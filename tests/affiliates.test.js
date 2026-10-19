@@ -49,10 +49,13 @@ test('affiliates: escapes names and notes', () => {
 });
 test('affiliates: every tool page has a matching slot and loads the script', () => {
   const root = path.join(__dirname, '..');
-  const pages = [];
+  const pages = []; // a tool page is a folder with tool.js next to index.html
   for (const lang of ['zh-tw', 'en']) for (const cat of fs.readdirSync(path.join(root, lang), { withFileTypes: true })) {
     if (!cat.isDirectory()) continue;
-    for (const tool of fs.readdirSync(path.join(root, lang, cat.name))) pages.push([tool, path.join(root, lang, cat.name, tool, 'index.html')]);
+    for (const tool of fs.readdirSync(path.join(root, lang, cat.name), { withFileTypes: true })) {
+      const dir = path.join(root, lang, cat.name, tool.name);
+      if (tool.isDirectory() && fs.existsSync(path.join(dir, 'tool.js'))) pages.push([tool.name, path.join(dir, 'index.html')]);
+    }
   }
   eq(pages.length >= 4, true);
   for (const [slug, file] of pages) {

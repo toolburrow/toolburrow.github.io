@@ -33,6 +33,7 @@ check tasks off as you finish them, and update PLAN.md before the session ends.
 /zh-tw/<category>/<tool-slug>/index.html + tool.js
 /en/                    English home
 /en/<category>/<tool-slug>/index.html + tool.js
+/zh-tw/{about,privacy,contact}/   site pages (same under /en/)
 /assets/site.css        shared design tokens and components
 /assets/site.js         theme toggle + copy buttons
 /assets/affiliates.js   affiliate products per tool (see "Affiliate slots")
@@ -60,6 +61,14 @@ Slugs are lowercase English words joined with hyphens, describing what people se
 6. Add the tool to the language home page AND the root `index.html`, and add its URL to `sitemap.xml`.
    Add an empty slot for its slug to `SLOTS` in `/assets/affiliates.js` (the tests check this).
 7. The tool must show a useful result on first load (pre-fill a sensible default) and update live as the user types.
+
+## Site pages and privacy
+
+- Every page's footer links to the about, privacy and contact pages in its language
+  (the root page and 404 link both languages). Every page except 404 is in `sitemap.xml`. The tests check both.
+- The privacy pages (`/zh-tw/privacy/`, `/en/privacy/`) must match what the site really does. Before adding anything
+  that collects or shares data (ads, analytics, cookies, a new third-party resource), update both privacy pages
+  and their "last updated" date in the same commit.
 
 ## Talking to the owner
 
