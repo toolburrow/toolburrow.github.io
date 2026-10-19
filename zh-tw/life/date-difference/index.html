@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>日期間隔計算｜兩個日期相差幾天、幾天後是幾號 - Toolburrow</title>
+<meta name="description" content="免費的日期計算工具：算兩個日期相差幾天、幾週、幾個月，或從某天加減 N 天得到哪一天。距離某日還有幾天、到期日、預產期都能算。">
+<link rel="canonical" href="https://toolburrow.github.io/zh-tw/life/date-difference/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕳️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<style>
+  .check { display: flex; align-items: center; gap: .5rem; margin-top: 1rem; font-size: .95rem; color: var(--muted); cursor: pointer; }
+  .check input { width: auto; margin: 0; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "日期間隔計算",
+  "url": "https://toolburrow.github.io/zh-tw/life/date-difference/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "zh-TW",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      Toolburrow
+    </a>
+    <nav class="site-nav" aria-label="主選單">
+      <a href="/zh-tw/" aria-current="page">中文工具</a>
+      <a href="/en/" lang="en">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="切換深淺色模式">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/zh-tw/">中文工具</a> / 生活工具</div>
+    <h1>日期間隔計算</h1>
+    <p>算出兩個日期相差幾天、幾週、幾個月，或是從某一天往前、往後推 N 天會是哪一天。</p>
+  </div>
+
+  <section class="tool" aria-labelledby="diff-h">
+    <h2 id="diff-h">兩個日期相差幾天</h2>
+    <div class="row">
+      <div class="field">
+        <label for="start-input">起始日</label>
+        <input id="start-input" type="date" min="0001-01-01" max="9999-12-31">
+      </div>
+      <div class="field">
+        <label for="end-input">結束日</label>
+        <input id="end-input" type="date" min="0001-01-01" max="9999-12-31">
+      </div>
+    </div>
+    <label class="check"><input id="inclusive" type="checkbox"> 頭尾都算（起始日也算 1 天）</label>
+    <div class="result" id="diff-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="tool" aria-labelledby="add-h">
+    <h2 id="add-h">加減天數</h2>
+    <div class="row">
+      <div class="field">
+        <label for="base-input">起始日</label>
+        <input id="base-input" type="date" min="0001-01-01" max="9999-12-31">
+      </div>
+      <div class="field">
+        <label for="days-input">天數（往前推請輸入負數）</label>
+        <input id="days-input" type="text" inputmode="numeric" autocomplete="off" placeholder="例如 30 或 -30">
+      </div>
+    </div>
+    <label class="check"><input id="count-start" type="checkbox"> 起始日算第 1 天</label>
+    <div class="result" id="add-result" aria-live="polite" hidden></div>
+  </section>
+
+  <!-- AFFILIATE SLOT: remove the comment and fill in when a product is chosen (see AGENTS.md).
+  <aside class="affiliate" data-slot="date-difference">
+    推薦內容
+    <small>本頁含有聯盟連結，透過連結購買時，Toolburrow 可能會獲得少量分潤，不影響你的購買價格。</small>
+  </aside>
+  -->
+
+  <article class="article">
+    <h2>兩個日期相差幾天怎麼算？</h2>
+    <p>相差天數就是「結束日減起始日」，起始日當天不算。例如 10 月 1 日到 10 月 10 日相差 9 天。</p>
+    <p>如果要算的是「總共幾天」，例如請假、活動、住院，頭尾兩天都要算進去，就再加 1 天，也就是 10 天。勾選工具裡的「頭尾都算」就會自動加上。</p>
+
+    <h2>「幾個月又幾天」怎麼算？</h2>
+    <p>工具會先從起始日往後數完整的月份，剩下的再算成天數。例如 3 月 15 日到 10 月 19 日，先數到 10 月 15 日是 7 個月，再加 4 天，就是 7 個月又 4 天。</p>
+    <p>遇到月底時，下個月如果沒有同一天，就以那個月的最後一天為準。所以 1 月 31 日加 1 個月是 2 月 28 日，閏年則是 2 月 29 日。閏年的 2 月多 1 天，工具都會自動算進去，不用自己處理。</p>
+
+    <h2>常見情境怎麼填</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>想知道</th><th>怎麼填</th></tr></thead>
+        <tbody>
+          <tr><td>距離某日還有幾天</td><td>起始日填今天，結束日填那一天</td></tr>
+          <tr><td>已經過了幾天、交往幾天</td><td>起始日填當天，結束日填今天</td></tr>
+          <tr><td>30 天後是幾月幾號</td><td>加減天數：起始日填今天，天數填 30</td></tr>
+          <tr><td>90 天前是哪一天</td><td>加減天數：天數填 -90</td></tr>
+          <tr><td>預產期</td><td>加減天數：起始日填最後一次月經的第一天，天數填 280</td></tr>
+          <tr><td>請假或活動總共幾天</td><td>相差天數，勾選「頭尾都算」</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>常見問題</h2>
+    <h3>「距離某日還有幾天」要不要算今天？</h3>
+    <p>一般說「還有幾天」是不算今天的，工具預設也是這樣。例如今天是 10 月 19 日，到 10 月 20 日就是還有 1 天。</p>
+    <h3>到期日怎麼算？「30 天內」是到哪一天？</h3>
+    <p>依照民法第 120 條，以「日」計算的期間，起始當天不算入。所以從 10 月 19 日起算 30 天，期限是 11 月 18 日，在工具裡不要勾選「起始日算第 1 天」即可。民法第 122 條也規定，期間的最後一天如果是星期日、紀念日或其他休息日，就以休息日的隔天代替。不過契約、帳單或各機關可能有自己的算法，請以實際文件上的規定為準。</p>
+    <h3>計算結果有扣掉假日嗎？</h3>
+    <p>沒有。工具算的是日曆天，週末和國定假日都會算進去。如果要算工作天，需要另外扣除週末和當年度的國定假日。</p>
+    <h3>閏年會影響計算嗎？</h3>
+    <p>會，但工具已經自動處理。閏年的 2 月有 29 天，所以跨過閏年 2 月的區間會多 1 天。下一個閏年是 2028 年。</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Toolburrow：小而好用的線上工具。所有計算都在你的瀏覽器裡完成，不會上傳任何資料。</p>
+    <p>部分頁面含有聯盟連結，透過連結購買時我們可能獲得少量分潤。</p>
+  </div>
+</footer>
+<script src="tool.js"></script>
+</body>
+</html>
