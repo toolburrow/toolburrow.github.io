@@ -35,6 +35,7 @@ check tasks off as you finish them, and update PLAN.md before the session ends.
 /en/<category>/<tool-slug>/index.html + tool.js
 /assets/site.css        shared design tokens and components
 /assets/site.js         theme toggle + copy buttons
+/assets/affiliates.js   affiliate products per tool (see "Affiliate slots")
 /tests/                 node tests for tool logic
 sitemap.xml, robots.txt, 404.html, .nojekyll
 ```
@@ -52,11 +53,12 @@ Slugs are lowercase English words joined with hyphens, describing what people se
    - DOM wiring inside `if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded', ...)`
 3. Add tests in `/tests/<slug>.test.js` and run `node tests/run.js`. All tests must pass.
 4. Page content, in this order: `.page-head` (breadcrumb, h1, one-sentence description) → one or more
-   `.tool` panels → affiliate slot comment → `.article` with an explanation, a reference table where useful,
+   `.tool` panels → affiliate slot `<aside>` (see below) → `.article` with an explanation, a reference table where useful,
    and a short FAQ (2–4 questions people actually search for).
 5. SEO in `<head>`: unique `<title>` (tool name + what it does + "- Toolburrow"), meta description under
    ~155 characters, canonical URL, `WebApplication` JSON-LD.
 6. Add the tool to the language home page AND the root `index.html`, and add its URL to `sitemap.xml`.
+   Add an empty slot for its slug to `SLOTS` in `/assets/affiliates.js` (the tests check this).
 7. The tool must show a useful result on first load (pre-fill a sensible default) and update live as the user types.
 
 ## Talking to the owner
@@ -79,7 +81,12 @@ Light and dark mode must both work. Keep layouts usable at 360 px wide. Don't ad
 
 ## Affiliate slots
 
-Each tool page has a commented-out `<aside class="affiliate" data-slot="<slug>">` block below the tool panels.
-Only the owner decides which products and links go there, and only programs marked "已核准" in PLAN.md may be used. When asked to fill one:
-uncomment it, add 1–3 relevant product links with `rel="sponsored noopener" target="_blank"`, and keep the disclosure line.
+All recommended products live in `/assets/affiliates.js`, in `SLOTS`, keyed by the tool's slug.
+Each slot holds 0–3 items `{ name, url, note }` (`note` is one sentence on why it's recommended).
+Every tool page has `<aside class="affiliate" data-slot="<slug>" hidden></aside>` below the tool panels and loads
+`/assets/affiliates.js`; the script fills the slot and shows it only when it has items, adding the heading,
+`rel="sponsored noopener" target="_blank"` and the disclosure line in the page's language. Don't edit the HTML.
+
+Only the owner decides which products and links go there, and only programs marked "已核准" in PLAN.md may be used.
+When asked to fill one, only edit that slot's array in `affiliates.js`, using the exact URLs the owner gives.
 Never invent affiliate URLs or tracking IDs.

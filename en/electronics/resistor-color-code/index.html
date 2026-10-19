@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
 <style>
   .resistor { display: block; width: 100%; max-width: 30rem; margin: 0 auto 1.2rem; }
   .mini-resistor { display: block; width: 100%; max-width: 18rem; margin: .4rem 0 .2rem; }
@@ -93,12 +94,8 @@
     <div class="result" id="encode-result" aria-live="polite" hidden></div>
   </section>
 
-  <!-- AFFILIATE SLOT: remove the comment and fill in when a product is chosen (see AGENTS.md).
-  <aside class="affiliate" data-slot="resistor-color-code">
-    Product recommendation
-    <small>This page contains affiliate links. If you buy through them, Toolburrow may earn a small commission at no extra cost to you.</small>
-  </aside>
-  -->
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="resistor-color-code" hidden></aside>
 
   <article class="article">
     <h2>How to read resistor color bands</h2>

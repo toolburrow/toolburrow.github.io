@@ -88,9 +88,14 @@ input:focus, select:focus { border-color: var(--accent); }
 .notice { color: var(--lamp); font-size: .92rem; margin-top: .6rem; }
 .error { color: var(--danger); }
 
-/* Affiliate slot: hidden until filled (see AGENTS.md) */
+/* Affiliate slot: rendered by affiliates.js, hidden while empty (see AGENTS.md) */
 .affiliate { margin-top: 1.2rem; border: 1px solid var(--line); border-left: 4px solid var(--lamp);
   border-radius: var(--radius-sm); padding: .9rem 1.1rem; background: var(--surface); font-size: .95rem; }
+.affiliate h2 { font: 650 1rem/1.3 var(--font-display); margin: 0 0 .5rem; }
+.affiliate ul { list-style: none; padding: 0; margin: 0; }
+.affiliate li + li { margin-top: .5rem; }
+.affiliate li a { font-weight: 650; }
+.affiliate li span { display: block; color: var(--muted); }
 .affiliate small { display: block; color: var(--muted); margin-top: .4rem; font-size: .8rem; }
 
 /* Article content */

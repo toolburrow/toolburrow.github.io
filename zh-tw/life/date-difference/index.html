@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
 <style>
   .check { display: flex; align-items: center; gap: .5rem; margin-top: 1rem; font-size: .95rem; color: var(--muted); cursor: pointer; }
   .check input { width: auto; margin: 0; }
@@ -83,12 +84,8 @@
     <div class="result" id="add-result" aria-live="polite" hidden></div>
   </section>
 
-  <!-- AFFILIATE SLOT: remove the comment and fill in when a product is chosen (see AGENTS.md).
-  <aside class="affiliate" data-slot="date-difference">
-    推薦內容
-    <small>本頁含有聯盟連結，透過連結購買時，Toolburrow 可能會獲得少量分潤，不影響你的購買價格。</small>
-  </aside>
-  -->
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="date-difference" hidden></aside>
 
   <article class="article">
     <h2>兩個日期相差幾天怎麼算？</h2>

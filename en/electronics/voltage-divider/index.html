@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
 <style>
   .divider-layout { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
   .divider-layout .row { flex: 1 1 16rem; }
@@ -117,12 +118,8 @@
     <div class="result" id="solve-result" aria-live="polite"></div>
   </section>
 
-  <!-- AFFILIATE SLOT: remove the comment and fill in when a product is chosen (see AGENTS.md).
-  <aside class="affiliate" data-slot="voltage-divider">
-    Product recommendation
-    <small>This page contains affiliate links. If you buy through them, Toolburrow may earn a small commission at no extra cost to you.</small>
-  </aside>
-  -->
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="voltage-divider" hidden></aside>
 
   <article class="article">
     <h2>How a voltage divider works</h2>
