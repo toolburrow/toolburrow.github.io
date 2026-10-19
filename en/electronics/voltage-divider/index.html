@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voltage Divider Calculator (Vout, Resistor and E24 Values) - Toolburrow</title>
+<meta name="description" content="Free voltage divider calculator. Find Vout from Vin, R1 and R2, or find the resistor you need with the closest E24 value, current and power.">
+<link rel="canonical" href="https://toolburrow.github.io/en/electronics/voltage-divider/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕳️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<style>
+  .divider-layout { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+  .divider-layout .row { flex: 1 1 16rem; }
+  .schematic { flex: 0 0 7.5rem; width: 7.5rem; color: var(--text); }
+  .schematic .wire { stroke: currentColor; stroke-width: 2; fill: none; }
+  .schematic .part { stroke: currentColor; stroke-width: 2; fill: var(--surface); }
+  .schematic text { fill: currentColor; font: 600 13px var(--font-body); }
+  .schematic .dot { fill: currentColor; }
+  .tool table { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: 1rem; font-variant-numeric: tabular-nums; }
+  .tool th, .tool td { border-bottom: 1px solid var(--line); padding: .4rem .5rem .4rem 0; text-align: left; }
+  .tool th { color: var(--muted); font-weight: 600; }
+  .tool tr.best td { font-weight: 700; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Voltage Divider Calculator",
+  "url": "https://toolburrow.github.io/en/electronics/voltage-divider/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      Toolburrow
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Electronics</div>
+    <h1>Voltage divider calculator</h1>
+    <p>Find the output voltage of a two-resistor divider, or the resistor you need for a target voltage, with the closest E24 value.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="fwd-h">
+    <h2 id="fwd-h">Find Vout</h2>
+    <div class="divider-layout">
+      <svg class="schematic" viewBox="0 0 120 250" role="img" aria-label="Vin connects through R1 to Vout, then through R2 to ground">
+        <circle cx="40" cy="14" r="5" class="part"/>
+        <text x="54" y="19">Vin</text>
+        <path d="M40 19V45M40 105V155M40 215V228M40 125H92" class="wire"/>
+        <rect x="28" y="45" width="24" height="60" class="part"/>
+        <text x="60" y="80">R1</text>
+        <circle cx="40" cy="125" r="3.5" class="dot"/>
+        <circle cx="97" cy="125" r="5" class="part"/>
+        <text x="70" y="148">Vout</text>
+        <rect x="28" y="155" width="24" height="60" class="part"/>
+        <text x="60" y="190">R2</text>
+        <path d="M22 228H58M28 236H52M34 244H46" class="wire"/>
+      </svg>
+      <div class="row">
+        <div class="field">
+          <label for="fwd-vin">Vin (input voltage)</label>
+          <input id="fwd-vin" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="e.g. 5, 3.3, 3V3">
+        </div>
+        <div class="field">
+          <label for="fwd-r1">R1 (top resistor)</label>
+          <input id="fwd-r1" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 10k, 4k7, 220">
+        </div>
+        <div class="field">
+          <label for="fwd-r2">R2 (bottom resistor)</label>
+          <input id="fwd-r2" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 10k, 4k7, 220">
+        </div>
+      </div>
+    </div>
+    <div class="result" id="fwd-result" aria-live="polite"></div>
+  </section>
+
+  <section class="tool" aria-labelledby="solve-h">
+    <h2 id="solve-h">Find a resistor</h2>
+    <div class="seg" id="known-seg" role="group" aria-label="Which resistor to find">
+      <button type="button" data-known="r1" aria-pressed="true">Find R2</button>
+      <button type="button" data-known="r2" aria-pressed="false">Find R1</button>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="solve-vin">Vin (input voltage)</label>
+        <input id="solve-vin" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="e.g. 12">
+      </div>
+      <div class="field">
+        <label for="solve-vout">Target Vout</label>
+        <input id="solve-vout" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="e.g. 3.3">
+      </div>
+      <div class="field">
+        <label for="solve-known" id="solve-known-label">R1 (top resistor)</label>
+        <input id="solve-known" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 10k">
+      </div>
+    </div>
+    <div class="result" id="solve-result" aria-live="polite"></div>
+  </section>
+
+  <!-- AFFILIATE SLOT: remove the comment and fill in when a product is chosen (see AGENTS.md).
+  <aside class="affiliate" data-slot="voltage-divider">
+    Product recommendation
+    <small>This page contains affiliate links. If you buy through them, Toolburrow may earn a small commission at no extra cost to you.</small>
+  </aside>
+  -->
+
+  <article class="article">
+    <h2>How a voltage divider works</h2>
+    <p>Two resistors in series between Vin and ground split the voltage in proportion to their values. The output is taken from the point between them:</p>
+    <p><strong>Vout = Vin × R2 / (R1 + R2)</strong></p>
+    <p>R1 is the resistor between Vin and the output, and R2 is the one between the output and ground. With R1 = 10 kΩ and R2 = 20 kΩ, a 5 V input gives 5 × 20 / 30 = 3.333 V.</p>
+    <p>The same current flows through both resistors: <strong>I = Vin / (R1 + R2)</strong>. Each resistor turns <strong>I² × R</strong> into heat, which is the power shown in the results.</p>
+
+    <h2>Finding the missing resistor</h2>
+    <p>Rearranging the formula gives the other resistor directly:</p>
+    <p><strong>R2 = R1 × Vout / (Vin − Vout)</strong><br>
+    <strong>R1 = R2 × (Vin − Vout) / Vout</strong></p>
+    <p>The exact answer is rarely a value you can buy, so the calculator also shows the E24 values on either side of it and the output voltage each one really gives. E24 resistors are the common ±5% series, with 24 values per decade.</p>
+
+    <h2>Common E24 pairs</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Vin</th><th>R1</th><th>R2</th><th>Vout</th></tr></thead>
+        <tbody>
+          <tr><td>5 V</td><td>10 kΩ</td><td>10 kΩ</td><td>2.5 V</td></tr>
+          <tr><td>5 V</td><td>4.7 kΩ</td><td>9.1 kΩ</td><td>3.297 V</td></tr>
+          <tr><td>3.3 V</td><td>10 kΩ</td><td>12 kΩ</td><td>1.8 V</td></tr>
+          <tr><td>9 V</td><td>12 kΩ</td><td>15 kΩ</td><td>5 V</td></tr>
+          <tr><td>12 V</td><td>18 kΩ</td><td>13 kΩ</td><td>5.032 V</td></tr>
+          <tr><td>12 V</td><td>24 kΩ</td><td>9.1 kΩ</td><td>3.299 V</td></tr>
+          <tr><td>24 V</td><td>91 kΩ</td><td>24 kΩ</td><td>5.009 V</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <h3>Can I power a circuit from a voltage divider?</h3>
+    <p>Usually not. The formula assumes nothing is connected to Vout. A load draws current and acts like a resistor in parallel with R2, which pulls Vout down. Dividers are fine for feeding a high-impedance input such as an ADC pin, an op-amp or a comparator. To power something, use a voltage regulator.</p>
+    <h3>What resistor values should I choose?</h3>
+    <p>Only the ratio sets Vout, so the size is a trade-off. Low values waste current and heat; very high values are more easily pulled off by the input they feed and pick up noise. For reading a voltage with a microcontroller ADC, a total of 10 kΩ to 100 kΩ is a common starting point. Check the input impedance in your chip’s datasheet.</p>
+    <h3>Can I use a voltage divider to connect a 5 V signal to a 3.3 V pin?</h3>
+    <p>For slow signals, yes: 4.7 kΩ on top and 9.1 kΩ on the bottom gives about 3.3 V from 5 V. For fast signals such as SPI clocks, the resistors and pin capacitance slow the edges, so a level-shifter chip is more reliable.</p>
+    <h3>How much power can the resistors handle?</h3>
+    <p>Compare the power shown for each resistor with its rating. Common through-hole resistors are rated 1/4 W (250 mW), and small SMD parts often 1/10 W or less. Leave a margin, for example by keeping each resistor under half its rating.</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Toolburrow: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p>Some pages contain affiliate links. We may earn a small commission if you buy through them.</p>
+  </div>
+</footer>
+<script src="tool.js"></script>
+</body>
+</html>
