@@ -3,6 +3,10 @@
 Toolburrow is a free online tool site hosted on GitHub Pages at https://toolburrow.github.io/.
 Income comes from affiliate links (later possibly AdSense). Read this whole file before changing anything.
 
+**Before any work, also read PLAN.md.** It holds the current phase, the task list, the status of every
+affiliate/ad program, and the decision log. Work on the first unchecked task of the current phase,
+check tasks off as you finish them, and update PLAN.md before the session ends.
+
 ## Hard rules
 
 - **Plain static site.** HTML, CSS and vanilla JavaScript only. No frameworks, no build step, no npm dependencies.
@@ -76,6 +80,6 @@ Light and dark mode must both work. Keep layouts usable at 360 px wide. Don't ad
 ## Affiliate slots
 
 Each tool page has a commented-out `<aside class="affiliate" data-slot="<slug>">` block below the tool panels.
-Only the owner decides which products and links go there. When asked to fill one:
+Only the owner decides which products and links go there, and only programs marked "已核准" in PLAN.md may be used. When asked to fill one:
 uncomment it, add 1–3 relevant product links with `rel="sponsored noopener" target="_blank"`, and keep the disclosure line.
 Never invent affiliate URLs or tracking IDs.
