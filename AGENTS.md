@@ -55,6 +55,11 @@ Slugs are lowercase English words joined with hyphens, describing what people se
 6. Add the tool to the language home page AND the root `index.html`, and add its URL to `sitemap.xml`.
 7. The tool must show a useful result on first load (pre-fill a sensible default) and update live as the user types.
 
+## Talking to the owner
+
+- Always reply to the owner in Traditional Chinese (Taiwan), including summaries, questions and error reports.
+  Code, commit messages and English page content stay in English.
+
 ## Writing style
 
 - `zh-tw`: Traditional Chinese with Taiwan vocabulary (資料, 網路, 程式, 預設). Full-width punctuation（，。：）.
