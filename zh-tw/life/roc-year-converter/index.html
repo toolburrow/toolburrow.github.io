@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>民國西元換算｜年份、日期一鍵轉換 - Toolburrow</title>
+<meta name="description" content="免費的民國西元換算工具：輸入西元或民國年份即可互相轉換，也能轉換完整日期（115/10/19、1151019 等格式），並顯示干支與生肖。">
+<link rel="canonical" href="https://toolburrow.github.io/zh-tw/life/roc-year-converter/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕳️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "民國西元換算",
+  "url": "https://toolburrow.github.io/zh-tw/life/roc-year-converter/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "zh-TW",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      Toolburrow
+    </a>
+    <nav class="site-nav" aria-label="主選單">
+      <a href="/zh-tw/" aria-current="page">中文工具</a>
+      <a href="/en/" lang="en">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="切換深淺色模式">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/zh-tw/">中文工具</a> / 生活工具</div>
+    <h1>民國西元換算</h1>
+    <p>輸入年份或日期，馬上得到民國與西元的對照，也會顯示當年的干支和生肖。</p>
+  </div>
+
+  <section class="tool" aria-labelledby="year-h">
+    <h2 id="year-h">年份換算</h2>
+    <div class="seg" id="mode-seg" role="group" aria-label="換算方向">
+      <button type="button" data-mode="w2r" aria-pressed="true">西元 → 民國</button>
+      <button type="button" data-mode="r2w" aria-pressed="false">民國 → 西元</button>
+    </div>
+    <div class="row">
+      <div class="field" id="era-field" hidden>
+        <label for="era">紀年</label>
+        <select id="era"><option value="民國">民國</option><option value="民前">民前</option></select>
+      </div>
+      <div class="field">
+        <label for="year-input" id="year-label">西元年</label>
+        <input id="year-input" type="number" inputmode="numeric" min="1" step="1" placeholder="例如 2026" aria-labelledby="year-label">
+      </div>
+    </div>
+    <div class="result" id="year-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="tool" aria-labelledby="date-h">
+    <h2 id="date-h">日期換算</h2>
+    <div class="row">
+      <div class="field">
+        <label for="rocdate-input">民國日期 → 西元</label>
+        <input id="rocdate-input" type="text" inputmode="numeric" autocomplete="off" placeholder="例如 115/10/19 或 1151019">
+      </div>
+    </div>
+    <div class="result" id="rocdate-result" aria-live="polite" hidden></div>
+    <div class="row" style="margin-top:1.2rem">
+      <div class="field">
+        <label for="wdate-input">西元日期 → 民國</label>
+        <input id="wdate-input" type="date">
+      </div>
+    </div>
+    <div class="result" id="wdate-result" aria-live="polite" hidden></div>
+  </section>
+
+  <!-- AFFILIATE SLOT: remove `hidden` and fill in when a relevant product is chosen (see AGENTS.md).
+  <aside class="affiliate" data-slot="roc-year-converter">
+    推薦內容
+    <small>本頁含有聯盟連結，透過連結購買時，Toolburrow 可能會獲得少量分潤，不影響你的購買價格。</small>
+  </aside>
+  -->
+
+  <article class="article">
+    <h2>民國和西元怎麼換算？</h2>
+    <p>中華民國從西元 1912 年開始紀年，1912 年就是民國元年。所以換算規則很簡單：</p>
+    <p><strong>西元年 − 1911 = 民國年</strong>，例如 2026 − 1911 = 115，西元 2026 年就是民國 115 年。<br>
+    <strong>民國年 + 1911 = 西元年</strong>，例如民國 89 年 + 1911 = 2000，就是西元 2000 年。</p>
+
+    <h2>1912 年以前怎麼表示？</h2>
+    <p>民國元年以前的年份稱為「民前」，算法是 1912 減去西元年。例如西元 1911 年是民前 1 年，1900 年是民前 12 年。民國沒有「0 年」，民前 1 年的下一年就是民國元年。</p>
+
+    <h2>常見的民國日期寫法</h2>
+    <p>公家機關和銀行表單常用幾種格式，這個工具都看得懂：</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>寫法</th><th>範例</th><th>常見場合</th></tr></thead>
+        <tbody>
+          <tr><td>斜線分隔</td><td>115/10/19</td><td>收據、一般文件</td></tr>
+          <tr><td>中文寫法</td><td>民國115年10月19日</td><td>公文、合約</td></tr>
+          <tr><td>7 碼數字</td><td>1151019</td><td>健保卡、網路表單、系統欄位</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>常用年份對照表</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>西元</th><th>民國</th><th>干支</th><th>生肖</th></tr></thead>
+        <tbody>
+          <tr><td>2027</td><td>116</td><td>丁未</td><td>羊</td></tr>
+          <tr><td>2026</td><td>115</td><td>丙午</td><td>馬</td></tr>
+          <tr><td>2025</td><td>114</td><td>乙巳</td><td>蛇</td></tr>
+          <tr><td>2024</td><td>113</td><td>甲辰</td><td>龍</td></tr>
+          <tr><td>2000</td><td>89</td><td>庚辰</td><td>龍</td></tr>
+          <tr><td>1990</td><td>79</td><td>庚午</td><td>馬</td></tr>
+          <tr><td>1980</td><td>69</td><td>庚申</td><td>猴</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>常見問題</h2>
+    <h3>生肖是用國曆還是農曆算？</h3>
+    <p>生肖和干支是以農曆新年為分界。如果你在國曆 1、2 月出生，而生日在農曆新年之前，生肖要算前一年的。工具顯示的是該年農曆新年之後的生肖。</p>
+    <h3>為什麼有些表單要填 7 碼？</h3>
+    <p>7 碼格式是「3 位民國年 + 2 位月 + 2 位日」，年份不足 3 位時前面補 0，例如民國 89 年 1 月 5 日寫成 0890105。</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Toolburrow：小而好用的線上工具。所有計算都在你的瀏覽器裡完成，不會上傳任何資料。</p>
+    <p>部分頁面含有聯盟連結，透過連結購買時我們可能獲得少量分潤。</p>
+  </div>
+</footer>
+<script src="tool.js"></script>
+</body>
+</html>
