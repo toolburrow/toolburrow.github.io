@@ -1,6 +1,6 @@
-# Toolburrow 計畫
+# ToolLamp 計畫
 
-這份文件是 Toolburrow 的工作計畫和狀態紀錄。每個 AI session 開始工作前都要先讀完，結束前要更新。
+這份文件是 ToolLamp 的工作計畫和狀態紀錄。每個 AI session 開始工作前都要先讀完，結束前要更新。
 規則細節（程式架構、新增工具的步驟、寫作和設計規範）在 AGENTS.md，兩份都要遵守。
 
 > 這個 repo 是公開的。這份文件只能記錄計畫、狀態和決定，
@@ -12,7 +12,7 @@
 
 - 中文生活工具：對象是台灣使用者，搭配蝦皮分潤。
 - 英文電子工程工具：對象是全球工程師，搭配電子零件、開發板的聯盟連結。
-- 先用 `toolburrow.github.io` 免費經營，流量起來後再買自有網域、申請 AdSense。
+- 先用 `toollamp.github.io` 免費經營，流量起來後再買自有網域、申請 AdSense。
 
 ## 怎麼使用這份計畫
 
@@ -76,7 +76,7 @@ AdSense 送審時會檢查這些頁面，現在先做好。中文版和英文版
 - [x] 隱私權政策：網站不收集使用者輸入的資料，所有計算在瀏覽器完成；提及聯盟連結，
       以及未來可能使用 Google AdSense 和 cookie。內容要誠實，不能寫網站實際上沒有做的資料收集。
       結果：`/zh-tw/privacy/`、`/en/privacy/`。如實寫出 localStorage（只記深淺色設定）、GitHub Pages 和 Google Fonts 會收到 IP 位址；本站沒有 cookie。
-- [x] 關於 Toolburrow：網站是做什麼的、由「一位台灣的韌體工程師」維護（不寫姓名）
+- [x] 關於 ToolLamp：網站是做什麼的、由「一位台灣的韌體工程師」維護（不寫姓名）
       結果：`/zh-tw/about/`、`/en/about/`，沒有寫姓名。
 - [x] 聯絡方式：先連到這個 repo 的 GitHub Issues
       結果：`/zh-tw/contact/`、`/en/contact/`，連到 GitHub Issues（已確認有開啟），並提醒 Issues 是公開的。
@@ -108,7 +108,11 @@ AdSense 送審時會檢查這些頁面，現在先做好。中文版和英文版
 
 這些需要本人帳號或個人資料，AI 不能代勞。AI 可以提醒，但不要假設已經完成。
 
-- [ ] 到 Google Search Console 驗證網站並提交 `https://toolburrow.github.io/sitemap.xml`
+- [ ] 把 GitHub 組織 `toolburrow` 改名為 `toollamp`（組織 Settings → Change organization name）
+- [ ] 把 repo `toolburrow.github.io` 改名為 `toollamp.github.io`（repo Settings → Repository name），確認網站在 `https://toollamp.github.io/` 能打開
+- [ ] 考慮現在就買下 `toollamp.com`，避免好名字被別人註冊走（買之前先到註冊商網站確認還沒人註冊）
+- [ ] 到智慧財產局和美國 USPTO 查 ToolLamp 有沒有人註冊商標
+- [ ] 到 Google Search Console 驗證網站並提交 `https://toollamp.github.io/sitemap.xml`
 - [ ] 申請蝦皮分潤計畫
 - [ ] 申請 AliExpress 聯盟或 Amazon Associates
 - [ ] 流量穩定後購買自有網域，再申請 AdSense
@@ -128,6 +132,7 @@ AdSense 送審時會檢查這些頁面，現在先做好。中文版和英文版
 ## 決策紀錄
 
 - 2026-10-19：網站名稱定為 Toolburrow，放在 GitHub 組織 `toolburrow` 底下，網址 `toolburrow.github.io`。
+- 2026-10-19：發現 toolburrow.com 已有同名、同類型的線上工具網站（2026-07 註冊），改名為 ToolLamp。改名前查過 Google、.com/.net/.app 網域和 GitHub 帳號都沒有人用。GitHub 組織改為 `toollamp`，網址改為 `toollamp.github.io`。
 - 2026-10-19：純靜態網站，不用框架、不用 build step，由 GitHub Pages 直接部署 main 分支。
 - 2026-10-19：先用聯盟連結，等有自有網域再申請 AdSense。
 - 2026-10-19：第一批工具是「民國西元換算」（中文）和「電阻色碼計算器」（英文），已上線。

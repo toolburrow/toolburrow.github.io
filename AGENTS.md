@@ -1,6 +1,6 @@
-# Toolburrow – working guide for AI agents
+# ToolLamp – working guide for AI agents
 
-Toolburrow is a free online tool site hosted on GitHub Pages at https://toolburrow.github.io/.
+ToolLamp is a free online tool site hosted on GitHub Pages at https://toollamp.github.io/.
 Income comes from affiliate links (later possibly AdSense). Read this whole file before changing anything.
 
 **Before any work, also read PLAN.md.** It holds the current phase, the task list, the status of every
@@ -56,7 +56,7 @@ Slugs are lowercase English words joined with hyphens, describing what people se
 4. Page content, in this order: `.page-head` (breadcrumb, h1, one-sentence description) → one or more
    `.tool` panels → affiliate slot `<aside>` (see below) → `.article` with an explanation, a reference table where useful,
    and a short FAQ (2–4 questions people actually search for).
-5. SEO in `<head>`: unique `<title>` (tool name + what it does + "- Toolburrow"), meta description under
+5. SEO in `<head>`: unique `<title>` (tool name + what it does + "- ToolLamp"), meta description under
    ~155 characters, canonical URL, `WebApplication` JSON-LD.
 6. Add the tool to the language home page AND the root `index.html`, and add its URL to `sitemap.xml`.
    Add an empty slot for its slug to `SLOTS` in `/assets/affiliates.js` (the tests check this).

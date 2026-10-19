@@ -13,7 +13,7 @@ function htmlPages(dir = root, out = []) {
   return out;
 }
 const pages = htmlPages();
-const urlOf = (rel) => 'https://toolburrow.github.io/' + rel.replace(/index\.html$/, '');
+const urlOf = (rel) => 'https://toollamp.github.io/' + rel.replace(/index\.html$/, '');
 const sitemap = [...fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
 
 test('site: every page except 404 is in the sitemap', () => {
@@ -22,7 +22,7 @@ test('site: every page except 404 is in the sitemap', () => {
 test('site: every sitemap URL is a real page', () => {
   eq(new Set(sitemap).size, sitemap.length);
   for (const url of sitemap) {
-    const rel = url.replace('https://toolburrow.github.io/', '') + 'index.html';
+    const rel = url.replace('https://toollamp.github.io/', '') + 'index.html';
     eq([url, fs.existsSync(path.join(root, rel))], [url, true]);
   }
 });

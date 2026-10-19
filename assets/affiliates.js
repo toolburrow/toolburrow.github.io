@@ -11,8 +11,8 @@ var AFF = (function () {
   };
 
   var TEXT = {
-    zh: { title: '推薦商品', disclosure: '本頁含有聯盟連結，透過連結購買時，Toolburrow 可能會獲得少量分潤，不影響你的購買價格。' },
-    en: { title: 'Recommended products', disclosure: 'This page contains affiliate links. If you buy through them, Toolburrow may earn a small commission at no extra cost to you.' }
+    zh: { title: '推薦商品', disclosure: '本頁含有聯盟連結，透過連結購買時，ToolLamp 可能會獲得少量分潤，不影響你的購買價格。' },
+    en: { title: 'Recommended products', disclosure: 'This page contains affiliate links. If you buy through them, ToolLamp may earn a small commission at no extra cost to you.' }
   };
 
   var MAX_ITEMS = 3;
