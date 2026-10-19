@@ -14,6 +14,13 @@ Income comes from affiliate links (later possibly AdSense). Read this whole file
 - **Accuracy over features.** A tool that gives a wrong answer destroys trust. Every calculation must be covered
   by the tests in `tests/`.
 
+## Git workflow
+
+- Commit and push straight to `main`. No feature branches or pull requests; the owner reviews on `main`.
+- `main` deploys to the live site immediately, so run `node tests/run.js` before every push.
+  Never push if any test fails.
+- One commit per tool or per logical change, with a clear English commit message.
+
 ## Structure
 
 ```
