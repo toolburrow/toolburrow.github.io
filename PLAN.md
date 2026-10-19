@@ -108,8 +108,8 @@ AdSense 送審時會檢查這些頁面，現在先做好。中文版和英文版
 
 這些需要本人帳號或個人資料，AI 不能代勞。AI 可以提醒，但不要假設已經完成。
 
-- [ ] 把 GitHub 組織 `toolburrow` 改名為 `toollamp`（組織 Settings → Change organization name）
-- [ ] 把 repo `toolburrow.github.io` 改名為 `toollamp.github.io`（repo Settings → Repository name），確認網站在 `https://toollamp.github.io/` 能打開
+- [x] 把 GitHub 組織 `toolburrow` 改名為 `toollamp`（組織 Settings → Change organization name）：已完成。
+- [x] 把 repo `toolburrow.github.io` 改名為 `toollamp.github.io`（repo Settings → Repository name），確認網站在 `https://toollamp.github.io/` 能打開：已完成，13 頁都能正常開啟，舊網址已失效。
 - [ ] 考慮現在就買下 `toollamp.com`，避免好名字被別人註冊走（買之前先到註冊商網站確認還沒人註冊）
 - [ ] 到智慧財產局和美國 USPTO 查 ToolLamp 有沒有人註冊商標
 - [ ] 到 Google Search Console 驗證網站並提交 `https://toollamp.github.io/sitemap.xml`
