@@ -14,6 +14,7 @@ var AFF = (function () {
     'zh-tw/bmi-calculator': [],
     'zh-tw/age-calculator': [],
     'zh-tw/split-bill': [],
+    'zh-tw/rc-time-constant': [],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
@@ -23,7 +24,8 @@ var AFF = (function () {
     'en/ping-converter': [],
     'en/bmi-calculator': [],
     'en/age-calculator': [],
-    'en/split-bill': []
+    'en/split-bill': [],
+    'en/rc-time-constant': []
   };
 
   var TEXT = {

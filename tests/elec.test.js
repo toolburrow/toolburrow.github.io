@@ -16,3 +16,18 @@ test('elec: read errors', () => {
   eq(E.read('-5', 'voltage', 'V'), { v: -5 }); // voltage may be negative
   eq(E.read('20', 'current', 'I', 1e-3), { v: 0.02 });
 });
+test('elec: capacitance parsing', () => {
+  const C = (s, bare) => E.parseCapacitance(s, bare === undefined ? 1e-6 : bare);
+  eq(C('100n'), 1e-7); eq(C('100nF'), 1e-7); eq(C('100 nF'), 1e-7); eq(C('4.7uF'), 4.7e-6); eq(C('4.7µF'), 4.7e-6);
+  eq(C('4.7μF'), 4.7e-6); eq(C('4u7'), 4.7e-6); eq(C('4n7'), 4.7e-9); eq(C('2p2'), 2.2e-12); eq(C('22p'), 2.2e-11);
+  eq(C('0.1u'), 1e-7); eq(C('10'), 1e-5); eq(C('1F'), 1); eq(C('1mF'), 1e-3); eq(C('470uf'), 4.7e-4);
+  eq(C('abc'), null); eq(C('4x7'), null); eq(C(''), null);
+  eq(E.read('0', 'capacitance', 'C', 1e-6).error, 'capacitance-positive');
+  eq(E.read('', 'capacitance', 'C', 1e-6).error, 'capacitance-empty');
+  eq(E.read('1q', 'capacitance', 'C', 1e-6).error, 'capacitance-format');
+  eq(E.read('100n', 'capacitance', 'C', 1e-6), { v: 1e-7 });
+});
+test('elec: SI formatting down to pico', () => {
+  eq(E.si(2.2e-11, 'F'), '22 pF'); eq(E.si(1e-7, 'F'), '100 nF'); eq(E.si(4.7e-6, 'F'), '4.7 µF'); eq(E.si(1e-3, 'F'), '1000 µF'); eq(E.si(0.0022, 'F'), '2200 µF'); eq(E.si(1, 'F'), '1 F');
+  eq(E.si(5e-10, 'A'), '500 pA');
+});

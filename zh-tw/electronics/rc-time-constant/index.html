@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RC 時間常數計算｜τ = RC、截止頻率、充放電時間 - ToolLamp</title>
+<meta name="description" content="免費的 RC 時間常數計算工具：輸入電阻和電容，算出 τ、截止頻率，以及充電到 90% 或放電到某個百分比要多久，支援 4k7、100n 等寫法。">
+<link rel="canonical" href="https://toollamp.github.io/zh-tw/electronics/rc-time-constant/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/rc-time-constant/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/rc-time-constant/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="RC 時間常數計算｜τ = RC、截止頻率、充放電時間">
+<meta property="og:description" content="免費的 RC 時間常數計算工具：輸入電阻和電容，算出 τ、截止頻率，以及充電到 90% 或放電到某個百分比要多久，支援 4k7、100n 等寫法。">
+<meta property="og:url" content="https://toollamp.github.io/zh-tw/electronics/rc-time-constant/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<style>
+  .tool table { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: 1rem; font-variant-numeric: tabular-nums; }
+  .tool th, .tool td { border-bottom: 1px solid var(--line); padding: .4rem .5rem .4rem 0; text-align: left; }
+  .tool th { color: var(--muted); font-weight: 600; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "RC 時間常數計算",
+  "url": "https://toollamp.github.io/zh-tw/electronics/rc-time-constant/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "zh-TW",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh-tw/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="主選單">
+      <a href="/zh-tw/" data-set-lang="zh-tw" aria-current="page">中文工具</a>
+      <a href="/en/" data-set-lang="en" lang="en">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="切換深淺色模式">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/zh-tw/">中文工具</a> / 電子工具</div>
+    <h1>RC 時間常數計算</h1>
+    <p>輸入電阻和電容，算出時間常數 τ、RC 濾波器的截止頻率，以及電容充電、放電到某個百分比要多久。</p>
+  </div>
+
+  <section class="tool" aria-labelledby="rc-h">
+    <h2 id="rc-h">算 τ 和充放電時間</h2>
+    <div class="row">
+      <div class="field">
+        <label for="rc-r">電阻 R（Ω）</label>
+        <input id="rc-r" type="text" autocomplete="off" spellcheck="false" placeholder="例如 10k、4k7">
+      </div>
+      <div class="field">
+        <label for="rc-c">電容 C（只填數字時是 µF）</label>
+        <input id="rc-c" type="text" autocomplete="off" spellcheck="false" placeholder="例如 100n、4.7u、22p">
+      </div>
+      <div class="field">
+        <label for="rc-p">目標百分比（%）</label>
+        <input id="rc-p" type="text" inputmode="decimal" autocomplete="off" placeholder="例如 90">
+      </div>
+    </div>
+    <div class="result" id="rc-result" aria-live="polite"></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="zh-tw/rc-time-constant" hidden></aside>
+
+  <article class="article">
+    <h2>RC 時間常數是什麼？</h2>
+    <p>電阻和電容串聯時，電容不會瞬間充飽，而是越充越慢。時間常數 <strong>τ = R × C</strong>（單位是秒）代表充放電的快慢：經過 1τ，電容會充到電源電壓的 63.2%，或是放電到只剩 36.8%。例如 10 kΩ 配 100 nF，τ = 10,000 × 0.0000001 = 1 ms。</p>
+
+    <h2>充電和放電公式</h2>
+    <ul>
+      <li>充電：V<sub>C</sub> = V<sub>S</sub> × (1 − e<sup>−t/τ</sup>)，充到 X% 需要 t = −τ × ln(1 − X/100)</li>
+      <li>放電：V<sub>C</sub> = V<sub>0</sub> × e<sup>−t/τ</sup>，放到剩 X% 需要 t = −τ × ln(X/100)</li>
+    </ul>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>經過時間</th><th>充電到</th><th>放電剩下</th></tr></thead>
+        <tbody>
+          <tr><td>0.693τ</td><td>50%</td><td>50%</td></tr>
+          <tr><td>1τ</td><td>63.2%</td><td>36.8%</td></tr>
+          <tr><td>2τ</td><td>86.5%</td><td>13.5%</td></tr>
+          <tr><td>2.303τ</td><td>90%</td><td>10%</td></tr>
+          <tr><td>3τ</td><td>95.0%</td><td>5.0%</td></tr>
+          <tr><td>4τ</td><td>98.2%</td><td>1.8%</td></tr>
+          <tr><td>5τ</td><td>99.3%</td><td>0.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>截止頻率</h2>
+    <p>同樣的 R 和 C 接成低通或高通濾波器時，截止頻率是 <strong>f<sub>c</sub> = 1 / (2π × R × C)</strong>，也就是訊號衰減 3 dB（剩約 70.7%）的頻率。10 kΩ 配 100 nF 的截止頻率約是 159 Hz。</p>
+
+    <h2>常見問題</h2>
+    <h3>電容要充多久才算充滿？</h3>
+    <p>理論上永遠不會完全充滿，實務上通常以 5τ 當作充滿，這時已經到 99.3%。要求不高的話，3τ（95%）也常被當作足夠。</p>
+    <h3>電容的單位怎麼寫？</h3>
+    <p>1 µF = 1,000 nF = 1,000,000 pF。可以輸入 100n、0.1u、100nF 或 4u7 這類寫法；只輸入數字時，單位是 µF。陶瓷電容上印的「104」是 10 × 10<sup>4</sup> pF，也就是 100 nF。</p>
+    <h3>為什麼實際量到的時間和計算不一樣？</h3>
+    <p>電容的誤差常有 ±10% 到 ±20%，電解電容更大；電源內阻、負載和量測儀器的輸入阻抗也會影響結果。如果時間很重要，請用誤差小的電容（例如 C0G 或薄膜電容），並實際量測確認。</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">相關工具</h2>
+    <ul class="tool-list">
+      <li><a href="/zh-tw/electronics/resistor-color-code/"><span class="tool-name">電阻色碼計算</span><span class="tool-desc">4 環、5 環，色環和阻值互查</span></a></li>
+      <li><a href="/zh-tw/electronics/voltage-divider/"><span class="tool-name">分壓電阻計算</span><span class="tool-desc">算 Vout、反推電阻、E24 標準值</span></a></li>
+      <li><a href="/zh-tw/electronics/led-resistor/"><span class="tool-name">LED 限流電阻計算</span><span class="tool-desc">算電阻值、E24 標準值和瓦數</span></a></li>
+      <li><a href="/zh-tw/electronics/ohms-law/"><span class="tool-name">歐姆定律計算</span><span class="tool-desc">V、I、R、P 任填兩個</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp：小而好用的線上工具。所有計算都在你的瀏覽器裡完成，不會上傳任何資料。</p>
+    <p class="footer-links"><a href="/zh-tw/about/">關於</a><a href="/zh-tw/privacy/">隱私權政策</a><a href="/zh-tw/contact/">聯絡我們</a></p>
+  </div>
+</footer>
+<script src="/assets/elec.js"></script>
+<script src="/assets/tools/rc-time-constant.js"></script>
+</body>
+</html>

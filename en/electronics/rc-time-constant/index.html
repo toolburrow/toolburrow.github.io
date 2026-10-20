@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RC Time Constant Calculator: τ, Cutoff Frequency, Charge Time - ToolLamp</title>
+<meta name="description" content="Free RC time constant calculator. Enter R and C to get τ, the cutoff frequency and how long the capacitor takes to charge or discharge to any percentage.">
+<link rel="canonical" href="https://toollamp.github.io/en/electronics/rc-time-constant/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/rc-time-constant/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/rc-time-constant/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="RC Time Constant Calculator: τ, Cutoff Frequency, Charge Time">
+<meta property="og:description" content="Free RC time constant calculator. Enter R and C to get τ, the cutoff frequency and how long the capacitor takes to charge or discharge to any percentage.">
+<meta property="og:url" content="https://toollamp.github.io/en/electronics/rc-time-constant/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<style>
+  .tool table { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: 1rem; font-variant-numeric: tabular-nums; }
+  .tool th, .tool td { border-bottom: 1px solid var(--line); padding: .4rem .5rem .4rem 0; text-align: left; }
+  .tool th { color: var(--muted); font-weight: 600; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "RC time constant calculator",
+  "url": "https://toollamp.github.io/en/electronics/rc-time-constant/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Electronics</div>
+    <h1>RC time constant calculator</h1>
+    <p>Enter a resistor and a capacitor to get the time constant τ, the RC filter cutoff frequency and how long the capacitor takes to charge or discharge.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="rc-h">
+    <h2 id="rc-h">Time constant and charge time</h2>
+    <div class="row">
+      <div class="field">
+        <label for="rc-r">Resistance R (Ω)</label>
+        <input id="rc-r" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 10k, 4k7">
+      </div>
+      <div class="field">
+        <label for="rc-c">Capacitance C (a plain number is µF)</label>
+        <input id="rc-c" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 100n, 4.7u, 22p">
+      </div>
+      <div class="field">
+        <label for="rc-p">Target (%)</label>
+        <input id="rc-p" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 90">
+      </div>
+    </div>
+    <div class="result" id="rc-result" aria-live="polite"></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/rc-time-constant" hidden></aside>
+
+  <article class="article">
+    <h2>What is the RC time constant?</h2>
+    <p>When a resistor feeds a capacitor, the capacitor charges quickly at first and then more and more slowly. The time constant <strong>τ = R × C</strong> (in seconds) sets the pace: after 1τ the capacitor reaches 63.2% of the supply voltage, or drops to 36.8% when discharging. For 10 kΩ and 100 nF, τ = 10,000 × 0.0000001 = 1 ms.</p>
+    <p>Typical uses are reset delays, switch debouncing, simple timers and filters.</p>
+
+    <h2>Charge and discharge formulas</h2>
+    <ul>
+      <li>Charging: V<sub>C</sub> = V<sub>S</sub> × (1 − e<sup>−t/τ</sup>), so reaching X% takes t = −τ × ln(1 − X/100)</li>
+      <li>Discharging: V<sub>C</sub> = V<sub>0</sub> × e<sup>−t/τ</sup>, so falling to X% takes t = −τ × ln(X/100)</li>
+    </ul>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Time</th><th>Charged to</th><th>Left when discharging</th></tr></thead>
+        <tbody>
+          <tr><td>0.693τ</td><td>50%</td><td>50%</td></tr>
+          <tr><td>1τ</td><td>63.2%</td><td>36.8%</td></tr>
+          <tr><td>2τ</td><td>86.5%</td><td>13.5%</td></tr>
+          <tr><td>2.303τ</td><td>90%</td><td>10%</td></tr>
+          <tr><td>3τ</td><td>95.0%</td><td>5.0%</td></tr>
+          <tr><td>4τ</td><td>98.2%</td><td>1.8%</td></tr>
+          <tr><td>5τ</td><td>99.3%</td><td>0.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Cutoff frequency</h2>
+    <p>The same R and C used as a low-pass or high-pass filter have a cutoff frequency of <strong>f<sub>c</sub> = 1 / (2π × R × C)</strong>, where the signal is 3 dB down (about 70.7%). For 10 kΩ and 100 nF that is about 159 Hz.</p>
+
+    <h2>Frequently asked questions</h2>
+    <h3>How long does a capacitor take to fully charge?</h3>
+    <p>In theory it never quite gets there. In practice 5τ (99.3%) is treated as fully charged, and 3τ (95%) is often close enough.</p>
+    <h3>How do I enter the capacitance?</h3>
+    <p>1 µF = 1,000 nF = 1,000,000 pF. You can type 100n, 0.1u, 100nF or 4u7; a plain number is read as µF. A ceramic capacitor marked “104” is 10 × 10<sup>4</sup> pF, which is 100 nF.</p>
+    <h3>Why does my circuit not match the calculation?</h3>
+    <p>Capacitors often have a tolerance of ±10% to ±20%, and electrolytics more. The source resistance, the load and the input impedance of your meter or scope also change the result. If the timing matters, use a tight-tolerance capacitor such as C0G or film, and measure.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/electronics/resistor-color-code/"><span class="tool-name">Resistor color code calculator</span><span class="tool-desc">4 and 5 band, both directions</span></a></li>
+      <li><a href="/en/electronics/voltage-divider/"><span class="tool-name">Voltage divider calculator</span><span class="tool-desc">Vout, missing resistor, E24 values</span></a></li>
+      <li><a href="/en/electronics/led-resistor/"><span class="tool-name">LED resistor calculator</span><span class="tool-desc">Resistor value, E24 and power rating</span></a></li>
+      <li><a href="/en/electronics/ohms-law/"><span class="tool-name">Ohm’s law calculator</span><span class="tool-desc">Any two of V, I, R, P</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a></p>
+  </div>
+</footer>
+<script src="/assets/elec.js"></script>
+<script src="/assets/tools/rc-time-constant.js"></script>
+</body>
+</html>

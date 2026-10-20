@@ -43,12 +43,22 @@ var ELEC = (function () {
     return clean(v * scale);
   }
 
+  // Capacitance: 100n, 100nF, 4.7uF, 4µ7, 4n7, 22p, 0.1u. A bare number is multiplied by bare (a field labelled
+  // "µF" passes 1e-6). Returns a number or null.
+  function parseCapacitance(text, bare) {
+    var s = String(text == null ? '' : text).trim().toLowerCase().replace(/\s+/g, '').replace(/μ/g, 'µ');
+    var m = s.match(/^(-?)(\d+)([pnuµm])(\d+)f?$/);
+    if (m) return clean((m[1] ? -1 : 1) * Number(m[2] + '.' + m[4]) * { p: 1e-12, n: 1e-9, u: 1e-6, 'µ': 1e-6, m: 1e-3 }[m[3]]);
+    return parseScaled(s, 'f', bare);
+  }
+
   // Format with SI prefix and 4 significant digits: si(0.0001667, 'A') -> '166.7 µA'.
   function si(v, unit) {
     var r = Number(v.toPrecision(4));
     if (r === 0) return '0 ' + unit;
-    var steps = [[1e9, 'G'], [1e6, 'M'], [1e3, 'k'], [1, ''], [1e-3, 'm'], [1e-6, 'µ'], [1e-9, 'n']];
+    var steps = [[1e9, 'G'], [1e6, 'M'], [1e3, 'k'], [1, ''], [1e-3, 'm'], [1e-6, 'µ'], [1e-9, 'n'], [1e-12, 'p']];
     if (unit === 'Ω') steps = steps.slice(0, 4); // no mΩ: resistor values are written 0.47 Ω
+    if (unit === 'F') steps = steps.filter(function (x) { return x[1] !== 'm'; }); // no mF: written 1000 µF
     for (var i = 0; i < steps.length; i++) {
       if (Math.abs(r) >= steps[i][0] || i === steps.length - 1) {
         return Number((r / steps[i][0]).toPrecision(4)) + ' ' + steps[i][1] + unit;
@@ -65,20 +75,21 @@ var ELEC = (function () {
     return lower === upper ? [lower] : [lower, upper];
   }
 
-  // Read a typed value. kind is 'voltage', 'resistance', 'current' or 'power'.
+  // Read a typed value. kind is 'voltage', 'resistance', 'current', 'power' or 'capacitance'.
   // Returns { v } or { error: kind + '-empty' | '-format' | '-positive', name } so pages can word errors themselves.
-  // Resistance, current and power must be greater than 0; voltage may be any sign.
+  // Everything except voltage must be greater than 0; voltage may be any sign.
   function read(text, kind, name, bare) {
     if (!String(text == null ? '' : text).trim()) return { error: kind + '-empty', name: name };
+    if (bare === undefined) bare = 1;
     var v = kind === 'voltage' ? parseVoltage(text) : kind === 'resistance' ? parseResistance(text)
-      : parseScaled(text, kind === 'current' ? 'a' : 'w', bare === undefined ? 1 : bare);
+      : kind === 'capacitance' ? parseCapacitance(text, bare) : parseScaled(text, kind === 'current' ? 'a' : 'w', bare);
     if (v === null) return { error: kind + '-format', name: name };
     if (kind !== 'voltage' && !(v > 0)) return { error: kind + '-positive', name: name };
     return { v: v };
   }
 
   return { E24: E24, clean: clean, parseResistance: parseResistance, parseVoltage: parseVoltage,
-    parseScaled: parseScaled, si: si, e24Neighbors: e24Neighbors, read: read };
+    parseScaled: parseScaled, parseCapacitance: parseCapacitance, si: si, e24Neighbors: e24Neighbors, read: read };
 })();
 
 if (typeof module !== 'undefined') module.exports = ELEC;
