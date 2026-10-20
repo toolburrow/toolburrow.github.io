@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UART Baud Rate Error Calculator: Divisor, Real Baud, Error % - ToolLamp</title>
+<meta name="description" content="Free UART baud rate error calculator. Enter the clock and baud rate to get the divisor, the real baud rate and the error, with AVR UBRR and STM32 BRR values.">
+<link rel="canonical" href="https://toollamp.github.io/en/electronics/uart-baud-rate/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/uart-baud-rate/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/uart-baud-rate/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="UART Baud Rate Error Calculator: Divisor, Real Baud, Error %">
+<meta property="og:description" content="Free UART baud rate error calculator. Enter the clock and baud rate to get the divisor, the real baud rate and the error, with AVR UBRR and STM32 BRR values.">
+<meta property="og:url" content="https://toollamp.github.io/en/electronics/uart-baud-rate/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<style>
+  .tool table { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: 1rem; font-variant-numeric: tabular-nums; }
+  .tool th, .tool td { border-bottom: 1px solid var(--line); padding: .4rem .5rem .4rem 0; text-align: left; }
+  .tool th { color: var(--muted); font-weight: 600; }
+  .tool tr.best td { font-weight: 700; }
+  .tool .ok { color: var(--lamp); }
+  .tool .bad { color: var(--danger); }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "UART baud rate error calculator",
+  "url": "https://toollamp.github.io/en/electronics/uart-baud-rate/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Electronics</div>
+    <h1>UART baud rate error calculator</h1>
+    <p>Enter the UART clock and baud rate to get the divisor to set, the real baud rate and the error, plus a table for the common baud rates.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="uart-h">
+    <h2 id="uart-h">Baud rate error</h2>
+    <div class="row">
+      <div class="field">
+        <label for="uart-clock">Clock (a plain number is MHz)</label>
+        <input id="uart-clock" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 16M, 7.3728M">
+      </div>
+      <div class="field">
+        <label for="uart-baud">Baud rate</label>
+        <input id="uart-baud" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 115200">
+      </div>
+      <div class="field">
+        <label for="uart-mode">Oversampling</label>
+        <select id="uart-mode">
+          <option value="x16">16x (AVR U2X=0, 16550)</option>
+          <option value="x8">8x (AVR U2X=1)</option>
+          <option value="brr">STM32 BRR (16x)</option>
+        </select>
+      </div>
+    </div>
+    <div class="result" id="uart-result" aria-live="polite"></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/uart-baud-rate" hidden></aside>
+
+  <article class="article">
+    <h2>Where baud rate error comes from</h2>
+    <p>A UART divides its clock to get the baud rate. With 16x oversampling, <strong>baud = clock ÷ (16 × divisor)</strong>, and the divisor must be a whole number, so the real baud rate is often a little off. For 115200 baud from 16 MHz: 16,000,000 ÷ (16 × 115200) ≈ 8.68, the closest divisor is 9, and the real baud rate is 111,111, an error of −3.5%.</p>
+    <p>The calculator picks the closest divisor and gives the error as (real − target) ÷ target.</p>
+
+    <h2>How much error is too much?</h2>
+    <p>The receiver samples each bit in the middle. An 8N1 frame has 10 bits, and by the stop bit the sampling point may not drift more than half a bit, so the two ends together must be within about 5%. After allowing for sampling resolution and slow signal edges, a common rule is to keep each end within ±2%. The calculator rates under 1% as fine, 1% to 2% as usually working, and over 2% as likely to give garbled data.</p>
+
+    <h2>Baud rate crystals</h2>
+    <p>These frequencies are whole multiples of 1.8432 MHz (115200 × 16), so all the common baud rates come out with 0% error.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Clock</th><th>Divisor for 115200 (16x)</th></tr></thead>
+        <tbody>
+          <tr><td>1.8432 MHz</td><td>1</td></tr>
+          <tr><td>3.6864 MHz</td><td>2</td></tr>
+          <tr><td>7.3728 MHz</td><td>4</td></tr>
+          <tr><td>11.0592 MHz</td><td>6</td></tr>
+          <tr><td>14.7456 MHz</td><td>8</td></tr>
+          <tr><td>18.432 MHz</td><td>10</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <h3>Why does an Arduino Uno at 16 MHz work at 115200?</h3>
+    <p>At 115200 the Arduino core uses 8x oversampling (U2X=1), which is +2.1% off. The ATmega16U2 that does USB-to-serial on the Uno also runs at 16 MHz with the same error, so the two ends match. Against an accurate USB-UART chip or another device it can fail; 57600 or lower, or rates that divide evenly such as 250000, 500000 and 1000000, are safer.</p>
+    <h3>How do I set the STM32 BRR?</h3>
+    <p>With 16x oversampling (OVER8=0), BRR = clock ÷ baud, rounded to a whole number; the fraction is already in the low 4 bits. For 72 MHz and 115200: 72,000,000 ÷ 115200 = 625 = 0x271. Use the clock of the bus the USART is on (APB1 or APB2). With 8x oversampling (OVER8=1) BRR is encoded differently, and this calculator doesn’t cover it.</p>
+    <h3>What is UBRR on AVR?</h3>
+    <p>AVR’s UBRR register takes the divisor minus 1. In the 16x and 8x modes the calculator shows the UBRR value next to the divisor.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/electronics/resistor-color-code/"><span class="tool-name">Resistor color code calculator</span><span class="tool-desc">4 and 5 band, both directions</span></a></li>
+      <li><a href="/en/electronics/voltage-divider/"><span class="tool-name">Voltage divider calculator</span><span class="tool-desc">Vout, missing resistor, E24 values</span></a></li>
+      <li><a href="/en/electronics/led-resistor/"><span class="tool-name">LED resistor calculator</span><span class="tool-desc">Resistor value, E24 and power rating</span></a></li>
+      <li><a href="/en/electronics/ohms-law/"><span class="tool-name">Ohm’s law calculator</span><span class="tool-desc">Any two of V, I, R, P</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/uart-baud-rate.js"></script>
+</body>
+</html>
