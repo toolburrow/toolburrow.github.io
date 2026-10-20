@@ -68,22 +68,36 @@
 
   <section class="tool" aria-labelledby="ohm-h">
     <h2 id="ohm-h">任填兩個值</h2>
-    <div class="row">
-      <div class="field">
-        <label for="ohm-v">電壓 V</label>
-        <input id="ohm-v" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 5、3V3">
-      </div>
-      <div class="field">
-        <label for="ohm-i">電流 I（A）</label>
-        <input id="ohm-i" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 0.02 或 20mA">
-      </div>
-      <div class="field">
-        <label for="ohm-r">電阻 R（Ω）</label>
-        <input id="ohm-r" type="text" autocomplete="off" spellcheck="false" placeholder="例如 220、4k7">
-      </div>
-      <div class="field">
-        <label for="ohm-p">功率 P（W）</label>
-        <input id="ohm-p" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 0.25 或 1/4W">
+    <div class="with-schematic">
+      <svg class="schematic" viewBox="0 0 130 210" role="img" aria-label="電壓源 V 推動電流 I 流過電阻 R，消耗功率 P = V × I">
+        <path d="M24 30H96V75M96 135V180H24V125M24 85V30" class="wire"/>
+        <circle cx="24" cy="105" r="20" class="part"/>
+        <text x="24" y="99" text-anchor="middle">+</text>
+        <text x="24" y="120" text-anchor="middle">−</text>
+        <text x="52" y="110">V</text>
+        <rect x="84" y="75" width="24" height="60" class="part"/>
+        <text x="114" y="110">R</text>
+        <path d="M50 30H66M60 24L68 30L60 36" class="wire"/>
+        <text x="54" y="20">I</text>
+        <text x="60" y="200" text-anchor="middle">P = V × I</text>
+      </svg>
+      <div class="row">
+        <div class="field">
+          <label for="ohm-v">電壓 V</label>
+          <input id="ohm-v" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 5、3V3">
+        </div>
+        <div class="field">
+          <label for="ohm-i">電流 I（A）</label>
+          <input id="ohm-i" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 0.02 或 20mA">
+        </div>
+        <div class="field">
+          <label for="ohm-r">電阻 R（Ω）</label>
+          <input id="ohm-r" type="text" autocomplete="off" spellcheck="false" placeholder="例如 220、4k7">
+        </div>
+        <div class="field">
+          <label for="ohm-p">功率 P（W）</label>
+          <input id="ohm-p" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 0.25 或 1/4W">
+        </div>
       </div>
     </div>
     <button class="clear-btn" type="button" id="ohm-clear">清除全部</button>

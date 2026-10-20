@@ -158,6 +158,12 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
       btn.setAttribute('aria-pressed', String(btn.dataset.known === known));
     });
     $('solve-known-label').textContent = T.known[known];
+    // The schematic marks the resistor being solved for.
+    [['r1', 'R1'], ['r2', 'R2']].forEach(function (r) {
+      var tag = $('solve-' + r[0] + '-tag');
+      tag.textContent = r[1] + (r[0] === known ? '' : ' ?');
+      tag.setAttribute('class', r[0] === known ? '' : 'unknown');
+    });
     renderSolve();
   }
 

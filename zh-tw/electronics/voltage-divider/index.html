@@ -26,6 +26,9 @@
 <script src="/assets/site.js"></script>
 <script src="/assets/affiliates.js"></script>
 <script src="/assets/favorites.js"></script>
+<style>
+  .schematic .unknown { fill: var(--lamp); }
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -101,18 +104,33 @@
       <button type="button" data-known="r1" aria-pressed="true">求 R2</button>
       <button type="button" data-known="r2" aria-pressed="false">求 R1</button>
     </div>
-    <div class="row">
-      <div class="field">
-        <label for="solve-vin">Vin（輸入電壓）</label>
-        <input id="solve-vin" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 12">
-      </div>
-      <div class="field">
-        <label for="solve-vout">目標 Vout</label>
-        <input id="solve-vout" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 3.3">
-      </div>
-      <div class="field">
-        <label for="solve-known" id="solve-known-label">R1（上方電阻）</label>
-        <input id="solve-known" type="text" autocomplete="off" spellcheck="false" placeholder="例如 10k">
+    <div class="with-schematic">
+      <svg class="schematic" viewBox="0 0 120 250" role="img" aria-label="Vin 經過 R1 接到 Vout，再經過 R2 接地，問號標出要求的電阻">
+        <circle cx="40" cy="14" r="5" class="part"/>
+        <text x="54" y="19">Vin</text>
+        <path d="M40 19V45M40 105V155M40 215V228M40 125H92" class="wire"/>
+        <rect x="28" y="45" width="24" height="60" class="part"/>
+        <text x="60" y="80" id="solve-r1-tag">R1</text>
+        <circle cx="40" cy="125" r="3.5" class="dot"/>
+        <circle cx="97" cy="125" r="5" class="part"/>
+        <text x="70" y="148">Vout</text>
+        <rect x="28" y="155" width="24" height="60" class="part"/>
+        <text x="60" y="190" id="solve-r2-tag">R2</text>
+        <path d="M22 228H58M28 236H52M34 244H46" class="wire"/>
+      </svg>
+      <div class="row">
+        <div class="field">
+          <label for="solve-vin">Vin（輸入電壓）</label>
+          <input id="solve-vin" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 12">
+        </div>
+        <div class="field">
+          <label for="solve-vout">目標 Vout</label>
+          <input id="solve-vout" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 3.3">
+        </div>
+        <div class="field">
+          <label for="solve-known" id="solve-known-label">R1（上方電阻）</label>
+          <input id="solve-known" type="text" autocomplete="off" spellcheck="false" placeholder="例如 10k">
+        </div>
       </div>
     </div>
     <div class="result" id="solve-result" aria-live="polite"></div>
