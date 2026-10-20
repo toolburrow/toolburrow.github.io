@@ -12,6 +12,7 @@ var AFF = (function () {
     'zh-tw/led-resistor': [],
     'zh-tw/ping-converter': [],
     'zh-tw/bmi-calculator': [],
+    'zh-tw/age-calculator': [],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
@@ -19,7 +20,8 @@ var AFF = (function () {
     'en/ohms-law': [],
     'en/led-resistor': [],
     'en/ping-converter': [],
-    'en/bmi-calculator': []
+    'en/bmi-calculator': [],
+    'en/age-calculator': []
   };
 
   var TEXT = {
