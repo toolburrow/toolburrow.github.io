@@ -115,6 +115,29 @@
       </table>
     </div>
 
+    <h2>Connecting 5 V and 3.3 V UARTs</h2>
+    <p>Wiring the TX of a 5 V board (such as an Arduino Uno) straight to the RX of a 3.3 V board (such as an ESP32 or Raspberry Pi) can damage the 3.3 V side. A simple fix is a voltage divider in between: with R1 = 1 kΩ and R2 = 2 kΩ, RX sees 5 × 2 ÷ (1 + 2) ≈ 3.33 V. Use the <a href="/en/electronics/voltage-divider/">voltage divider calculator</a> for other values.</p>
+    <svg class="schematic schematic-wide" viewBox="0 0 400 178" role="img" aria-label="TX of the 5 V device through R1 1 kΩ to RX of the 3.3 V device, with R2 2 kΩ from there to ground; TX of the 3.3 V device straight to RX of the 5 V device; both grounds connected">
+      <rect x="6" y="14" width="96" height="150" rx="6" class="part"/>
+      <text x="54" y="36" text-anchor="middle">5 V device</text>
+      <text x="92" y="64" text-anchor="end">RX</text>
+      <text x="92" y="104" text-anchor="end">TX</text>
+      <text x="92" y="154" text-anchor="end">GND</text>
+      <rect x="298" y="14" width="96" height="150" rx="6" class="part"/>
+      <text x="346" y="36" text-anchor="middle">3.3 V device</text>
+      <text x="308" y="64">TX</text>
+      <text x="308" y="104">RX</text>
+      <text x="308" y="154">GND</text>
+      <path d="M102 60H298M102 100H140M190 100H298M220 100V112M220 140V150M102 150H298" class="wire"/>
+      <rect x="140" y="88" width="50" height="24" class="part"/>
+      <text x="165" y="82" text-anchor="middle">R1 1 kΩ</text>
+      <circle cx="220" cy="100" r="3.5" class="dot"/>
+      <rect x="208" y="112" width="24" height="28" class="part"/>
+      <text x="240" y="131">R2 2 kΩ</text>
+      <circle cx="220" cy="150" r="3.5" class="dot"/>
+    </svg>
+    <p>The other direction (3.3 V TX to 5 V RX) usually works without parts, since many 5 V chips read about 3 V as high, but check V<sub>IH</sub> in the 5 V chip’s datasheet; if it isn’t enough, use a level shifter. Always connect the two grounds.</p>
+
     <h2>Frequently asked questions</h2>
     <h3>Why does an Arduino Uno at 16 MHz work at 115200?</h3>
     <p>At 115200 the Arduino core uses 8x oversampling (U2X=1), which is +2.1% off. The ATmega16U2 that does USB-to-serial on the Uno also runs at 16 MHz with the same error, so the two ends match. Against an accurate USB-UART chip or another device it can fail; 57600 or lower, or rates that divide evenly such as 250000, 500000 and 1000000, are safer.</p>

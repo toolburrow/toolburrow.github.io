@@ -132,6 +132,7 @@ input:focus, select:focus { border-color: var(--accent); }
 .schematic .part { stroke: currentColor; stroke-width: 2; fill: var(--surface); }
 .schematic text { fill: currentColor; font: 600 13px var(--font-body); }
 .schematic .dot { fill: currentColor; }
+.schematic-wide { display: block; width: 100%; max-width: 30rem; height: auto; margin: 1rem 0; }
 
 /* Tables inside tool panels (results such as E24 options or baud rate tables) */
 .tool table { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: 1rem; font-variant-numeric: tabular-nums; }

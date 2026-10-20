@@ -63,36 +63,51 @@
 
   <section class="tool" aria-labelledby="led-h">
     <h2 id="led-h">計算限流電阻</h2>
-    <div class="row">
-      <div class="field">
-        <label for="led-vs">電源電壓 Vs</label>
-        <input id="led-vs" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 5、12、3V3">
-      </div>
-      <div class="field">
-        <label for="led-color">LED 顏色</label>
-        <select id="led-color">
-          <option value="red">紅（約 2.0 V）</option>
-          <option value="orange">橙（約 2.0 V）</option>
-          <option value="yellow">黃（約 2.1 V）</option>
-          <option value="yellow-green">黃綠（約 2.1 V）</option>
-          <option value="green">綠，高亮度（約 3.2 V）</option>
-          <option value="blue">藍（約 3.2 V）</option>
-          <option value="white">白（約 3.2 V）</option>
-          <option value="ir">紅外線（約 1.3 V）</option>
-          <option value="custom">自訂</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="led-vf">順向電壓 Vf</label>
-        <input id="led-vf" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 2">
-      </div>
-      <div class="field">
-        <label for="led-i">電流（mA）</label>
-        <input id="led-i" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 20">
-      </div>
-      <div class="field">
-        <label for="led-n">串聯顆數</label>
-        <input id="led-n" type="text" inputmode="numeric" autocomplete="off" placeholder="例如 1">
+    <div class="with-schematic">
+      <svg class="schematic" viewBox="0 0 120 245" role="img" aria-label="電源 Vs 經過限流電阻 R，接到 n 顆串聯的 LED，再接地">
+        <circle cx="40" cy="14" r="5" class="part"/>
+        <text x="54" y="19">Vs</text>
+        <path d="M40 19V45M40 95V138M40 166V216" class="wire"/>
+        <rect x="28" y="45" width="24" height="50" class="part"/>
+        <text x="60" y="75">R</text>
+        <path d="M24 138H56L40 164Z" class="part"/>
+        <path d="M24 165H56" class="wire"/>
+        <path d="M60 146L74 136M68 136H74V142M60 158L74 148M68 148H74V154" class="wire" style="stroke-width:1.5"/>
+        <text x="62" y="182">LED</text>
+        <text x="62" y="198">× n</text>
+        <path d="M22 216H58M28 224H52M34 232H46" class="wire"/>
+      </svg>
+      <div class="row">
+        <div class="field">
+          <label for="led-vs">電源電壓 Vs</label>
+          <input id="led-vs" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 5、12、3V3">
+        </div>
+        <div class="field">
+          <label for="led-color">LED 顏色</label>
+          <select id="led-color">
+            <option value="red">紅（約 2.0 V）</option>
+            <option value="orange">橙（約 2.0 V）</option>
+            <option value="yellow">黃（約 2.1 V）</option>
+            <option value="yellow-green">黃綠（約 2.1 V）</option>
+            <option value="green">綠，高亮度（約 3.2 V）</option>
+            <option value="blue">藍（約 3.2 V）</option>
+            <option value="white">白（約 3.2 V）</option>
+            <option value="ir">紅外線（約 1.3 V）</option>
+            <option value="custom">自訂</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="led-vf">順向電壓 Vf</label>
+          <input id="led-vf" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 2">
+        </div>
+        <div class="field">
+          <label for="led-i">電流（mA）</label>
+          <input id="led-i" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 20">
+        </div>
+        <div class="field">
+          <label for="led-n">串聯顆數</label>
+          <input id="led-n" type="text" inputmode="numeric" autocomplete="off" placeholder="例如 1">
+        </div>
       </div>
     </div>
     <div class="result" id="led-result" aria-live="polite"></div>

@@ -115,6 +115,29 @@
       </table>
     </div>
 
+    <h2>5 V 和 3.3 V 的 UART 怎麼接？</h2>
+    <p>5 V 裝置（例如 Arduino Uno）的 TX 直接接到 3.3 V 裝置（例如 ESP32、樹莓派）的 RX，可能會損壞 3.3 V 那端。簡單的做法是在中間加一組分壓電阻，把 5 V 降到 3.3 V 左右：R1 = 1 kΩ、R2 = 2 kΩ 時，RX 收到 5 × 2 ÷ (1 + 2) ≈ 3.33 V。其他組合可以用<a href="/zh-tw/electronics/voltage-divider/">分壓電阻計算</a>算。</p>
+    <svg class="schematic schematic-wide" viewBox="0 0 400 178" role="img" aria-label="5 V 裝置的 TX 經過 R1 1 kΩ 接到 3.3 V 裝置的 RX，中間用 R2 2 kΩ 接地；3.3 V 裝置的 TX 直接接 5 V 裝置的 RX；兩邊的 GND 相連">
+      <rect x="6" y="14" width="96" height="150" rx="6" class="part"/>
+      <text x="54" y="36" text-anchor="middle">5 V 裝置</text>
+      <text x="92" y="64" text-anchor="end">RX</text>
+      <text x="92" y="104" text-anchor="end">TX</text>
+      <text x="92" y="154" text-anchor="end">GND</text>
+      <rect x="298" y="14" width="96" height="150" rx="6" class="part"/>
+      <text x="346" y="36" text-anchor="middle">3.3 V 裝置</text>
+      <text x="308" y="64">TX</text>
+      <text x="308" y="104">RX</text>
+      <text x="308" y="154">GND</text>
+      <path d="M102 60H298M102 100H140M190 100H298M220 100V112M220 140V150M102 150H298" class="wire"/>
+      <rect x="140" y="88" width="50" height="24" class="part"/>
+      <text x="165" y="82" text-anchor="middle">R1 1 kΩ</text>
+      <circle cx="220" cy="100" r="3.5" class="dot"/>
+      <rect x="208" y="112" width="24" height="28" class="part"/>
+      <text x="240" y="131">R2 2 kΩ</text>
+      <circle cx="220" cy="150" r="3.5" class="dot"/>
+    </svg>
+    <p>反方向（3.3 V 的 TX 接 5 V 的 RX）通常可以直接接，因為很多 5 V 晶片在 3 V 左右就認得是高電位，但請查 5 V 那端資料手冊的 V<sub>IH</sub>；不夠的話要改用電位轉換 IC。兩邊的 GND 一定要接在一起。</p>
+
     <h2>常見問題</h2>
     <h3>Arduino Uno 用 16 MHz 跑 115200，為什麼還能通？</h3>
     <p>Arduino 在 115200 時用 8 倍取樣（U2X=1），誤差是 +2.1%。Uno 上負責 USB 轉序列埠的 ATmega16U2 也是 16 MHz，誤差一樣，兩端的偏差剛好抵消。如果接的是時脈準確的 USB 轉 UART 晶片或其他裝置，就可能出錯，可以改用 57600 以下或 250000、500000、1000000 這類整除的鮑率。</p>
