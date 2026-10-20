@@ -1,61 +1,14 @@
 // Voltage divider calculator / 分壓電阻計算, shared by /en/ and /zh-tw/ pages.
 // Pure logic first (testable with node), then page text per language, then DOM wiring.
 // Circuit: Vin -- R1 -- Vout -- R2 -- GND, no load on Vout.
+var ELEC = typeof module !== 'undefined' ? require('../elec.js') : window.ELEC;
+
 var VD = (function () {
-  var E24 = [10, 11, 12, 13, 15, 16, 18, 20, 22, 24, 27, 30, 33, 36, 39, 43, 47, 51, 56, 62, 68, 75, 82, 91];
-
-  function clean(x) { return Number(x.toPrecision(12)); }
-
-  // Accepts 4.7k, 4k7, 470, 2.2M, R47, 4R7, 10kΩ, 1 ohm. "m" is treated as mega (resistor convention).
-  // Returns a number (possibly 0 or negative, so callers can explain the problem) or null.
-  function parseResistance(text) {
-    var s = String(text == null ? '' : text).trim().toLowerCase().replace(/\s+/g, '').replace(/(Ω|ω|ohms?)$/, '');
-    var mult = { r: 1, '': 1, k: 1e3, m: 1e6, g: 1e9 };
-    var m = s.match(/^(-?)(\d*)([rkmg])(\d+)$/);
-    if (m && (m[2] !== '' || m[3] === 'r')) return clean((m[1] ? -1 : 1) * Number((m[2] || '0') + '.' + m[4]) * mult[m[3]]);
-    m = s.match(/^(-?(?:\d+\.?\d*|\.\d+))([kmg]?)$/);
-    if (m) return clean(Number(m[1]) * mult[m[2]]);
-    return null;
-  }
-
-  // Accepts 5, 3.3, -12, 3.3V, 3V3, 500mV. Returns a number or null.
-  function parseVoltage(text) {
-    var s = String(text == null ? '' : text).trim().toLowerCase().replace(/\s+/g, '');
-    var m = s.match(/^(-?)(\d+)v(\d+)$/);
-    if (m) return clean((m[1] ? -1 : 1) * Number(m[2] + '.' + m[3]));
-    m = s.match(/^([+-]?(?:\d+\.?\d*|\.\d+))(mv|v)?$/);
-    if (m) return clean(Number(m[1]) * (m[2] === 'mv' ? 1e-3 : 1));
-    return null;
-  }
-
-  // Format with SI prefix and 4 significant digits: si(0.0001667, 'A') -> '166.7 µA'.
-  function si(v, unit) {
-    var r = Number(v.toPrecision(4));
-    if (r === 0) return '0 ' + unit;
-    var steps = [[1e9, 'G'], [1e6, 'M'], [1e3, 'k'], [1, ''], [1e-3, 'm'], [1e-6, 'µ'], [1e-9, 'n']];
-    if (unit === 'Ω') steps = steps.slice(0, 4); // no mΩ: resistor values are written 0.47 Ω
-    for (var i = 0; i < steps.length; i++) {
-      if (Math.abs(r) >= steps[i][0] || i === steps.length - 1) {
-        return Number((r / steps[i][0]).toPrecision(4)) + ' ' + steps[i][1] + unit;
-      }
-    }
-  }
+  var clean = ELEC.clean, si = ELEC.si, e24Neighbors = ELEC.e24Neighbors;
 
   // Errors are { error: code, name } so each page can word them in its own language (see TEXT).
-  function readVoltage(text, name) {
-    if (!String(text == null ? '' : text).trim()) return { error: 'voltage-empty', name: name };
-    var v = parseVoltage(text);
-    if (v === null) return { error: 'voltage-format', name: name };
-    return { v: v };
-  }
-
-  function readResistance(text, name) {
-    if (!String(text == null ? '' : text).trim()) return { error: 'resistance-empty', name: name };
-    var v = parseResistance(text);
-    if (v === null) return { error: 'resistance-format', name: name };
-    if (!(v > 0)) return { error: 'resistance-positive', name: name };
-    return { v: v };
-  }
+  function readVoltage(text, name) { return ELEC.read(text, 'voltage', name); }
+  function readResistance(text, name) { return ELEC.read(text, 'resistance', name); }
 
   // Everything that follows from Vin, R1 and R2.
   function circuit(vin, r1, r2) {
@@ -70,15 +23,6 @@ var VD = (function () {
     var r1 = readResistance(r1Text, 'R1'); if (r1.error) return r1;
     var r2 = readResistance(r2Text, 'R2'); if (r2.error) return r2;
     return circuit(vin.v, r1.v, r2.v);
-  }
-
-  // E24 values just below and just above x (one value if x is itself an E24 value).
-  function e24Neighbors(x) {
-    var d = Math.floor(Math.log10(x)), all = [];
-    for (var dec = d - 1; dec <= d + 1; dec++) E24.forEach(function (v) { all.push(clean(v * Math.pow(10, dec - 1))); });
-    var lower = all.filter(function (v) { return v <= x * (1 + 1e-9); }).pop();
-    var upper = all.filter(function (v) { return v >= x * (1 - 1e-9); })[0];
-    return lower === upper ? [lower] : [lower, upper];
   }
 
   // Vin, target Vout and the known resistor -> the exact other resistor, plus the E24 values on either side of it.
@@ -151,7 +95,7 @@ var VD = (function () {
     }
   };
 
-  return { E24: E24, parseResistance: parseResistance, parseVoltage: parseVoltage, si: si,
+  return { E24: ELEC.E24, parseResistance: ELEC.parseResistance, parseVoltage: ELEC.parseVoltage, si: si,
     circuit: circuit, forward: forward, e24Neighbors: e24Neighbors, solve: solve, TEXT: TEXT };
 })();
 

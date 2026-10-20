@@ -34,6 +34,7 @@ check tasks off as you finish them, and update PLAN.md before the session ends.
 /en/                    English home
 /en/<category>/<tool-slug>/index.html
 /assets/tools/<tool-slug>.js   tool logic + page text in both languages, shared by both pages
+/assets/elec.js         shared parsing, SI formatting and E24 values for electronics tools (load it before the tool script)
 /zh-tw/{about,privacy,contact}/   site pages (same under /en/)
 /assets/site.css        shared design tokens and components
 /assets/site.js         language choice, theme toggle, copy buttons
