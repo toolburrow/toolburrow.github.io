@@ -23,7 +23,7 @@
 5. 做了重要的技術或方向決定，記到最下面的「決策紀錄」。
 6. session 結束前，給 Adrian 一份摘要：完成了什麼、卡在哪裡、需要他做什麼。
 
-**目前階段：第 7 階段已完成，等 Adrian 決定下一階段**
+**目前階段：第 8 階段**
 
 ## 收益計畫狀態
 
@@ -128,12 +128,26 @@ Adrian 2026-10-20 決定四個都做，每個都要有中英兩版。照 AGENTS.
 - [x] 歐姆定律計算（`electronics/ohms-law`）：V、I、R、P 任填兩個，算出另外兩個。
       結果：已上線，四個值任填兩個（填超過兩個會提示清除），列出用到的公式；電流和功率只輸入數字時單位是 A 和 W，也接受 20mA、1/4W 這類寫法。
 
+## 第 8 階段：SEO 基礎，再做第三批工具
+
+Adrian 2026-10-20 決定。先做 SEO（8 頁一次套用），再做四個新工具，每個都要有中英兩版，每個工具一個 commit。
+
+- [x] 拿掉 footer 的「部分頁面含有聯盟連結」：Adrian 決定，等第一個計畫核准、真的放上連結再加回來。工具頁推薦區塊自己的揭露文字保留。新增測試防止提早加回去。
+- [x] 每頁加上 Open Graph 標籤和分享預覽圖（`/assets/og.png`，1200×630），貼到 LINE、Facebook 會顯示標題、說明和圖片。
+      結果：25 頁都有，測試檢查標籤和 title、description、canonical 一致。順便更新三個首頁的 meta description（原本只列最早的 4 個工具）。
+- [x] 每個工具頁加上「相關工具」：列出同分類的其他工具，項目直接照抄語言首頁，測試檢查兩邊一致。
+- [x] FAQPage 結構化資料：不做。查證後發現 Google 從 2023 年起只對政府和醫療網站顯示 FAQ 搜尋結果，對本站沒有效果。已寫進 AGENTS.md。
+- [ ] 年齡計算（`life/age-calculator`）：輸入生日，算出幾歲幾個月幾天、下次生日還有幾天；中文頁另外顯示虛歲和民國年。
+- [ ] 聚餐分帳（`life/split-bill`）：總金額、人數、服務費，算出每人要付多少，可以處理除不盡的零頭。
+- [ ] RC 時間常數（`electronics/rc-time-constant`）：R、C 算出 τ、截止頻率，以及充電到某個百分比要多久。
+- [ ] UART 鮑率誤差（`electronics/uart-baud-rate`）：輸入時脈和目標鮑率，算出除數、實際鮑率和誤差，標示能不能用。
+
 ## 之後的工具點子
 
 依搜尋需求排序，Adrian 可以調整。做完一個就從這裡移到對應階段。
 
-- 中文：聚餐分帳計算、台斤公斤換算、年齡計算
-- 英文：UART baud rate error、CRC calculator（CRC-8/16/32）、RC time constant、DMX address DIP switch calculator
+- 中文：台斤公斤換算
+- 英文：CRC calculator（CRC-8/16/32）、DMX address DIP switch calculator
 
 ## Adrian 要自己做的事
 
@@ -141,7 +155,7 @@ Adrian 2026-10-20 決定四個都做，每個都要有中英兩版。照 AGENTS.
 
 - [x] 把 GitHub 組織 `toolburrow` 改名為 `toollamp`（組織 Settings → Change organization name）：已完成。
 - [x] 把 repo `toolburrow.github.io` 改名為 `toollamp.github.io`（repo Settings → Repository name），確認網站在 `https://toollamp.github.io/` 能打開：已完成，13 頁都能正常開啟，舊網址已失效。
-- [ ] 考慮現在就買下 `toollamp.com`，避免好名字被別人註冊走（買之前先到註冊商網站確認還沒人註冊）
+- [ ] 有流量再買 `toollamp.com`（Adrian 2026-10-20 決定先不買；.com 一年約 US$10～15）
 - [ ] 到智慧財產局和美國 USPTO 查 ToolLamp 有沒有人註冊商標
 - [x] 到 Google Search Console 驗證網站並提交 `https://toollamp.github.io/sitemap.xml`：2026-10-20 完成，驗證檔 `google93ec6f7db77f90e7.html` 要一直留著。
 - [ ] 申請蝦皮分潤計畫
@@ -160,8 +174,6 @@ Adrian 2026-10-20 決定四個都做，每個都要有中英兩版。照 AGENTS.
 - 加廣告時，所有頁面 footer 的「不會上傳任何資料」要改寫。計算確實不會上傳，但 AdSense 會用 cookie。可以在第 3 階段做隱私權政策時一起處理。
 - 蝦皮分潤計畫官方說明只列 YouTube、Instagram、Facebook 粉絲專頁，沒提到網站。如果申請時一定要連結社群帳號，要不要開一個 ToolLamp 的 Facebook 粉絲專頁？（詳見 `docs/applications.md`）
 - Amazon Associates 建議等英文頁有穩定流量再申請，因為很多來源說新帳號要在 180 天內成交 3 筆，否則帳號會被關（官方文件沒找到這條，待確認）。
-- 第 7 階段完成，下一階段要做什麼？可以從「之後的工具點子」再挑，或等 Search Console 有資料後依搜尋字詞決定。
-- footer 寫「部分頁面含有聯盟連結」，但目前還沒有任何聯盟連結。要先拿掉，等第一個計畫核准再加回來，還是先保留？
 
 ## 決策紀錄
 
@@ -182,3 +194,4 @@ Adrian 2026-10-20 決定四個都做，每個都要有中英兩版。照 AGENTS.
 - 2026-10-20：申請順序建議：蝦皮（先確認網站能不能申請）→ AliExpress → Amazon（等有流量）→ AdSense（等自有網域）。
 - 2026-10-20：BMI 用實際值分類，顯示到小數一位；只有四捨五入會跨過分界時（例如 23.96 會變 24.0）才改顯示兩位小數，讓顯示的數字、分類和健康範圍永遠一致。
 - 2026-10-20：電子工具共用的函式（解析電壓、電阻、電流、功率，SI 格式，E24）放在 `/assets/elec.js`，電子工具頁先載入它再載入工具程式。
+- 2026-10-20：第 8 階段先做 SEO 基礎再做新工具。不加 FAQPage 結構化資料（Google 只對政府和醫療網站顯示 FAQ 結果）。footer 的聯盟揭露先拿掉，第一個計畫核准時再加回來。

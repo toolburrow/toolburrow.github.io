@@ -65,11 +65,18 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
 3. Add tests in `/tests/<slug>.test.js` and run `node tests/run.js`. All tests must pass.
 4. Page content, in this order: `.page-head` (breadcrumb, h1, one-sentence description) → one or more
    `.tool` panels → affiliate slot `<aside>` (see below) → `.article` with an explanation, a reference table where useful,
-   and a short FAQ (2–4 questions people actually search for).
+   and a short FAQ (2–4 questions people actually search for) → related tools
+   `<nav class="tool-group" aria-labelledby="related-h">` (copy one from another tool page).
+   The related list holds 2–4 tools, preferably from the same category, and each `<li>` is copied exactly from the
+   language home page (the tests check).
 5. SEO in `<head>`: unique `<title>` (tool name + what it does + "- ToolLamp"), meta description under
-   ~155 characters, canonical URL, `hreflang` links to both versions (see "Languages"), `WebApplication` JSON-LD.
+   ~155 characters, canonical URL, `hreflang` links to both versions (see "Languages"), Open Graph tags right after the
+   `hreflang` links (`og:title` is the `<title>` without " - ToolLamp", `og:description` repeats the meta description,
+   `og:url` is the canonical URL, shared image `/assets/og.png`), `WebApplication` JSON-LD.
+   No FAQPage JSON-LD: Google only shows FAQ results for government and health sites.
 6. Add the tool to both language home pages AND the root `index.html`, and add both URLs to `sitemap.xml`.
    Add empty slots `zh-tw/<slug>` and `en/<slug>` to `SLOTS` in `/assets/affiliates.js` (the tests check this).
+   Add the new tool to the related list of the other tools in its category while that list has fewer than 4 entries.
 7. The tool must show a useful result on first load (pre-fill a sensible default) and update live as the user types.
 
 ## Languages
@@ -124,6 +131,9 @@ Every tool page has `<aside class="affiliate" data-slot="<lang>/<slug>" hidden><
 Only the owner decides which products and links go there, and only programs marked "已核准" in PLAN.md may be used.
 When asked to fill one, only edit that slot's array in `affiliates.js`, using the exact URLs the owner gives.
 Never invent affiliate URLs or tracking IDs.
+
+Footers carry no affiliate disclosure while no page has affiliate links (`tests/site.test.js` checks). When the first
+program is approved and its links go in, add the disclosure line back to every footer in both languages and update that test.
 
 ## Ad slots
 

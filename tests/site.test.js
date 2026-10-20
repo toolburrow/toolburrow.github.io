@@ -48,3 +48,48 @@ test('site: ad slots are styled but no page has one yet', () => {
   eq(/\.ad-slot \{[^}]*min-height: 300px/.test(css), true);
   for (const rel of pages) eq([rel, /class="[^"]*\bad-slot\b/.test(fs.readFileSync(path.join(root, rel), 'utf8'))], [rel, false]);
 });
+test('site: footers carry no affiliate disclosure until a program is approved', () => {
+  for (const rel of pages) {
+    const footer = (fs.readFileSync(path.join(root, rel), 'utf8').match(/<footer class="site-footer">[\s\S]*?<\/footer>/) || [''])[0];
+    eq([rel, /聯盟|affiliate/i.test(footer)], [rel, false]);
+  }
+});
+
+const meta = (html, attr, key) => {
+  const m = html.match(new RegExp('<meta ' + attr + '="' + key + '" content="([^"]*)">'));
+  return m && m[1];
+};
+test('site: Open Graph tags match the title, description and canonical URL', () => {
+  eq(fs.existsSync(path.join(root, 'assets/og.png')), true);
+  for (const rel of pages) {
+    if (rel === '404.html') continue;
+    const h = fs.readFileSync(path.join(root, rel), 'utf8');
+    eq([rel, meta(h, 'property', 'og:title')], [rel, h.match(/<title>([^<]*)<\/title>/)[1].replace(/ - ToolLamp$/, '')]);
+    eq([rel, meta(h, 'property', 'og:description')], [rel, meta(h, 'name', 'description')]);
+    eq([rel, meta(h, 'property', 'og:url')], [rel, urlOf(rel)]);
+    eq([rel, meta(h, 'property', 'og:image')], [rel, 'https://toollamp.github.io/assets/og.png']);
+    eq([rel, meta(h, 'property', 'og:locale')], [rel, rel.startsWith('en/') ? 'en_US' : 'zh_TW']);
+    eq([rel, meta(h, 'name', 'twitter:card')], [rel, 'summary_large_image']);
+  }
+});
+
+test('site: every tool page lists 2-4 related tools, copied from its home page', () => {
+  for (const lang of ['zh-tw', 'en']) {
+    const home = fs.readFileSync(path.join(root, lang, 'index.html'), 'utf8');
+    const entries = new Map([...home.matchAll(/<li><a href="(\/[^"]+)">.*?<\/li>/g)].map(m => [m[1], m[0]]));
+    for (const rel of pages.filter(p => p.startsWith(lang + '/') && p.split('/').length === 4)) {
+      const h = fs.readFileSync(path.join(root, rel), 'utf8');
+      const self = '/' + rel.replace(/index\.html$/, '');
+      eq([rel, entries.has(self)], [rel, true]);
+      const nav = (h.match(/<nav class="tool-group" aria-labelledby="related-h">[\s\S]*?<\/nav>/) || [''])[0];
+      eq([rel, nav !== ''], [rel, true]);
+      eq([rel, h.indexOf('</article>') < h.indexOf('aria-labelledby="related-h"')], [rel, true]);
+      const lis = [...nav.matchAll(/<li><a href="(\/[^"]+)">.*?<\/li>/g)];
+      eq([rel, lis.length >= 2 && lis.length <= 4], [rel, true]);
+      for (const m of lis) {
+        eq([rel, m[1] !== self], [rel, true]);
+        eq([rel, m[0]], [rel, entries.get(m[1])]);
+      }
+    }
+  }
+});
