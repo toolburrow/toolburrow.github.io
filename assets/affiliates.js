@@ -8,6 +8,7 @@ var AFF = (function () {
     'zh-tw/date-difference': [],
     'zh-tw/resistor-color-code': [],
     'zh-tw/voltage-divider': [],
+    'zh-tw/ohms-law': [],
     'zh-tw/led-resistor': [],
     'zh-tw/ping-converter': [],
     'zh-tw/bmi-calculator': [],
@@ -15,6 +16,7 @@ var AFF = (function () {
     'en/date-difference': [],
     'en/resistor-color-code': [],
     'en/voltage-divider': [],
+    'en/ohms-law': [],
     'en/led-resistor': [],
     'en/ping-converter': [],
     'en/bmi-calculator': []

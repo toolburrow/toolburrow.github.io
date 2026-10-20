@@ -1,6 +1,6 @@
 # 收益計畫申請草稿
 
-給 Adrian 填申請表時複製貼上用。內容依照網站 2026-10-20 的實際狀況撰寫，沒有流量數字。
+給 Adrian 填申請表時複製貼上用。內容依照網站 2026-10-20 的實際狀況撰寫（第二批工具上線後更新），沒有流量數字。
 申請時如果網站已經有變化（新工具、Search Console 有了流量資料），請先更新這份文件。
 
 > 這個 repo 是公開的，這份文件也會出現在網站上。不要在這裡寫入帳號、收款、身分或收入資料。
@@ -14,7 +14,7 @@
 | 網站名稱 | ToolLamp |
 | 網址 | https://toollamp.github.io/ |
 | 上線日期 | 2026 年 10 月 19 日 |
-| 內容 | 4 個免費線上工具，每個都有繁體中文和英文版，共 8 個工具頁：民國西元換算、日期間隔計算、電阻色碼計算、分壓電阻計算。每頁都有說明文章、對照表和常見問題。 |
+| 內容 | 8 個免費線上工具，每個都有繁體中文和英文版，共 16 個工具頁。生活工具：民國西元換算、日期間隔計算、BMI 計算、坪數換算；電子工具：電阻色碼、分壓電阻、LED 限流電阻、歐姆定律。每頁都有說明文章、對照表和常見問題。 |
 | 語言 | 繁體中文（台灣）、英文 |
 | 流量 | 剛上線，還沒有流量資料。2026-10-20 已提交 Google Search Console。 |
 | 經營者 | 一位台灣的韌體工程師（個人經營） |
@@ -28,7 +28,7 @@
 
 **約 50 字**
 
-> ToolLamp 是免費的線上工具網站，提供民國西元換算、日期計算、電阻色碼和分壓電阻計算等工具，打開就能用，不用註冊。
+> ToolLamp 是免費的線上工具網站，提供 BMI、坪數換算、日期計算、民國西元換算，以及電阻色碼、LED 電阻等電子工具，打開就能用，不用註冊。
 
 **約 150 字**
 
@@ -38,11 +38,11 @@
 
 **About 50 words**
 
-> ToolLamp is a free website of small online tools: a resistor color code calculator, a voltage divider calculator, a date difference calculator and a Taiwan (ROC) year converter. Every tool works in the browser with no sign-up, and each page explains the method with reference tables and FAQs.
+> ToolLamp is a free website of small online tools: electronics calculators for resistor color codes, voltage dividers, LED resistors and Ohm’s law, plus BMI, date and area converters. Every tool works in the browser with no sign-up, and each page explains the method with tables and FAQs.
 
 **About 150 words**
 
-> ToolLamp is a free website of small online tools, built and run by a firmware engineer in Taiwan. It focuses on electronics work and everyday calculations: a resistor color code calculator for 4- and 5-band resistors, a voltage divider calculator that suggests the closest E24 resistor values, a date difference calculator, and a converter for Taiwan’s ROC (Minguo) calendar. Every tool is available in English and Traditional Chinese, runs entirely in the browser, and needs no account. Each page explains how the calculation works, with formulas, reference tables and answers to common questions, and every calculation is covered by automated tests. The audience is hobbyists, students and engineers working with circuits, plus people who need quick date and calendar conversions. The site is new and growing through search; more electronics tools, such as LED resistor, Ohm’s law and RC time constant calculators, are planned.
+> ToolLamp is a free website of small online tools, built and run by a firmware engineer in Taiwan. It focuses on electronics work and everyday calculations: a resistor color code calculator for 4- and 5-band resistors, a voltage divider calculator that suggests the closest E24 resistor values, an LED resistor calculator, an Ohm’s law calculator, a BMI calculator, a date difference calculator, and converters for Taiwan’s ROC calendar and ping floor-area unit. Every tool is available in English and Traditional Chinese, runs entirely in the browser, and needs no account. Each page explains how the calculation works, with formulas, reference tables and answers to common questions, and every calculation is covered by automated tests. The audience is hobbyists, students and engineers working with circuits, plus people who need quick everyday calculations. The site is new and growing through search, with more electronics tools planned.
 
 ### 內容類型 / Content type
 
@@ -60,7 +60,7 @@
 
 ### 蝦皮分潤計畫（中文頁）
 
-用在：`zh-tw/` 的 4 個工具頁。
+用在：`zh-tw/` 的 8 個工具頁。
 
 **申請條件**（2026-10-20 查詢）
 
@@ -74,12 +74,12 @@
 |---|---|
 | 推廣管道 | 網站：https://toollamp.github.io/zh-tw/ |
 | 網站簡介 | 用上面的「約 50 字」或「約 150 字」中文版 |
-| 推廣商品類別 | 電子零件與工具（電阻包、三用電錶、麵包板、開發板）、文具與日曆（桌曆、手帳） |
+| 推廣商品類別 | 電子零件與工具（電阻包、LED、三用電錶、麵包板、開發板）、健康（體重計、體脂計）、居家（捲尺、雷射測距儀）、文具與日曆（桌曆、手帳） |
 | 推廣方式 | 用上面的「打算怎麼推廣商品」中文版 |
 
 ### AliExpress 聯盟（英文頁）
 
-用在：`en/` 的 4 個工具頁，主要是兩個電子工具。
+用在：`en/` 的 8 個工具頁，主要是四個電子工具。
 
 **申請條件**（2026-10-20 查詢）
 
@@ -98,7 +98,7 @@
 
 ### Amazon Associates（英文頁）
 
-用在：`en/` 的 4 個工具頁。
+用在：`en/` 的 8 個工具頁。
 
 **申請條件**（2026-10-20 查詢）
 
