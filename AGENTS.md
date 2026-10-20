@@ -35,7 +35,7 @@ check tasks off as you finish them, and update PLAN.md before the session ends.
 /en/<category>/<tool-slug>/index.html + tool.js
 /zh-tw/{about,privacy,contact}/   site pages (same under /en/)
 /assets/site.css        shared design tokens and components
-/assets/site.js         theme toggle + copy buttons
+/assets/site.js         language choice, theme toggle, copy buttons
 /assets/affiliates.js   affiliate products per tool (see "Affiliate slots")
 /tests/                 node tests for tool logic
 sitemap.xml, robots.txt, 404.html, .nojekyll
@@ -57,10 +57,25 @@ Slugs are lowercase English words joined with hyphens, describing what people se
    `.tool` panels → affiliate slot `<aside>` (see below) → `.article` with an explanation, a reference table where useful,
    and a short FAQ (2–4 questions people actually search for).
 5. SEO in `<head>`: unique `<title>` (tool name + what it does + "- ToolLamp"), meta description under
-   ~155 characters, canonical URL, `WebApplication` JSON-LD.
+   ~155 characters, canonical URL, `WebApplication` JSON-LD. If the tool exists in both languages, add the
+   `hreflang` links to both versions (see "Languages").
 6. Add the tool to the language home page AND the root `index.html`, and add its URL to `sitemap.xml`.
    Add an empty slot for its slug to `SLOTS` in `/assets/affiliates.js` (the tests check this).
 7. The tool must show a useful result on first load (pre-fill a sensible default) and update live as the user types.
+
+## Languages
+
+- The root page `/` only redirects: `site.js` sends the reader to `/zh-tw/` or `/en/`. Its bilingual content is the
+  no-JS fallback. No other page redirects by language, so search engines can index both versions.
+- Language rule (`SiteLang` in `site.js`, tested in `tests/site-lang.test.js`): a saved choice wins. Otherwise the first
+  Chinese entry in the browser languages decides: Traditional or TW/HK/MO → Chinese, Simplified or CN/SG/MY → English.
+  With no Chinese entry, a Taipei/Hong Kong/Macau time zone → Chinese, anything else → English.
+- The choice is saved in localStorage (`tb-lang`) only when the reader clicks a link with `data-set-lang`
+  (the header's 中文工具 / English tools links and the offer bar).
+- Pages that exist in both languages list each other with `<link rel="alternate" hreflang="zh-Hant|en">`
+  right after the canonical link, with the same set on both pages. On those pages `site.js` shows a bar offering the
+  other version when it matches the reader's language better. The tests check the links are reciprocal.
+- The logo links to the home page of the page's language (`/zh-tw/` or `/en/`); only the root page and 404 link to `/`.
 
 ## Site pages and privacy
 

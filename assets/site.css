@@ -142,3 +142,12 @@ input:focus, select:focus { border-color: var(--accent); }
   .hero { grid-template-columns: 1fr; padding-top: 2.2rem; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Offer to switch to the reader's language (added by site.js) */
+.lang-offer { background: var(--surface); border-bottom: 1px solid var(--line); font-size: .92rem; }
+.lang-offer .wrap { display: flex; align-items: center; gap: .4rem 1rem; flex-wrap: wrap; padding-block: .55rem; }
+.lang-offer span { color: var(--muted); }
+.lang-offer a { font-weight: 600; }
+.lang-offer button { margin-left: auto; background: none; border: 0; color: var(--muted); cursor: pointer;
+  font-size: 1.2rem; line-height: 1; padding: .2rem .4rem; }
+.lang-offer button:hover { color: var(--text); }

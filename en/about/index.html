@@ -6,6 +6,8 @@
 <title>About ToolLamp - ToolLamp</title>
 <meta name="description" content="ToolLamp is a small collection of free online tools, maintained by a firmware engineer in Taiwan. Everything runs in your browser.">
 <link rel="canonical" href="https://toollamp.github.io/en/about/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/about/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/about/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,13 +18,13 @@
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/">
+    <a class="brand" href="/en/">
       <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
       ToolLamp
     </a>
     <nav class="site-nav" aria-label="Main">
-      <a href="/zh-tw/" lang="zh-Hant-TW">中文工具</a>
-      <a href="/en/" aria-current="page">English tools</a>
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
       <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
     </nav>
   </div>
