@@ -104,6 +104,8 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
 
 ## Site pages and privacy
 
+- Every page's footer carries `<p>© 2026 ToolLamp</p>` just above the footer links (the tests check). The repo is
+  all rights reserved (see `LICENSE`); don't add an open-source license without the owner's say.
 - Every page's footer links to the about, privacy and contact pages in its language
   (the root page and 404 link both languages). Every page except 404 is in `sitemap.xml`. The tests check both.
 - The privacy pages (`/zh-tw/privacy/`, `/en/privacy/`) must match what the site really does. Before adding anything

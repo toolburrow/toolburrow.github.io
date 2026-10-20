@@ -48,6 +48,13 @@ test('site: ad slots are styled but no page has one yet', () => {
   eq(/\.ad-slot \{[^}]*min-height: 300px/.test(css), true);
   for (const rel of pages) eq([rel, /class="[^"]*\bad-slot\b/.test(fs.readFileSync(path.join(root, rel), 'utf8'))], [rel, false]);
 });
+test('site: every footer carries the copyright line', () => {
+  for (const rel of pages) {
+    const footer = (fs.readFileSync(path.join(root, rel), 'utf8').match(/<footer class="site-footer">[\s\S]*?<\/footer>/) || [''])[0];
+    eq([rel, footer.includes('<p>© 2026 ToolLamp</p>')], [rel, true]);
+  }
+});
+
 test('site: footers carry no affiliate disclosure until a program is approved', () => {
   for (const rel of pages) {
     const footer = (fs.readFileSync(path.join(root, rel), 'utf8').match(/<footer class="site-footer">[\s\S]*?<\/footer>/) || [''])[0];
