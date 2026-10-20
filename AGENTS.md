@@ -39,6 +39,7 @@ check tasks off as you finish them, and update PLAN.md before the session ends.
 /assets/site.css        shared design tokens and components
 /assets/site.js         language choice, theme toggle, copy buttons
 /assets/affiliates.js   affiliate products per tool (see "Affiliate slots")
+/assets/favorites.js    ☆ button on tool pages, "my favorites" on the language home pages (see "Favorites")
 /tests/                 node tests for tool logic
 sitemap.xml, robots.txt, 404.html, .nojekyll
 google93ec6f7db77f90e7.html   Google Search Console verification. Never edit or delete it.
@@ -76,6 +77,7 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
    No FAQPage JSON-LD: Google only shows FAQ results for government and health sites.
 6. Add the tool to both language home pages AND the root `index.html`, and add both URLs to `sitemap.xml`.
    Add empty slots `zh-tw/<slug>` and `en/<slug>` to `SLOTS` in `/assets/affiliates.js` (the tests check this).
+   Load `/assets/favorites.js` right after `affiliates.js` (the tests check this).
    Add the new tool to the related list of the other tools in its category while that list has fewer than 4 entries.
 7. The tool must show a useful result on first load (pre-fill a sensible default) and update live as the user types.
 
@@ -118,6 +120,16 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
 Use only the tokens in `site.css` (`--bg`, `--surface`, `--text`, `--muted`, `--line`, `--accent`, `--lamp`, …).
 Never hard-code colors except in content that represents a real-world color (e.g. resistor bands).
 Light and dark mode must both work. Keep layouts usable at 360 px wide. Don't add animations.
+
+## Favorites
+
+`/assets/favorites.js` adds a ☆ button under the h1 of every tool page and a "我的收藏 / My favorites" list above the
+tool groups on `/zh-tw/` and `/en/`. Nothing is in the HTML; the script builds it, so pages without JS show nothing.
+
+- The list is stored in localStorage `tb-fav` as `<category>/<slug>` ids. It is shared by both languages, since the ids
+  are the same; each home page shows the names from its own tool list, so a tool must be on the home page to show up.
+- "Copy favorites link" gives `/<lang>/?fav=<id>,<id>`. Opening it asks before adding anything, then removes `?fav=` from the address.
+- No accounts and no server. The privacy pages describe this; update them if the stored data changes.
 
 ## Affiliate slots
 
