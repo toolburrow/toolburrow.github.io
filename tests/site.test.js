@@ -120,3 +120,10 @@ test('site: page-level <style> rules are not copied between tools', () => {
   }
   for (const rule of Object.keys(seen)) eq([rule, seen[rule].size], [rule, 1]);
 });
+test('site: the home pages name the site ToolLamp for search results', () => {
+  for (const rel of ['index.html', 'zh-tw/index.html', 'en/index.html']) {
+    const m = fs.readFileSync(path.join(root, rel), 'utf8').match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    const data = JSON.parse(m[1]);
+    eq([rel, data['@type'], data.name, data.url], [rel, 'WebSite', 'ToolLamp', 'https://toollamp.github.io/']);
+  }
+});

@@ -77,6 +77,8 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
    `hreflang` links (`og:title` is the `<title>` without " - ToolLamp", `og:description` repeats the meta description,
    `og:url` is the canonical URL, shared image `/assets/og.png`), `WebApplication` JSON-LD.
    No FAQPage JSON-LD: Google only shows FAQ results for government and health sites.
+   The three home pages (`/`, `/zh-tw/`, `/en/`) instead carry `WebSite` JSON-LD named "ToolLamp", so Google can show
+   ToolLamp rather than GitHub as the site name (the tests check).
 6. Add the tool to both language home pages AND the root `index.html`, and add both URLs to `sitemap.xml`.
    Add empty slots `zh-tw/<slug>` and `en/<slug>` to `SLOTS` in `/assets/affiliates.js` (the tests check this).
    Load `/assets/favorites.js` right after `affiliates.js` (the tests check this).

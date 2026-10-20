@@ -165,6 +165,8 @@ Adrian 2026-10-20 決定。不用登入，收藏存在瀏覽器（localStorage�
 - [x] LED 限流電阻加上電路圖（Vs → R → n 顆 LED → 地），放在輸入欄旁邊。UART 的輸入沒有對應的電路，所以電路圖放在文章新增的「5 V 和 3.3 V 的 UART 怎麼接？」：5 V 的 TX 經過 1 kΩ／2 kΩ 分壓接到 3.3 V 的 RX，並連到分壓電阻工具。
 - [x] 分壓電阻的「反推電阻值」也加上電路圖，要求的那顆電阻標成金色的「R1 ?」或「R2 ?」，切換求 R1／R2 時跟著變（第一個面板原本就有電路圖）。歐姆定律加上電路圖：電壓源 V、電流 I、電阻 R，下面標 P = V × I。
 
+- [x] Google 已經收錄首頁（2026-10-20 用 `site:toollamp.github.io` 查到 1 頁），但網站名稱顯示成「GitHub」。三個首頁加上 `WebSite` 結構化資料，名稱是 ToolLamp。Google 不保證採用，github.io 是共用網域，可能還是顯示 GitHub。
+
 ## 之後的工具點子
 
 依搜尋需求排序，Adrian 可以調整。做完一個就從這裡移到對應階段。
@@ -181,6 +183,7 @@ Adrian 2026-10-20 決定。不用登入，收藏存在瀏覽器（localStorage�
 - [ ] 有流量再買 `toollamp.com`（Adrian 2026-10-20 決定先不買；.com 一年約 US$10～15）
 - [ ] 到智慧財產局和美國 USPTO 查 ToolLamp 有沒有人註冊商標
 - [x] 到 Google Search Console 驗證網站並提交 `https://toollamp.github.io/sitemap.xml`：2026-10-20 完成，驗證檔 `google93ec6f7db77f90e7.html` 要一直留著。
+- [ ] 在 Search Console 用「網址審查」→「要求建立索引」送出中文首頁和幾個主要工具頁（AI 不能操作 Adrian 的瀏覽器或帳號）
 - [ ] 申請蝦皮分潤計畫
 - [ ] 申請 AliExpress 聯盟或 Amazon Associates
 - [ ] 流量穩定後購買自有網域，再申請 AdSense
