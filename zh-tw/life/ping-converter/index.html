@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>坪數換算｜坪、平方公尺、平方英尺互換，扣除公設計算 - ToolLamp</title>
+<meta name="description" content="免費的坪數換算工具：坪、平方公尺、平方英尺互相換算，輸入長寬算房間幾坪，或輸入公設比算出扣除公設後的坪數。">
+<link rel="canonical" href="https://toollamp.github.io/zh-tw/life/ping-converter/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/life/ping-converter/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/life/ping-converter/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "坪數換算",
+  "url": "https://toollamp.github.io/zh-tw/life/ping-converter/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "zh-TW",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh-tw/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="主選單">
+      <a href="/zh-tw/" data-set-lang="zh-tw" aria-current="page">中文工具</a>
+      <a href="/en/" data-set-lang="en" lang="en">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="切換深淺色模式">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/zh-tw/">中文工具</a> / 生活工具</div>
+    <h1>坪數換算</h1>
+    <p>坪、平方公尺、平方英尺互相換算，也能用長和寬算房間幾坪，或扣掉公設算出實際坪數。</p>
+  </div>
+
+  <section class="tool" aria-labelledby="convert-h">
+    <h2 id="convert-h">單位換算</h2>
+    <div class="row">
+      <div class="field">
+        <label for="value-input">數值</label>
+        <input id="value-input" type="text" inputmode="decimal" autocomplete="off" placeholder="例如 30">
+      </div>
+      <div class="field">
+        <label for="value-unit">單位</label>
+        <select id="value-unit"><option value="ping">坪</option><option value="m2">平方公尺（m²）</option><option value="ft2">平方英尺（ft²）</option></select>
+      </div>
+    </div>
+    <div class="result" id="convert-result" aria-live="polite"></div>
+  </section>
+
+  <section class="tool" aria-labelledby="room-h">
+    <h2 id="room-h">長 × 寬算坪數</h2>
+    <div class="row">
+      <div class="field">
+        <label for="room-length">長度</label>
+        <input id="room-length" type="text" inputmode="decimal" autocomplete="off" placeholder="例如 4">
+      </div>
+      <div class="field">
+        <label for="room-width">寬度</label>
+        <input id="room-width" type="text" inputmode="decimal" autocomplete="off" placeholder="例如 3.5">
+      </div>
+      <div class="field">
+        <label for="room-unit">單位</label>
+        <select id="room-unit"><option value="m">公尺</option><option value="cm">公分</option><option value="ft">英尺</option></select>
+      </div>
+    </div>
+    <div class="result" id="room-result" aria-live="polite"></div>
+  </section>
+
+  <section class="tool" aria-labelledby="shared-h">
+    <h2 id="shared-h">扣除公設的坪數</h2>
+    <div class="row">
+      <div class="field">
+        <label for="shared-total">權狀坪數</label>
+        <input id="shared-total" type="text" inputmode="decimal" autocomplete="off" placeholder="例如 35">
+      </div>
+      <div class="field">
+        <label for="shared-ratio">公設比（%）</label>
+        <input id="shared-ratio" type="text" inputmode="decimal" autocomplete="off" placeholder="例如 33">
+      </div>
+    </div>
+    <div class="result" id="shared-result" aria-live="polite"></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="zh-tw/ping-converter" hidden></aside>
+
+  <article class="article">
+    <h2>1 坪等於幾平方公尺？</h2>
+    <p>1 坪是 6 台尺 × 6 台尺，1 台尺是 10/33 公尺，所以：</p>
+    <p><strong>1 坪 = 400/121 平方公尺 ≈ 3.3058 平方公尺</strong><br>
+    <strong>1 平方公尺 = 0.3025 坪</strong></p>
+    <p>換算時，<strong>平方公尺 × 0.3025 = 坪</strong>，<strong>坪 × 3.3058 = 平方公尺</strong>。例如 100 平方公尺就是 30.25 坪，30 坪約是 99.17 平方公尺。</p>
+
+    <h2>坪數對照表</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>坪</th><th>平方公尺</th><th>平方英尺</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>3.31</td><td>35.6</td></tr>
+          <tr><td>10</td><td>33.06</td><td>355.8</td></tr>
+          <tr><td>20</td><td>66.12</td><td>711.7</td></tr>
+          <tr><td>25</td><td>82.64</td><td>889.6</td></tr>
+          <tr><td>30</td><td>99.17</td><td>1,067.5</td></tr>
+          <tr><td>35</td><td>115.7</td><td>1,245.4</td></tr>
+          <tr><td>40</td><td>132.23</td><td>1,423.3</td></tr>
+          <tr><td>50</td><td>165.29</td><td>1,779.2</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>權狀坪數和公設比</h2>
+    <p>房屋廣告和權狀上寫的坪數，通常包含三個部分：主建物（室內）、附屬建物（陽台、雨遮等）和公共設施（大廳、電梯、樓梯間、停車場車道等的持分）。</p>
+    <p>公設比就是公共設施佔權狀坪數的比例。例如權狀 35 坪、公設比 33%，公設約 11.55 坪，扣除後約 23.45 坪。這 23.45 坪還包含陽台等附屬建物，實際室內空間會再小一些。</p>
+
+    <h2>常見問題</h2>
+    <h3>房間幾坪要怎麼量？</h3>
+    <p>量出房間的長和寬，相乘就是面積。用上面的「長 × 寬算坪數」輸入就能直接換算成坪。例如 4 公尺 × 3.5 公尺是 14 平方公尺，約 4.24 坪。</p>
+    <h3>1 坪大概多大？</h3>
+    <p>1 坪約 3.3 平方公尺，大約是兩張榻榻米的大小，或是一個邊長約 1.8 公尺的正方形。</p>
+    <h3>日本的「坪」和台灣一樣嗎？</h3>
+    <p>一樣。台灣的坪數單位源自日本，日本的 1 坪（tsubo）同樣約 3.3058 平方公尺，所以兩邊的坪數可以直接比較。</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp：小而好用的線上工具。所有計算都在你的瀏覽器裡完成，不會上傳任何資料。</p>
+    <p>部分頁面含有聯盟連結，透過連結購買時我們可能獲得少量分潤。</p>
+    <p class="footer-links"><a href="/zh-tw/about/">關於</a><a href="/zh-tw/privacy/">隱私權政策</a><a href="/zh-tw/contact/">聯絡我們</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/ping-converter.js"></script>
+</body>
+</html>
