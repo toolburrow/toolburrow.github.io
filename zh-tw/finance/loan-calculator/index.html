@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>貸款試算｜房貸、信貸每月要繳多少，本息、本金平均攤還 - ToolLamp</title>
+<meta name="description" content="免費的房貸、信貸試算：輸入貸款金額、年利率、年限和寬限期，算出每月還款、總利息，比較本息和本金平均攤還，附每年還款明細。">
+<link rel="canonical" href="https://toollamp.github.io/zh-tw/finance/loan-calculator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/finance/loan-calculator/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/finance/loan-calculator/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="貸款試算｜房貸、信貸每月要繳多少，本息、本金平均攤還">
+<meta property="og:description" content="免費的房貸、信貸試算：輸入貸款金額、年利率、年限和寬限期，算出每月還款、總利息，比較本息和本金平均攤還，附每年還款明細。">
+<meta property="og:url" content="https://toollamp.github.io/zh-tw/finance/loan-calculator/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script src="/assets/favorites.js"></script>
+<style>
+  .method { margin-top: 1rem; }
+  .method > span { display: block; font-size: .9rem; color: var(--muted); }
+  .method .seg { margin: .3rem 0 0; }
+  #year-result th, #year-result td { white-space: nowrap; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "貸款試算",
+  "url": "https://toollamp.github.io/zh-tw/finance/loan-calculator/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "zh-TW",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh-tw/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="主選單">
+      <a href="/zh-tw/" data-set-lang="zh-tw" aria-current="page">中文工具</a>
+      <a href="/en/" data-set-lang="en" lang="en">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="切換深淺色模式">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/zh-tw/">中文工具</a> / 理財工具</div>
+    <h1>貸款試算</h1>
+    <p>輸入貸款金額、年利率和年限，算出每月要繳多少、總共付多少利息，房貸、信貸、車貸都能用。</p>
+  </div>
+
+  <section class="tool" aria-labelledby="loan-h">
+    <h2 id="loan-h">每月還款</h2>
+    <div class="row">
+      <div class="field">
+        <label for="amount-input">貸款金額（萬元）</label>
+        <input id="amount-input" type="text" inputmode="decimal" autocomplete="off" value="1000" placeholder="例如 1000">
+      </div>
+      <div class="field">
+        <label for="rate-input">年利率（%）</label>
+        <input id="rate-input" type="text" inputmode="decimal" autocomplete="off" value="2.2" placeholder="例如 2.2">
+      </div>
+      <div class="field">
+        <label for="years-input">貸款年限（年）</label>
+        <input id="years-input" type="text" inputmode="numeric" autocomplete="off" value="30" placeholder="例如 30">
+      </div>
+      <div class="field">
+        <label for="grace-input">寬限期（年，沒有就填 0）</label>
+        <input id="grace-input" type="text" inputmode="numeric" autocomplete="off" value="0" placeholder="例如 3">
+      </div>
+    </div>
+    <div class="method">
+      <span id="method-label">還款方式</span>
+      <div class="seg" id="method-seg" role="group" aria-labelledby="method-label"></div>
+    </div>
+    <div class="result" id="loan-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="tool" aria-labelledby="year-h">
+    <h2 id="year-h">每年還款明細</h2>
+    <div id="year-result"></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="zh-tw/loan-calculator" hidden></aside>
+
+  <article class="article">
+    <h2>本息平均攤還和本金平均攤還</h2>
+    <p>台灣的房貸大多可以選這兩種還款方式：</p>
+    <ul>
+      <li><strong>本息平均攤還</strong>：每個月繳的金額一樣。前期繳的大多是利息，越後面還的本金越多。每月金額 = 本金 × 月利率 ÷ (1 − (1 + 月利率)<sup>−月數</sup>)，月利率 = 年利率 ÷ 12。</li>
+      <li><strong>本金平均攤還</strong>：每個月還一樣多的本金，再加上剩餘本金的利息。第一個月繳最多，之後每月遞減，總利息比本息平均攤還少，但前期壓力比較大。</li>
+    </ul>
+    <p>例如貸款 1,000 萬元、年利率 2.2%、30 年：本息平均攤還每月 37,970 元，總利息約 366.9 萬元；本金平均攤還第一個月 46,111 元，最後一個月 27,829 元，總利息約 330.9 萬元，少了約 36 萬元。</p>
+
+    <h2>寬限期是什麼？</h2>
+    <p>寬限期內只繳利息、不還本金，每月負擔比較輕。寬限期結束後，要在剩下的年限內還完全部本金，每月金額會變高，總利息也會增加。</p>
+    <p>同樣 1,000 萬元、2.2%、30 年，如果有 3 年寬限期：前 3 年每月只繳 18,333 元，第 4 年起每月 40,961 元，總利息約 393.1 萬元，比沒有寬限期多約 26 萬元。</p>
+
+    <h2>每 100 萬元貸款的月付金</h2>
+    <p>本息平均攤還，金額四捨五入到元。貸款 500 萬元就乘以 5。</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>年利率</th><th>20 年每月</th><th>20 年總利息</th><th>30 年每月</th><th>30 年總利息</th></tr></thead>
+        <tbody>
+          <tr><td>1.5%</td><td>4,825 元</td><td>158,109 元</td><td>3,451 元</td><td>242,433 元</td></tr>
+          <tr><td>2%</td><td>5,059 元</td><td>214,120 元</td><td>3,696 元</td><td>330,630 元</td></tr>
+          <tr><td>2.5%</td><td>5,299 元</td><td>271,767 元</td><td>3,951 元</td><td>422,435 元</td></tr>
+          <tr><td>3%</td><td>5,546 元</td><td>331,034 元</td><td>4,216 元</td><td>517,775 元</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>常見問題</h2>
+    <h3>為什麼和銀行算的差幾塊錢？</h3>
+    <p>這個工具用精確值計算，只在顯示時四捨五入。銀行通常每期各自取整到元，最後一期再補差額，所以每月金額或總利息可能差幾元，以銀行的還款明細為準。</p>
+    <h3>利率會變動怎麼辦？</h3>
+    <p>台灣房貸大多是機動利率，會跟著指標利率調整。這個工具假設整段期間利率不變；利率調整後，可以用剩餘本金和剩餘年限重新試算。</p>
+    <h3>本息還是本金平均攤還比較好？</h3>
+    <p>本金平均攤還總利息比較少，但前幾年每月要多繳不少錢；本息平均攤還每月金額固定，比較好安排預算。可以切換上方的還款方式，看兩者每月和總利息差多少。</p>
+    <h3>信貸、車貸也能用嗎？</h3>
+    <p>可以。只要是固定利率、按月還款的貸款都適用。信貸通常沒有寬限期，寬限期填 0 即可；有開辦費或手續費的話，實際成本會比這裡算的利息高一些。</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">相關工具</h2>
+    <ul class="tool-list">
+      <li><a href="/zh-tw/life/ping-converter/"><span class="tool-name">坪數換算</span><span class="tool-desc">坪、平方公尺互換，扣除公設</span></a></li>
+      <li><a href="/zh-tw/life/date-difference/"><span class="tool-name">日期間隔計算</span><span class="tool-desc">相差幾天、幾個月，加減天數</span></a></li>
+      <li><a href="/zh-tw/life/roc-year-converter/"><span class="tool-name">民國西元換算</span><span class="tool-desc">年份、日期互轉，附干支生肖</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp：小而好用的線上工具。所有計算都在你的瀏覽器裡完成，不會上傳任何資料。</p>
+    <p class="footer-links"><a href="/zh-tw/about/">關於</a><a href="/zh-tw/privacy/">隱私權政策</a><a href="/zh-tw/contact/">聯絡我們</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/loan-calculator.js"></script>
+</body>
+</html>

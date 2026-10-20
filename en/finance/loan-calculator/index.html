@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loan Calculator: Monthly Payment, Total Interest and Yearly Schedule - ToolLamp</title>
+<meta name="description" content="Free loan and mortgage calculator. See the monthly payment, total interest and a yearly schedule for any amount, rate and term.">
+<link rel="canonical" href="https://toollamp.github.io/en/finance/loan-calculator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/finance/loan-calculator/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/finance/loan-calculator/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="Loan Calculator: Monthly Payment, Total Interest and Yearly Schedule">
+<meta property="og:description" content="Free loan and mortgage calculator. See the monthly payment, total interest and a yearly schedule for any amount, rate and term.">
+<meta property="og:url" content="https://toollamp.github.io/en/finance/loan-calculator/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script src="/assets/favorites.js"></script>
+<style>
+  .method { margin-top: 1rem; }
+  .method > span { display: block; font-size: .9rem; color: var(--muted); }
+  .method .seg { margin: .3rem 0 0; }
+  #year-result th, #year-result td { white-space: nowrap; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Loan calculator",
+  "url": "https://toollamp.github.io/en/finance/loan-calculator/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Finance</div>
+    <h1>Loan calculator</h1>
+    <p>Enter the loan amount, interest rate and term to see the monthly payment and how much interest you pay in total.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="loan-h">
+    <h2 id="loan-h">Monthly payment</h2>
+    <div class="row">
+      <div class="field">
+        <label for="amount-input">Loan amount</label>
+        <input id="amount-input" type="text" inputmode="decimal" autocomplete="off" value="300000" placeholder="e.g. 300000">
+      </div>
+      <div class="field">
+        <label for="rate-input">Annual interest rate (%)</label>
+        <input id="rate-input" type="text" inputmode="decimal" autocomplete="off" value="6.5" placeholder="e.g. 6.5">
+      </div>
+      <div class="field">
+        <label for="years-input">Term (years)</label>
+        <input id="years-input" type="text" inputmode="numeric" autocomplete="off" value="30" placeholder="e.g. 30">
+      </div>
+      <div class="field">
+        <label for="grace-input">Interest-only period (years, 0 for none)</label>
+        <input id="grace-input" type="text" inputmode="numeric" autocomplete="off" value="0" placeholder="e.g. 3">
+      </div>
+    </div>
+    <div class="method">
+      <span id="method-label">Repayment</span>
+      <div class="seg" id="method-seg" role="group" aria-labelledby="method-label"></div>
+    </div>
+    <div class="result" id="loan-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="tool" aria-labelledby="year-h">
+    <h2 id="year-h">Yearly schedule</h2>
+    <div id="year-result"></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/loan-calculator" hidden></aside>
+
+  <article class="article">
+    <h2>How the monthly payment is calculated</h2>
+    <p>Most loans use <strong>equal payments</strong> (an amortizing loan): you pay the same amount every month. Early payments are mostly interest; later ones are mostly principal.</p>
+    <p><strong>Payment = P × r ÷ (1 − (1 + r)<sup>−n</sup>)</strong>, where P is the loan amount, r is the annual rate ÷ 12 and n is the number of monthly payments. For 300,000 at 6.5% over 30 years, r = 0.0054167 and n = 360, so the payment is 1,896.20 a month and the total interest is 382,633.47.</p>
+    <p>With <strong>equal principal</strong>, you repay the same share of the principal every month plus interest on what is left. The first payment is the largest and each one after it is smaller. The same 300,000 loan starts at 2,458.33 a month and costs 293,312.50 in interest, about 89,000 less, because the balance falls faster. This method is common in Taiwan, China and parts of Europe.</p>
+
+    <h2>Interest-only periods</h2>
+    <p>During an interest-only period (called a grace period in Taiwan) you pay only the interest, so the balance does not fall. Afterwards the full amount has to be repaid over the remaining years, so the payment jumps and the total interest goes up.</p>
+
+    <h2>Monthly payment per 100,000 borrowed</h2>
+    <p>Equal payments, rounded to the cent. For 250,000, multiply by 2.5.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Rate</th><th>15 years</th><th>Total interest</th><th>30 years</th><th>Total interest</th></tr></thead>
+        <tbody>
+          <tr><td>4%</td><td>739.69</td><td>33,144</td><td>477.42</td><td>71,870</td></tr>
+          <tr><td>5%</td><td>790.79</td><td>42,343</td><td>536.82</td><td>93,256</td></tr>
+          <tr><td>6%</td><td>843.86</td><td>51,894</td><td>599.55</td><td>115,838</td></tr>
+          <tr><td>7%</td><td>898.83</td><td>61,789</td><td>665.30</td><td>139,509</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>FAQ</h2>
+    <h3>Does this include taxes and insurance?</h3>
+    <p>No. It covers principal and interest only. A US mortgage payment often also includes property tax, homeowners insurance and mortgage insurance, which depend on where you live and your lender.</p>
+    <h3>Why is my lender’s number a few cents different?</h3>
+    <p>This calculator keeps exact values and rounds only for display. Lenders round each payment to the cent and adjust the last one, so totals can differ slightly. Your loan statement is the final word.</p>
+    <h3>What about variable rates?</h3>
+    <p>The calculator assumes the rate stays the same for the whole term. When a variable rate changes, run it again with the remaining balance and the remaining years.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/life/ping-converter/"><span class="tool-name">Ping to square meters</span><span class="tool-desc">Taiwan’s floor-area unit, m² and ft²</span></a></li>
+      <li><a href="/en/life/date-difference/"><span class="tool-name">Date difference calculator</span><span class="tool-desc">Days between dates, add or subtract days</span></a></li>
+      <li><a href="/en/life/roc-year-converter/"><span class="tool-name">ROC year converter</span><span class="tool-desc">Taiwan’s Minguo years and dates</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/loan-calculator.js"></script>
+</body>
+</html>

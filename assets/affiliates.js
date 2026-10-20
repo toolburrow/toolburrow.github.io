@@ -16,6 +16,7 @@ var AFF = (function () {
     'zh-tw/split-bill': [],
     'zh-tw/rc-time-constant': [],
     'zh-tw/uart-baud-rate': [],
+    'zh-tw/loan-calculator': [],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
@@ -27,7 +28,8 @@ var AFF = (function () {
     'en/age-calculator': [],
     'en/split-bill': [],
     'en/rc-time-constant': [],
-    'en/uart-baud-rate': []
+    'en/uart-baud-rate': [],
+    'en/loan-calculator': []
   };
 
   var TEXT = {
