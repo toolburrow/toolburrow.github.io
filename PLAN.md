@@ -183,7 +183,8 @@ Adrian 2026-10-20 決定。不用登入，收藏存在瀏覽器（localStorage�
 - [ ] 有流量再買 `toollamp.com`（Adrian 2026-10-20 決定先不買；.com 一年約 US$10～15）
 - [ ] 到智慧財產局和美國 USPTO 查 ToolLamp 有沒有人註冊商標
 - [x] 到 Google Search Console 驗證網站並提交 `https://toollamp.github.io/sitemap.xml`：2026-10-20 完成，驗證檔 `google93ec6f7db77f90e7.html` 要一直留著。
-- [ ] 在 Search Console 用「網址審查」→「要求建立索引」送出中文首頁和幾個主要工具頁（AI 不能操作 Adrian 的瀏覽器或帳號）
+- [x] 在 Search Console 用「網址審查」→「要求建立索引」送出中英文首頁：2026-10-20 送出 `/zh-tw/` 和 `/en/`。當時兩頁都顯示「Google 無法辨識的網址」，sitemap 也還沒被讀取過。工具頁先不送，讓 Google 從首頁的連結找到。
+- [ ] 一週後用 `site:toollamp.github.io` 確認中英文首頁和工具頁有沒有被收錄；如果工具頁還是沒有，再送幾個主要工具頁。
 - [ ] 申請蝦皮分潤計畫
 - [ ] 申請 AliExpress 聯盟或 Amazon Associates
 - [ ] 流量穩定後購買自有網域，再申請 AdSense
