@@ -124,6 +124,15 @@ input:focus, select:focus { border-color: var(--accent); }
 .tool-name { font-weight: 650; }
 .tool-desc { color: var(--muted); font-size: .92rem; text-align: right; }
 
+/* Circuit diagram next to a panel's inputs (inline SVG, drawn in the text color) */
+.with-schematic { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+.with-schematic .row { flex: 1 1 16rem; }
+.schematic { flex: 0 0 7.5rem; width: 7.5rem; color: var(--text); }
+.schematic .wire { stroke: currentColor; stroke-width: 2; fill: none; }
+.schematic .part { stroke: currentColor; stroke-width: 2; fill: var(--surface); }
+.schematic text { fill: currentColor; font: 600 13px var(--font-body); }
+.schematic .dot { fill: currentColor; }
+
 /* Tables inside tool panels (results such as E24 options or baud rate tables) */
 .tool table { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: 1rem; font-variant-numeric: tabular-nums; }
 .tool th, .tool td { border-bottom: 1px solid var(--line); padding: .4rem .5rem .4rem 0; text-align: left; }

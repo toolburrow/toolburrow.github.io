@@ -26,15 +26,6 @@
 <script src="/assets/site.js"></script>
 <script src="/assets/affiliates.js"></script>
 <script src="/assets/favorites.js"></script>
-<style>
-  .divider-layout { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
-  .divider-layout .row { flex: 1 1 16rem; }
-  .schematic { flex: 0 0 7.5rem; width: 7.5rem; color: var(--text); }
-  .schematic .wire { stroke: currentColor; stroke-width: 2; fill: none; }
-  .schematic .part { stroke: currentColor; stroke-width: 2; fill: var(--surface); }
-  .schematic text { fill: currentColor; font: 600 13px var(--font-body); }
-  .schematic .dot { fill: currentColor; }
-</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -72,7 +63,7 @@
 
   <section class="tool" aria-labelledby="fwd-h">
     <h2 id="fwd-h">計算輸出電壓 Vout</h2>
-    <div class="divider-layout">
+    <div class="with-schematic">
       <svg class="schematic" viewBox="0 0 120 250" role="img" aria-label="Vin 經過 R1 接到 Vout，再經過 R2 接地">
         <circle cx="40" cy="14" r="5" class="part"/>
         <text x="54" y="19">Vin</text>

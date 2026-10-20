@@ -123,6 +123,9 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
 
 Use only the tokens in `site.css` (`--bg`, `--surface`, `--text`, `--muted`, `--line`, `--accent`, `--lamp`, …).
 Never hard-code colors except in content that represents a real-world color (e.g. resistor bands).
+Circuit diagrams are inline SVG next to the inputs: wrap the SVG (`class="schematic"`, `role="img"` and an `aria-label`
+describing the circuit) and the `.row` in `<div class="with-schematic">`; the styles are in `site.css` and draw in the
+text color, so they work in both themes. Charts are inline SVG too, colored with tokens through classes.
 A page may have one `<style>` block in `<head>` for rules only that tool uses. A rule that a second tool needs moves to
 `site.css` instead of being copied (the tests check that no two tools share a page-level rule).
 Light and dark mode must both work. Keep layouts usable at 360 px wide. Don't add animations.
