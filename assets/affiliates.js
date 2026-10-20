@@ -8,10 +8,12 @@ var AFF = (function () {
     'zh-tw/date-difference': [],
     'zh-tw/resistor-color-code': [],
     'zh-tw/voltage-divider': [],
+    'zh-tw/bmi-calculator': [],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
-    'en/voltage-divider': []
+    'en/voltage-divider': [],
+    'en/bmi-calculator': []
   };
 
   var TEXT = {

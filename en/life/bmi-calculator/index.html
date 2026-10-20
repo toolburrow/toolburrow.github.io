@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BMI Calculator: Body Mass Index and Healthy Weight (lb or kg) - ToolLamp</title>
+<meta name="description" content="Free BMI calculator. Enter height and weight in feet and pounds or cm and kg to get your BMI, WHO weight category and healthy weight range.">
+<link rel="canonical" href="https://toollamp.github.io/en/life/bmi-calculator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/life/bmi-calculator/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/life/bmi-calculator/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<style>
+  .tool table { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: 1rem; font-variant-numeric: tabular-nums; }
+  .tool th, .tool td { border-bottom: 1px solid var(--line); padding: .4rem .5rem .4rem 0; text-align: left; }
+  .tool th { color: var(--muted); font-weight: 600; }
+  .tool tr.best td { font-weight: 700; color: var(--accent); }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "BMI Calculator",
+  "url": "https://toollamp.github.io/en/life/bmi-calculator/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Everyday</div>
+    <h1>BMI calculator</h1>
+    <p>Calculate your body mass index from your height and weight, see the WHO weight category, and find the healthy weight range for your height.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="bmi-h">
+    <h2 id="bmi-h">Calculate BMI</h2>
+    <div class="seg" id="system-seg" role="group" aria-label="Units">
+      <button type="button" data-system="us" aria-pressed="true">ft, in, lb</button>
+      <button type="button" data-system="metric" aria-pressed="false">cm, kg</button>
+    </div>
+    <div class="row" id="us-fields">
+      <div class="field">
+        <label for="height-ft">Height (feet)</label>
+        <input id="height-ft" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 5">
+      </div>
+      <div class="field">
+        <label for="height-in">Inches</label>
+        <input id="height-in" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 9">
+      </div>
+      <div class="field">
+        <label for="weight-lb">Weight (lb)</label>
+        <input id="weight-lb" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 160">
+      </div>
+    </div>
+    <div class="row" id="metric-fields" hidden>
+      <div class="field">
+        <label for="height-cm">Height (cm)</label>
+        <input id="height-cm" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 170">
+      </div>
+      <div class="field">
+        <label for="weight-kg">Weight (kg)</label>
+        <input id="weight-kg" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 65">
+      </div>
+    </div>
+    <div class="result" id="bmi-result" aria-live="polite"></div>
+    <div class="table-scroll">
+      <table id="bmi-table">
+        <thead><tr><th>Category</th><th>BMI</th></tr></thead>
+        <tbody>
+          <tr data-key="under"><td>Underweight</td><td>Under 18.5</td></tr>
+          <tr data-key="normal"><td>Healthy weight</td><td>18.5 to 24.9</td></tr>
+          <tr data-key="over"><td>Overweight</td><td>25 to 29.9</td></tr>
+          <tr data-key="obese1"><td>Obesity class 1</td><td>30 to 34.9</td></tr>
+          <tr data-key="obese2"><td>Obesity class 2</td><td>35 to 39.9</td></tr>
+          <tr data-key="obese3"><td>Obesity class 3</td><td>40 or more</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/bmi-calculator" hidden></aside>
+
+  <article class="article">
+    <h2>How BMI is calculated</h2>
+    <p>Body mass index (BMI) estimates whether your weight is in a healthy range for your height:</p>
+    <p><strong>BMI = weight (kg) ÷ height (m)²</strong><br>
+    <strong>BMI = 703 × weight (lb) ÷ height (in)²</strong></p>
+    <p>For example, at 5 ft 9 in (69 inches) and 160 lb: 703 × 160 ÷ 69² = 23.6, which is a healthy weight. The calculator uses exact unit conversions, so its results match the metric formula.</p>
+
+    <h2>Healthy weight by height</h2>
+    <p>With the WHO categories, a healthy weight is a BMI from 18.5 to under 25:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Height</th><th>Healthy weight</th></tr></thead>
+        <tbody>
+          <tr><td>5 ft 0 in</td><td>94.7 to 128 lb</td></tr>
+          <tr><td>5 ft 4 in</td><td>107.8 to 145.6 lb</td></tr>
+          <tr><td>5 ft 8 in</td><td>121.7 to 164.4 lb</td></tr>
+          <tr><td>6 ft 0 in</td><td>136.4 to 184.3 lb</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Different cut-offs in some countries</h2>
+    <p>At the same BMI, many Asian populations have more body fat and a higher risk of diabetes and heart disease. Some countries therefore use lower cut-offs. Taiwan, for example, counts a BMI of 24 or more as overweight and 27 or more as obese. This page uses the WHO international categories.</p>
+
+    <h2>Frequently asked questions</h2>
+    <h3>Is BMI accurate?</h3>
+    <p>BMI only uses height and weight, so it can’t tell muscle from fat. Very muscular people can have a high BMI without much body fat, and older adults can have a normal BMI with more fat than it suggests. It doesn’t apply during pregnancy. Treat it as a first check, alongside waist size or body fat.</p>
+    <h3>Can I use this for children?</h3>
+    <p>No. For children and teens, BMI is compared with growth charts for their age and sex (BMI-for-age percentiles). These adult categories only apply from age 18.</p>
+    <h3>Is a normal BMI enough?</h3>
+    <p>Not always. Fat around the waist carries more health risk, so a large waist is worth checking even with a normal BMI. These results are for information only; talk to a doctor if you have concerns about your weight.</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p>Some pages contain affiliate links. We may earn a small commission if you buy through them.</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/bmi-calculator.js"></script>
+</body>
+</html>
