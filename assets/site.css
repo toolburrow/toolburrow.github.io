@@ -151,3 +151,10 @@ input:focus, select:focus { border-color: var(--accent); }
 .lang-offer button { margin-left: auto; background: none; border: 0; color: var(--muted); cursor: pointer;
   font-size: 1.2rem; line-height: 1; padding: .2rem .4rem; }
 .lang-offer button:hover { color: var(--text); }
+
+/* Ad slot, reserved for later (see AGENTS.md "Ad slots"). No page uses it yet.
+   The fixed height keeps the layout from jumping when an ad loads:
+   a 20px label + 280px, the tallest common responsive ad on phones. */
+.ad-slot { display: block; min-height: 300px; margin: 2rem 0; text-align: center; }
+.ad-slot::before { content: attr(data-label); display: block; height: 20px; line-height: 20px;
+  font-size: .75rem; color: var(--muted); letter-spacing: .04em; }

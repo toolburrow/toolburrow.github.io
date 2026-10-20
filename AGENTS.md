@@ -123,3 +123,21 @@ Every tool page has `<aside class="affiliate" data-slot="<lang>/<slug>" hidden><
 Only the owner decides which products and links go there, and only programs marked "已核准" in PLAN.md may be used.
 When asked to fill one, only edit that slot's array in `affiliates.js`, using the exact URLs the owner gives.
 Never invent affiliate URLs or tracking IDs.
+
+## Ad slots
+
+No page has ads yet. AdSense needs our own domain first (see PLAN.md), and no ad code may be added until PLAN.md marks
+Google AdSense as 已核准. `site.css` already defines `.ad-slot` so ads can go in later without the layout jumping.
+
+- Markup: `<div class="ad-slot" data-label="廣告"></div>` on zh-tw pages, `data-label="Advertisement"` on en pages.
+  The ad code goes inside. The slot reserves 300px (a 20px label + a 280px ad); don't set a smaller height, and never
+  hide overflow, since a cut-off ad breaks AdSense policy.
+- Positions, at most two per page:
+  1. Below the tool panels: after the affiliate `<aside>`, before `.article`. Never between or inside `.tool` panels,
+     so an ad is never mistaken for part of a result.
+  2. Mid-article: inside `.article`, just before the second `<h2>`.
+- Never put a slot in the header, footer, page head or next to buttons and inputs.
+- Until AdSense is approved, no page contains a `.ad-slot` element (`tests/site.test.js` checks).
+- Adding ads also means updating both privacy pages (AdSense uses cookies) and the footer line
+  「不會上傳任何資料」/“nothing is uploaded” in the same commit.
+

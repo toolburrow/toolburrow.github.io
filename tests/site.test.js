@@ -43,3 +43,8 @@ test('site: canonical URL matches the page location', () => {
     eq([rel, m && m[1]], [rel, urlOf(rel)]);
   }
 });
+test('site: ad slots are styled but no page has one yet', () => {
+  const css = fs.readFileSync(path.join(root, 'assets/site.css'), 'utf8');
+  eq(/\.ad-slot \{[^}]*min-height: 300px/.test(css), true);
+  for (const rel of pages) eq([rel, /class="[^"]*\bad-slot\b/.test(fs.readFileSync(path.join(root, rel), 'utf8'))], [rel, false]);
+});
