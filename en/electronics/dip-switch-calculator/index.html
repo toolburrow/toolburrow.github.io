@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DIP Switch Calculator: Switches to Number and DMX Addresses - ToolLamp</title>
+<meta name="description" content="Free DIP switch calculator. Click switches to see the value or enter a number to see which to turn on. 4 to 16 switches, hex, binary and DMX addresses.">
+<link rel="canonical" href="https://toollamp.github.io/en/electronics/dip-switch-calculator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/dip-switch-calculator/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/dip-switch-calculator/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="DIP Switch Calculator: Switches to Number and DMX Addresses">
+<meta property="og:description" content="Free DIP switch calculator. Click switches to see the value or enter a number to see which to turn on. 4 to 16 switches, hex, binary and DMX addresses.">
+<meta property="og:url" content="https://toollamp.github.io/en/electronics/dip-switch-calculator/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script src="/assets/favorites.js"></script>
+<style>
+  .switches-wrap { margin-top: 1rem; }
+  .switches-wrap > span { display: block; font-size: .9rem; color: var(--muted); margin-bottom: .3rem; }
+  .switches { display: flex; flex-wrap: wrap; gap: .35rem; padding: .6rem; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--field); }
+  .sw { display: flex; flex-direction: column; align-items: center; gap: .15rem; width: 2.2rem; padding: 0; border: 0; background: none; color: var(--text); cursor: pointer; }
+  .sw-slot { position: relative; width: 1.4rem; height: 2.6rem; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+  .sw-knob { position: absolute; left: 2px; right: 2px; bottom: 2px; height: 1.1rem; border-radius: 3px; background: var(--muted); }
+  .sw[aria-pressed="true"] .sw-knob { top: 2px; bottom: auto; background: var(--accent); }
+  .sw-n { font-weight: 700; font-size: .9rem; }
+  .sw-w { font-size: .75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  #dmx-result th, #dmx-result td { white-space: nowrap; }
+  #count-seg button { padding: .35rem .6rem; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DIP switch calculator",
+  "url": "https://toollamp.github.io/en/electronics/dip-switch-calculator/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Electronics</div>
+    <h1>DIP switch calculator</h1>
+    <p>Click the switches to see the number they set, or type a number to see which switches to turn on. Also plans DMX fixture addresses.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="dip-h">
+    <h2 id="dip-h">Switches and numbers</h2>
+    <div class="row">
+      <div class="field">
+        <label for="value-input">Value (decimal, or starting with 0x or 0b)</label>
+        <input id="value-input" type="text" autocomplete="off" spellcheck="false" value="37" placeholder="e.g. 37 or 0x25">
+      </div>
+    </div>
+    <div class="choice">
+      <span id="count-label">Number of switches</span>
+      <div class="seg" id="count-seg" role="group" aria-labelledby="count-label"></div>
+    </div>
+    <div class="choice">
+      <span id="order-label">Switch 1 is</span>
+      <div class="seg" id="order-seg" role="group" aria-labelledby="order-label"></div>
+    </div>
+    <div class="switches-wrap">
+      <span>Click a switch to flip it (up is ON). The small number is what each switch adds.</span>
+      <div class="switches" id="switches"></div>
+    </div>
+    <div class="result" id="dip-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="tool" aria-labelledby="dmx-h">
+    <h2 id="dmx-h">DMX address planner</h2>
+    <div class="row">
+      <div class="field">
+        <label for="dmx-start">First fixture’s address</label>
+        <input id="dmx-start" type="text" inputmode="numeric" autocomplete="off" value="1" placeholder="e.g. 1">
+      </div>
+      <div class="field">
+        <label for="dmx-channels">Channels per fixture</label>
+        <input id="dmx-channels" type="text" inputmode="numeric" autocomplete="off" value="8" placeholder="e.g. 8">
+      </div>
+      <div class="field">
+        <label for="dmx-fixtures">Number of fixtures</label>
+        <input id="dmx-fixtures" type="text" inputmode="numeric" autocomplete="off" value="4" placeholder="e.g. 4">
+      </div>
+    </div>
+    <div class="result" id="dmx-result" aria-live="polite" hidden></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/dip-switch-calculator" hidden></aside>
+
+  <article class="article">
+    <h2>How DIP switches set a number</h2>
+    <p>Each switch in a DIP switch is one bit of a binary number: ON is 1, OFF is 0. Switch 1 is worth 1, switch 2 is worth 2, switch 3 is worth 4, and each one after that doubles. Add up the switches that are ON to get the value.</p>
+    <p>For example, switches 1, 3 and 6 ON give 1 + 4 + 32 = 37. To set 37, take away the largest values that fit: 37 = 32 + 4 + 1, so turn on switches 6, 3 and 1.</p>
+    <p>DMX fixtures almost always use switch 1 = 1. Some boards and modules make switch 1 the highest bit instead; set “Switch 1 is” to “highest bit” for those, and check the manual or the board markings.</p>
+
+    <h2>Setting a DMX address</h2>
+    <p>One DMX512 line (a universe) carries 512 channels. A fixture’s address is the first channel it uses, and how many it uses depends on its mode. An 8-channel fixture at address 1 uses channels 1–8, so the next one starts at 9.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Address</th><th>Switches ON</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>1</td></tr>
+          <tr><td>9</td><td>1, 4</td></tr>
+          <tr><td>17</td><td>1, 5</td></tr>
+          <tr><td>33</td><td>1, 6</td></tr>
+          <tr><td>49</td><td>1, 5, 6</td></tr>
+          <tr><td>65</td><td>1, 7</td></tr>
+          <tr><td>100</td><td>3, 6, 7</td></tr>
+          <tr><td>129</td><td>1, 8</td></tr>
+          <tr><td>257</td><td>1, 9</td></tr>
+          <tr><td>511</td><td>1 to 9</td></tr>
+          <tr><td>512</td><td>10</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Switch values: 1 = 1, 2 = 2, 3 = 4, 4 = 8, 5 = 16, 6 = 32, 7 = 64, 8 = 128, 9 = 256, 10 = 512.</p>
+
+    <h2>FAQ</h2>
+    <h3>What is switch 10 for?</h3>
+    <p>Nine switches reach 511, so only address 512 needs switch 10. Many fixtures use switch 10 for something else, such as a standalone or channel mode. Check the fixture’s manual.</p>
+    <h3>Is all OFF address 0?</h3>
+    <p>It adds up to 0, but DMX addresses start at 1, so 0 is not a valid address. Some fixtures treat all OFF as a special mode and some as address 1, depending on the maker.</p>
+    <h3>What if two fixtures share an address?</h3>
+    <p>They receive the same data and do the same thing, which is handy when you want them in sync. Otherwise, make sure one fixture’s channels don’t overlap the next one’s; the planner above lays them out back to back.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/electronics/uart-baud-rate/"><span class="tool-name">UART baud rate error calculator</span><span class="tool-desc">Divisor, real baud rate, error %</span></a></li>
+      <li><a href="/en/electronics/resistor-color-code/"><span class="tool-name">Resistor color code calculator</span><span class="tool-desc">4 and 5 band, both directions</span></a></li>
+      <li><a href="/en/electronics/led-resistor/"><span class="tool-name">LED resistor calculator</span><span class="tool-desc">Resistor value, E24 and power rating</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/dip-switch-calculator.js"></script>
+</body>
+</html>
