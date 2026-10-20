@@ -112,10 +112,12 @@ input:focus, select:focus { border-color: var(--accent); }
 .article th { color: var(--muted); font-weight: 600; }
 
 /* Tool index (home pages) */
-.tool-group { margin: 2rem 0; }
-.tool-group h2 { font: 650 1.2rem/1.3 var(--font-display); margin: 0 0 .7rem; }
-.tool-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
-.tool-list li { border-bottom: 1px solid var(--line); }
+/* Each group (my favorites, a category, related tools) is a card, so the groups read as separate blocks. */
+.tool-group { margin: 1.5rem 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  padding: 1.1rem clamp(1rem, 3vw, 1.5rem) .3rem; }
+.tool-group h2 { font: 650 1.2rem/1.3 var(--font-display); margin: 0 0 .4rem; color: var(--accent); }
+.tool-list { list-style: none; padding: 0; margin: 0; }
+.tool-list li + li { border-top: 1px solid var(--line); }
 .tool-list a { display: flex; gap: 1rem; justify-content: space-between; align-items: baseline;
   padding: .9rem .2rem; text-decoration: none; color: var(--text); }
 .tool-list a:hover .tool-name { color: var(--accent); }
@@ -137,9 +139,11 @@ input:focus, select:focus { border-color: var(--accent); }
 .fav-list li a { flex: 1; min-width: 0; }
 .fav-remove { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 1.2rem; line-height: 1; padding: .3rem .5rem; }
 .fav-remove:hover { color: var(--danger); }
-.fav-share { margin: .8rem 0 0; }
-.fav-empty { margin: 0; color: var(--muted); font-size: .95rem; }
-.fav-link { margin: .6rem 0 0; font-size: .9rem; color: var(--muted); }
+.fav-share { margin: .5rem 0 .9rem; }
+.fav-group { border-left: 4px solid var(--lamp); }
+.fav-group h2 { color: var(--lamp); }
+.fav-empty { margin: 0 0 .9rem; color: var(--muted); font-size: .95rem; }
+.fav-link { margin: 0 0 .9rem; font-size: .9rem; color: var(--muted); }
 .fav-link input { margin-top: .3rem; font-size: .85rem; }
 .fav-offer { margin: 1.5rem 0 0; padding: .7rem 1rem; background: var(--surface); border: 1px solid var(--line);
   border-left: 4px solid var(--lamp); border-radius: var(--radius-sm); font-size: .95rem; }
