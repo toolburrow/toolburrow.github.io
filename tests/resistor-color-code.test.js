@@ -1,4 +1,4 @@
-const R = require('../en/electronics/resistor-color-code/tool.js');
+const R = require('../assets/tools/resistor-color-code.js');
 
 test('decode 4-band', () => {
   eq(R.decode(['yellow', 'violet', 'red', 'gold']), { ohms: 4700, tol: 5, min: 4465, max: 4935 });
@@ -24,7 +24,14 @@ test('encode', () => {
   eq(R.encode(4750, 3).exact, true);
   eq(R.encode(999, 2).bands, ['brown', 'black', 'red']); // 999 rounds to 1000 = 10 x 100
 });
-test('encode limits', () => { eq(!!R.encode(0.001, 2).error, true); eq(!!R.encode(0, 2).error, true); });
+test('encode limits', () => {
+  eq(R.encode(0.001, 2), { error: 'small', min: 0.1 }); eq(R.encode(0.001, 3), { error: 'small', min: 1 });
+  eq(R.encode(0, 2), { error: 'zero' }); eq(R.encode(1e13, 2), { error: 'large' });
+  eq(R.TEXT.en.encodeError.small({ min: 0.1 }, 2), 'Too small to show with 2 digit bands (smallest is 0.1 Ω).');
+});
+test('every color has a name in both languages', () => {
+  for (const lang of ['en', 'zh-tw']) for (const k of Object.keys(R.COLORS)) eq([lang, k, !!R.TEXT[lang].colors[k]], [lang, k, true]);
+});
 test('round trip E24 values', () => {
   const e24 = [10,11,12,13,15,16,18,20,22,24,27,30,33,36,39,43,47,51,56,62,68,75,82,91];
   for (const exp of [-1, 0, 1, 2, 3, 4, 5, 6]) for (const v of e24) {

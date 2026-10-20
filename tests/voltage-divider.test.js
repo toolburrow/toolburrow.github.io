@@ -1,4 +1,4 @@
-const VD = require('../en/electronics/voltage-divider/tool.js');
+const VD = require('../assets/tools/voltage-divider.js');
 const near = (a, b, rel = 1e-9) => { if (Math.abs(a - b) > Math.abs(b) * rel + 1e-15) throw new Error(`expected ~${b}, got ${a}`); };
 
 test('parse resistance', () => {
@@ -34,7 +34,7 @@ test('forward: zero and negative Vin', () => {
   eq([n.vout, n.current, n.p1, n.ptotal], [-6, -0.006, 0.036, 0.072]);
 });
 test('forward: errors', () => {
-  const err = (a, b, c) => VD.forward(a, b, c).error || null;
+  const err = (a, b, c) => { const r = VD.forward(a, b, c); return r.error ? VD.TEXT.en.errors[r.error](r.name) : null; };
   eq(err('', '10k', '10k'), 'Enter Vin, for example 5 or 3.3.');
   eq(err('5', '', '10k'), 'Enter R1, for example 10k.');
   eq(err('5', '10k', '  '), 'Enter R2, for example 10k.');
@@ -81,7 +81,7 @@ test('solve: negative supply', () => {
   near(r.exact, 14000); near(r.options[r.best].vout, -4.8);
 });
 test('solve: errors', () => {
-  const err = (a, b, c, k) => VD.solve(a, b, c, k || 'r1').error || null;
+  const err = (a, b, c, k) => { const r = VD.solve(a, b, c, k || 'r1'); return r.error ? VD.TEXT.en.errors[r.error](r.name) : null; };
   eq(err('', '3.3', '10k'), 'Enter Vin, for example 5 or 3.3.');
   eq(err('5', '', '10k'), 'Enter Vout, for example 5 or 3.3.');
   eq(err('5', '3.3', ''), 'Enter R1, for example 10k.');
@@ -108,4 +108,12 @@ test('article table of common pairs', () => {
     eq(VD.si(VD.forward(String(vin), r1, r2).vout, 'V'), want);
     for (const r of [r1, r2]) eq(VD.e24Neighbors(VD.parseResistance(r)).length, 1); // both are E24 values
   }
+});
+test('errors: codes and Chinese text', () => {
+  eq(VD.forward('', '10k', '10k'), { error: 'voltage-empty', name: 'Vin' });
+  eq(VD.forward('5', 'x', '10k'), { error: 'resistance-format', name: 'R1' });
+  eq(VD.solve('5', '5', '10k', 'r1'), { error: 'too-high' });
+  const zh = VD.TEXT['zh-tw'].errors;
+  eq(zh['resistance-positive']('R2'), 'R2 必須大於 0 Ω。');
+  eq(zh['voltage-empty']('Vout'), '請輸入 Vout，例如 5 或 3.3。');
 });

@@ -1,13 +1,17 @@
-// Affiliate recommendations for every tool page, keyed by slot name (the tool's slug).
+// Affiliate recommendations for every tool page, keyed by slot name: "<lang>/<slug>" (each language uses its own programs).
 // Only add links from programs marked 已核准 in PLAN.md, exactly as the owner gives them.
 // Each slot holds 0–3 items: { name, url, note } where note is one sentence on why it's recommended.
 // An empty slot renders nothing.
 var AFF = (function () {
   var SLOTS = {
-    'roc-year-converter': [],
-    'date-difference': [],
-    'resistor-color-code': [],
-    'voltage-divider': []
+    'zh-tw/roc-year-converter': [],
+    'zh-tw/date-difference': [],
+    'zh-tw/resistor-color-code': [],
+    'zh-tw/voltage-divider': [],
+    'en/roc-year-converter': [],
+    'en/date-difference': [],
+    'en/resistor-color-code': [],
+    'en/voltage-divider': []
   };
 
   var TEXT = {

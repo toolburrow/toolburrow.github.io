@@ -30,9 +30,10 @@ check tasks off as you finish them, and update PLAN.md before the session ends.
 ```
 /                       bilingual home (lists every tool)
 /zh-tw/                 Chinese home (Traditional Chinese, Taiwan)
-/zh-tw/<category>/<tool-slug>/index.html + tool.js
+/zh-tw/<category>/<tool-slug>/index.html
 /en/                    English home
-/en/<category>/<tool-slug>/index.html + tool.js
+/en/<category>/<tool-slug>/index.html
+/assets/tools/<tool-slug>.js   tool logic + page text in both languages, shared by both pages
 /zh-tw/{about,privacy,contact}/   site pages (same under /en/)
 /assets/site.css        shared design tokens and components
 /assets/site.js         language choice, theme toggle, copy buttons
@@ -41,26 +42,32 @@ check tasks off as you finish them, and update PLAN.md before the session ends.
 sitemap.xml, robots.txt, 404.html, .nojekyll
 ```
 
-Current categories: `zh-tw/life` (生活工具), `en/electronics`.
+Current categories: `life` (生活工具 / Everyday) and `electronics` (電子工具 / Electronics), in both languages.
 Slugs are lowercase English words joined with hyphens, describing what people search for.
+The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/x/y/` are the two versions of one tool.
 
 ## Adding a new tool – checklist
 
-1. Create `/<lang>/<category>/<slug>/index.html` by copying an existing tool page. Keep the header, footer,
-   font links and theme script identical.
-2. Put logic in `tool.js` next to it, in this shape:
-   - a pure-logic object at the top (no DOM access), exported with
-     `if (typeof module !== 'undefined') module.exports = X;`
-   - DOM wiring inside `if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded', ...)`
+1. Every tool is built in both languages. Create `/zh-tw/<category>/<slug>/index.html` and
+   `/en/<category>/<slug>/index.html` by copying an existing tool page in each language. Keep the header, footer,
+   font links and theme script identical to other pages in that language.
+2. Put the logic in `/assets/tools/<slug>.js`, loaded by both pages, in this shape:
+   - a pure-logic object at the top (no DOM access, no language), exported with
+     `if (typeof module !== 'undefined') module.exports = X;`. Errors are codes such as `{ error: 'format' }`,
+     never sentences.
+   - `X.TEXT = { 'zh-tw': {...}, en: {...} }` with every string the script writes on the page, including error
+     messages. Both languages must have the same keys (`tests/tool-text.test.js` checks). Use `null` for a line
+     that only one language shows.
+   - DOM wiring inside `if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded', ...)`,
+     starting with `var T = X.TEXT[document.documentElement.lang === 'en' ? 'en' : 'zh-tw'];`
 3. Add tests in `/tests/<slug>.test.js` and run `node tests/run.js`. All tests must pass.
 4. Page content, in this order: `.page-head` (breadcrumb, h1, one-sentence description) → one or more
    `.tool` panels → affiliate slot `<aside>` (see below) → `.article` with an explanation, a reference table where useful,
    and a short FAQ (2–4 questions people actually search for).
 5. SEO in `<head>`: unique `<title>` (tool name + what it does + "- ToolLamp"), meta description under
-   ~155 characters, canonical URL, `WebApplication` JSON-LD. If the tool exists in both languages, add the
-   `hreflang` links to both versions (see "Languages").
-6. Add the tool to the language home page AND the root `index.html`, and add its URL to `sitemap.xml`.
-   Add an empty slot for its slug to `SLOTS` in `/assets/affiliates.js` (the tests check this).
+   ~155 characters, canonical URL, `hreflang` links to both versions (see "Languages"), `WebApplication` JSON-LD.
+6. Add the tool to both language home pages AND the root `index.html`, and add both URLs to `sitemap.xml`.
+   Add empty slots `zh-tw/<slug>` and `en/<slug>` to `SLOTS` in `/assets/affiliates.js` (the tests check this).
 7. The tool must show a useful result on first load (pre-fill a sensible default) and update live as the user types.
 
 ## Languages
@@ -72,7 +79,7 @@ Slugs are lowercase English words joined with hyphens, describing what people se
   With no Chinese entry, a Taipei/Hong Kong/Macau time zone → Chinese, anything else → English.
 - The choice is saved in localStorage (`tb-lang`) only when the reader clicks a link with `data-set-lang`
   (the header's 中文工具 / English tools links and the offer bar).
-- Pages that exist in both languages list each other with `<link rel="alternate" hreflang="zh-Hant|en">`
+- Every tool and site page exists in both languages (the tests check). Pages list each other with `<link rel="alternate" hreflang="zh-Hant|en">`
   right after the canonical link, with the same set on both pages. On those pages `site.js` shows a bar offering the
   other version when it matches the reader's language better. The tests check the links are reciprocal.
 - The logo links to the home page of the page's language (`/zh-tw/` or `/en/`); only the root page and 404 link to `/`.
@@ -105,9 +112,10 @@ Light and dark mode must both work. Keep layouts usable at 360 px wide. Don't ad
 
 ## Affiliate slots
 
-All recommended products live in `/assets/affiliates.js`, in `SLOTS`, keyed by the tool's slug.
+All recommended products live in `/assets/affiliates.js`, in `SLOTS`, keyed by `<lang>/<slug>`
+(for example `zh-tw/voltage-divider`), because each language uses its own programs (蝦皮 for zh-tw, AliExpress or Amazon for en).
 Each slot holds 0–3 items `{ name, url, note }` (`note` is one sentence on why it's recommended).
-Every tool page has `<aside class="affiliate" data-slot="<slug>" hidden></aside>` below the tool panels and loads
+Every tool page has `<aside class="affiliate" data-slot="<lang>/<slug>" hidden></aside>` below the tool panels and loads
 `/assets/affiliates.js`; the script fills the slot and shows it only when it has items, adding the heading,
 `rel="sponsored noopener" target="_blank"` and the disclosure line in the page's language. Don't edit the HTML.
 

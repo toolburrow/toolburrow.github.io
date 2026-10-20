@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Date Difference Calculator: Days Between Dates, Add or Subtract Days - ToolLamp</title>
+<meta name="description" content="Free date calculator. Find the days, weeks and months between two dates, or add or subtract days from a date. For countdowns, deadlines and due dates.">
+<link rel="canonical" href="https://toollamp.github.io/en/life/date-difference/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/life/date-difference/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/life/date-difference/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<style>
+  .check { display: flex; align-items: center; gap: .5rem; margin-top: 1rem; font-size: .95rem; color: var(--muted); cursor: pointer; }
+  .check input { width: auto; margin: 0; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Date Difference Calculator",
+  "url": "https://toollamp.github.io/en/life/date-difference/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Everyday</div>
+    <h1>Date difference calculator</h1>
+    <p>Find how many days, weeks and months are between two dates, or which date is N days before or after another.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="diff-h">
+    <h2 id="diff-h">Days between two dates</h2>
+    <div class="row">
+      <div class="field">
+        <label for="start-input">Start date</label>
+        <input id="start-input" type="date" min="0001-01-01" max="9999-12-31">
+      </div>
+      <div class="field">
+        <label for="end-input">End date</label>
+        <input id="end-input" type="date" min="0001-01-01" max="9999-12-31">
+      </div>
+    </div>
+    <label class="check"><input id="inclusive" type="checkbox"> Include both the start and end date</label>
+    <div class="result" id="diff-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="tool" aria-labelledby="add-h">
+    <h2 id="add-h">Add or subtract days</h2>
+    <div class="row">
+      <div class="field">
+        <label for="base-input">Start date</label>
+        <input id="base-input" type="date" min="0001-01-01" max="9999-12-31">
+      </div>
+      <div class="field">
+        <label for="days-input">Days (negative to go back)</label>
+        <input id="days-input" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 30 or -30">
+      </div>
+    </div>
+    <label class="check"><input id="count-start" type="checkbox"> Count the start date as day 1</label>
+    <div class="result" id="add-result" aria-live="polite" hidden></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/date-difference" hidden></aside>
+
+  <article class="article">
+    <h2>How the days between two dates are counted</h2>
+    <p>The number of days is the end date minus the start date, so the start date itself isn’t counted. From October 1 to October 10 is 9 days.</p>
+    <p>If you want the total number of days, for example for a trip, a hospital stay or time off, both the first and last day count, so add 1: that’s 10 days. Tick “Include both the start and end date” to do this automatically.</p>
+
+    <h2>How months and days are counted</h2>
+    <p>The calculator first counts whole calendar months from the start date, then the days left over. From March 15 to October 19 is 7 months to October 15, plus 4 days: 7 months, 4 days.</p>
+    <p>When the next month has no matching day, the last day of that month is used. So January 31 plus 1 month is February 28, or February 29 in a leap year. Leap years are handled automatically.</p>
+
+    <h2>Common questions and how to fill them in</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>You want to know</th><th>Fill in</th></tr></thead>
+        <tbody>
+          <tr><td>How many days until a date</td><td>Start date: today. End date: that date.</td></tr>
+          <tr><td>How many days since a date</td><td>Start date: that date. End date: today.</td></tr>
+          <tr><td>What date is 30 days from now</td><td>Add or subtract days: start date today, days 30.</td></tr>
+          <tr><td>What date was 90 days ago</td><td>Add or subtract days: days -90.</td></tr>
+          <tr><td>Pregnancy due date</td><td>Add or subtract days: start date is the first day of the last period, days 280.</td></tr>
+          <tr><td>Total days of a trip or leave</td><td>Days between, with “Include both the start and end date” ticked.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <h3>Does “days until” include today?</h3>
+    <p>Usually not, and the calculator doesn’t by default. If today is October 19, October 20 is 1 day away.</p>
+    <h3>Which date is “within 30 days”?</h3>
+    <p>It depends on whether the start date counts. Counting from the day after, 30 days from October 19 ends on November 18. Counting October 19 as day 1, it ends on November 17. Use the “Count the start date as day 1” option to switch. Contracts, bills and laws can define deadlines differently, so check the exact wording.</p>
+    <h3>Are weekends and holidays excluded?</h3>
+    <p>No. The calculator counts calendar days, including weekends and public holidays. For working days, subtract the weekends and the holidays where you live.</p>
+    <h3>Do leap years change the result?</h3>
+    <p>Yes, and the calculator handles them. February has 29 days in a leap year, so a period that crosses February in a leap year is one day longer. The next leap year is 2028.</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p>Some pages contain affiliate links. We may earn a small commission if you buy through them.</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/date-difference.js"></script>
+</body>
+</html>

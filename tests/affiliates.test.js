@@ -49,19 +49,20 @@ test('affiliates: escapes names and notes', () => {
 });
 test('affiliates: every tool page has a matching slot and loads the script', () => {
   const root = path.join(__dirname, '..');
-  const pages = []; // a tool page is a folder with tool.js next to index.html
+  const pages = []; // a tool page is /<lang>/<category>/<slug>/index.html
   for (const lang of ['zh-tw', 'en']) for (const cat of fs.readdirSync(path.join(root, lang), { withFileTypes: true })) {
     if (!cat.isDirectory()) continue;
     for (const tool of fs.readdirSync(path.join(root, lang, cat.name), { withFileTypes: true })) {
-      const dir = path.join(root, lang, cat.name, tool.name);
-      if (tool.isDirectory() && fs.existsSync(path.join(dir, 'tool.js'))) pages.push([tool.name, path.join(dir, 'index.html')]);
+      const file = path.join(root, lang, cat.name, tool.name, 'index.html');
+      if (tool.isDirectory() && fs.existsSync(file)) pages.push([lang + '/' + tool.name, file]);
     }
   }
-  eq(pages.length >= 4, true);
-  for (const [slug, file] of pages) {
+  eq(pages.length >= 8, true);
+  for (const [slot, file] of pages) {
     const html = fs.readFileSync(file, 'utf8');
-    eq([slug, html.includes('<aside class="affiliate" data-slot="' + slug + '" hidden></aside>')], [slug, true]);
-    eq([slug, html.includes('<script src="/assets/affiliates.js"></script>')], [slug, true]);
-    eq([slug, Object.prototype.hasOwnProperty.call(AFF.SLOTS, slug)], [slug, true]);
+    eq([slot, html.includes('<aside class="affiliate" data-slot="' + slot + '" hidden></aside>')], [slot, true]);
+    eq([slot, html.includes('<script src="/assets/affiliates.js"></script>')], [slot, true]);
+    eq([slot, Object.prototype.hasOwnProperty.call(AFF.SLOTS, slot)], [slot, true]);
   }
+  eq(Object.keys(AFF.SLOTS).sort(), pages.map(p => p[0]).sort()); // no slot without a page
 });

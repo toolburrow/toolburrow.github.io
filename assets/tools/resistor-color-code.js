@@ -1,4 +1,5 @@
-// Resistor color code calculator. Pure logic first (testable with node), DOM wiring below.
+// Resistor color code calculator / 電阻色碼計算, shared by /en/ and /zh-tw/ pages.
+// Pure logic first (testable with node), then page text per language, then DOM wiring.
 var RCC = (function () {
   var COLORS = {
     black:  { name: 'Black',  hex: '#1B1B1B', digit: 0, exp: 0 },
@@ -53,13 +54,14 @@ var RCC = (function () {
   }
 
   // Value -> color bands for the given number of significant digits (2 or 3).
+  // Errors: { error: 'zero' }, { error: 'small', min }, { error: 'large' }.
   function encode(ohms, sig) {
-    if (!(ohms > 0)) return { error: 'Enter a value greater than zero.' };
+    if (!(ohms > 0)) return { error: 'zero' };
     var exp = Math.floor(Math.log10(ohms) + 1e-9) - (sig - 1);
     var digits = Math.round(ohms / Math.pow(10, exp));
     if (digits >= Math.pow(10, sig)) { digits = Math.round(digits / 10); exp += 1; }
-    if (exp < -2) return { error: 'Too small to show with ' + sig + ' digit bands (smallest is ' + formatOhms(Math.pow(10, sig - 1) / 100) + ').' };
-    if (exp > 9) return { error: 'Too large for standard color bands.' };
+    if (exp < -2) return { error: 'small', min: clean(Math.pow(10, sig - 1) / 100) };
+    if (exp > 9) return { error: 'large' };
     var actual = clean(digits * Math.pow(10, exp));
     var ds = String(digits);
     while (ds.length < sig) ds = '0' + ds;
@@ -68,8 +70,47 @@ var RCC = (function () {
     return { bands: bands, actual: actual, exact: Math.abs(actual - ohms) / ohms < 1e-9 };
   }
 
+  // Everything the script writes on the page, per language. Both languages must have the same keys.
+  // Color names here; the English name in COLORS is only a fallback for code that has no page language.
+  var TEXT = {
+    en: {
+      copy: 'Copy', copied: 'Copied',
+      colors: { black: 'Black', brown: 'Brown', red: 'Red', orange: 'Orange', yellow: 'Yellow', green: 'Green', blue: 'Blue',
+        violet: 'Violet', grey: 'Grey', white: 'White', gold: 'Gold', silver: 'Silver', none: 'None' },
+      digitBand: function (n) { return 'Band ' + n + ' (digit)'; }, multiplier: 'Multiplier', tolerance: 'Tolerance',
+      range: function (a, b) { return a + ' to ' + b; }, sep: ', ',
+      option: function (color, detail) { return color + ' (' + detail + ')'; },
+      bandsTitle: function (n) { return n + '-band'; },
+      bandsAria: function (title, names) { return title + ' resistor: ' + names; },
+      badValue: 'Use a format like 4.7k, 4k7, 220, 1M or R47.',
+      encodeError: {
+        zero: function () { return 'Enter a value greater than zero.'; },
+        small: function (e, sig) { return 'Too small to show with ' + sig + ' digit bands (smallest is ' + formatOhms(e.min) + ').'; },
+        large: function () { return 'Too large for standard color bands.'; }
+      },
+      rounded: function (v, sig) { return 'Rounded to ' + v + '. ' + sig + ' significant digits can’t show this value exactly.'; }
+    },
+    'zh-tw': {
+      copy: '複製', copied: '已複製',
+      colors: { black: '黑', brown: '棕', red: '紅', orange: '橙', yellow: '黃', green: '綠', blue: '藍',
+        violet: '紫', grey: '灰', white: '白', gold: '金', silver: '銀', none: '無色環' },
+      digitBand: function (n) { return '第 ' + n + ' 環（數字）'; }, multiplier: '倍率', tolerance: '誤差',
+      range: function (a, b) { return a + ' 到 ' + b; }, sep: '、',
+      option: function (color, detail) { return color + '（' + detail + '）'; },
+      bandsTitle: function (n) { return n + ' 環'; },
+      bandsAria: function (title, names) { return title + '電阻：' + names; },
+      badValue: '請輸入像 4.7k、4k7、220、1M 或 R47 這樣的格式。',
+      encodeError: {
+        zero: function () { return '請輸入大於 0 的電阻值。'; },
+        small: function (e, sig) { return '數值太小，' + sig + ' 位數字的色環無法表示（最小是 ' + formatOhms(e.min) + '）。'; },
+        large: function () { return '數值太大，標準色環無法表示。'; }
+      },
+      rounded: function (v, sig) { return '已四捨五入為 ' + v + '。' + sig + ' 位有效數字無法精確表示這個值。'; }
+    }
+  };
+
   return { COLORS: COLORS, DIGIT_COLORS: DIGIT_COLORS, MULT_COLORS: MULT_COLORS, TOL_COLORS: TOL_COLORS,
-    decode: decode, encode: encode, parseValue: parseValue, formatOhms: formatOhms };
+    decode: decode, encode: encode, parseValue: parseValue, formatOhms: formatOhms, TEXT: TEXT };
 })();
 
 if (typeof module !== 'undefined') module.exports = RCC;
@@ -77,13 +118,16 @@ if (typeof module !== 'undefined') module.exports = RCC;
 if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded', function () {
   var $ = function (id) { return document.getElementById(id); };
   var C = RCC.COLORS;
+  var T = RCC.TEXT[document.documentElement.lang === 'en' ? 'en' : 'zh-tw'];
+  var name = function (k) { return T.colors[k]; };
+  var names = function (keys) { return keys.map(name).join(T.sep); };
   var count = 4;
   var state = { 4: ['yellow', 'violet', 'red', 'gold'], 5: ['brown', 'black', 'black', 'red', 'brown'] };
 
   function labelFor(i) {
     var sig = count - 2;
-    if (i < sig) return 'Band ' + (i + 1) + ' (digit)';
-    return i === sig ? 'Multiplier' : 'Tolerance';
+    if (i < sig) return T.digitBand(i + 1);
+    return i === sig ? T.multiplier : T.tolerance;
   }
   function optionsFor(i) {
     var sig = count - 2;
@@ -92,9 +136,9 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
   }
   function optionText(key, i) {
     var sig = count - 2, c = C[key];
-    if (i < sig) return c.name + ' (' + c.digit + ')';
-    if (i === sig) return c.name + ' (×' + RCC.formatOhms(Math.pow(10, c.exp)).replace(/\s*Ω$/, '').replace(' ', '') + ')';
-    return c.name + ' (±' + c.tol + '%)';
+    if (i < sig) return T.option(name(key), c.digit);
+    if (i === sig) return T.option(name(key), '×' + RCC.formatOhms(Math.pow(10, c.exp)).replace(/\s*Ω$/, '').replace(' ', ''));
+    return T.option(name(key), '±' + c.tol + '%');
   }
 
   function buildSelects() {
@@ -145,8 +189,8 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
     var r = RCC.decode(bands);
     drawResistor(bands, 'resistor-svg');
     $('decode-main').textContent = RCC.formatOhms(r.ohms) + ' ±' + r.tol + '%';
-    $('decode-range').textContent = RCC.formatOhms(r.min) + ' to ' + RCC.formatOhms(r.max);
-    $('decode-bands').textContent = bands.map(function (k) { return C[k].name; }).join(', ');
+    $('decode-range').textContent = T.range(RCC.formatOhms(r.min), RCC.formatOhms(r.max));
+    $('decode-bands').textContent = names(bands);
   }
 
   function setCount(n) {
@@ -168,19 +212,19 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
     if (!raw.trim()) { out.hidden = true; return; }
     out.hidden = false;
     var v = RCC.parseValue(raw);
-    if (v === null) { out.innerHTML = '<p class="error">Use a format like 4.7k, 4k7, 220, 1M or R47.</p>'; return; }
+    if (v === null) { out.innerHTML = '<p class="error">' + T.badValue + '</p>'; return; }
     var tolKey = $('tol-select').value;
     var html = '';
     [2, 3].forEach(function (sig) {
       var e = RCC.encode(v, sig);
-      var title = (sig + 2) + '-band';
-      if (e.error) { html += '<h3>' + title + '</h3><p class="error">' + e.error + '</p>'; return; }
+      var title = T.bandsTitle(sig + 2);
+      if (e.error) { html += '<h3>' + title + '</h3><p class="error">' + T.encodeError[e.error](e, sig) + '</p>'; return; }
       var bands = e.bands.concat([tolKey]);
       html += '<h3>' + title + '</h3>' +
-        '<svg class="mini-resistor" id="enc-svg-' + sig + '" viewBox="0 0 400 100" role="img" aria-label="' + title + ' resistor: ' +
-        bands.map(function (k) { return C[k].name; }).join(', ') + '">' + resistorShell() + '</svg>' +
-        '<p class="band-names">' + bands.map(function (k) { return C[k].name; }).join(', ') + '</p>' +
-        (e.exact ? '' : '<p class="notice">Rounded to ' + RCC.formatOhms(e.actual) + '. ' + sig + ' significant digits can’t show this value exactly.</p>');
+        '<svg class="mini-resistor" id="enc-svg-' + sig + '" viewBox="0 0 400 100" role="img" aria-label="' + T.bandsAria(title, names(bands)) + '">' +
+        resistorShell() + '</svg>' +
+        '<p class="band-names">' + names(bands) + '</p>' +
+        (e.exact ? '' : '<p class="notice">' + T.rounded(RCC.formatOhms(e.actual), sig) + '</p>');
     });
     out.innerHTML = html;
     [2, 3].forEach(function (sig) {
@@ -198,7 +242,7 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
   $('tol-select').addEventListener('change', renderEncode);
   RCC.TOL_COLORS.forEach(function (k) {
     var o = document.createElement('option');
-    o.value = k; o.textContent = C[k].name + ' (±' + C[k].tol + '%)';
+    o.value = k; o.textContent = T.option(name(k), '±' + C[k].tol + '%');
     $('tol-select').appendChild(o);
   });
   $('tol-select').value = 'gold';

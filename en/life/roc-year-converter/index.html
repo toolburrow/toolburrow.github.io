@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROC Year Converter: Taiwan Minguo Year to Western Year - ToolLamp</title>
+<meta name="description" content="Convert Taiwan’s ROC (Minguo) years and dates to Western years and back, e.g. ROC 115 is 2026. Reads formats like 115/10/19 and 1151019.">
+<link rel="canonical" href="https://toollamp.github.io/en/life/roc-year-converter/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/life/roc-year-converter/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/life/roc-year-converter/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ROC Year Converter",
+  "url": "https://toollamp.github.io/en/life/roc-year-converter/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Everyday</div>
+    <h1>ROC year converter</h1>
+    <p>Convert years and dates between Taiwan’s ROC (Minguo) calendar and the Western calendar. Also shows the year’s sexagenary name and zodiac animal.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="year-h">
+    <h2 id="year-h">Convert a year</h2>
+    <div class="seg" id="mode-seg" role="group" aria-label="Direction">
+      <button type="button" data-mode="w2r" aria-pressed="true">Western → ROC</button>
+      <button type="button" data-mode="r2w" aria-pressed="false">ROC → Western</button>
+    </div>
+    <div class="row">
+      <div class="field" id="era-field" hidden>
+        <label for="era">Era</label>
+        <select id="era"><option value="民國">ROC (民國)</option><option value="民前">Before ROC (民前)</option></select>
+      </div>
+      <div class="field">
+        <label for="year-input" id="year-label">Western year</label>
+        <input id="year-input" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g. 2026" aria-labelledby="year-label">
+      </div>
+    </div>
+    <div class="result" id="year-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="tool" aria-labelledby="date-h">
+    <h2 id="date-h">Convert a date</h2>
+    <div class="row">
+      <div class="field">
+        <label for="rocdate-input">ROC date → Western</label>
+        <input id="rocdate-input" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 115/10/19 or 1151019">
+      </div>
+    </div>
+    <div class="result" id="rocdate-result" aria-live="polite" hidden></div>
+    <div class="row" style="margin-top:1.2rem">
+      <div class="field">
+        <label for="wdate-input">Western date → ROC</label>
+        <input id="wdate-input" type="date">
+      </div>
+    </div>
+    <div class="result" id="wdate-result" aria-live="polite" hidden></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/roc-year-converter" hidden></aside>
+
+  <article class="article">
+    <h2>How to convert ROC years</h2>
+    <p>The Republic of China (ROC) calendar, also called the Minguo calendar (民國), counts years from 1912, the year the ROC was founded. 1912 is ROC year 1, and Taiwan still uses this calendar on official documents. The rule is simple:</p>
+    <p><strong>Western year − 1911 = ROC year</strong>. For example, 2026 − 1911 = 115, so 2026 is ROC 115.<br>
+    <strong>ROC year + 1911 = Western year</strong>. For example, ROC 89 + 1911 = 2000.</p>
+
+    <h2>Years before 1912</h2>
+    <p>Years before ROC year 1 are written 民前 (“before the ROC”), counted as 1912 minus the Western year. So 1911 is 民前 1 and 1900 is 民前 12. There is no year 0: the year after 民前 1 is ROC 1.</p>
+
+    <h2>Where you’ll see ROC dates</h2>
+    <p>Taiwanese government documents, ID cards, health insurance records, bank forms, receipts and invoices usually use ROC dates. The calculator reads all the common ways of writing them:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Format</th><th>Example</th><th>Where it’s used</th></tr></thead>
+        <tbody>
+          <tr><td>Slashes</td><td>115/10/19</td><td>Receipts, everyday documents</td></tr>
+          <tr><td>In Chinese</td><td lang="zh-Hant-TW">民國115年10月19日</td><td>Official letters, contracts</td></tr>
+          <tr><td>7 digits</td><td>1151019</td><td>Online forms, system fields</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Year chart</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Western</th><th>ROC</th><th>Sexagenary</th><th>Zodiac</th></tr></thead>
+        <tbody>
+          <tr><td>2027</td><td>116</td><td>丁未 (ding-wei)</td><td>Goat</td></tr>
+          <tr><td>2026</td><td>115</td><td>丙午 (bing-wu)</td><td>Horse</td></tr>
+          <tr><td>2025</td><td>114</td><td>乙巳 (yi-si)</td><td>Snake</td></tr>
+          <tr><td>2024</td><td>113</td><td>甲辰 (jia-chen)</td><td>Dragon</td></tr>
+          <tr><td>2000</td><td>89</td><td>庚辰 (geng-chen)</td><td>Dragon</td></tr>
+          <tr><td>1990</td><td>79</td><td>庚午 (geng-wu)</td><td>Horse</td></tr>
+          <tr><td>1980</td><td>69</td><td>庚申 (geng-shen)</td><td>Monkey</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <h3>What year is ROC 115?</h3>
+    <p>ROC 115 is 2026. Add 1911 to any ROC year to get the Western year.</p>
+    <h3>Does the zodiac year start on January 1?</h3>
+    <p>No. The zodiac animal and sexagenary year change at Lunar New Year, which falls between late January and mid-February. If you were born in January or February before Lunar New Year, your zodiac animal is the previous year’s. The calculator shows the animal from Lunar New Year onwards.</p>
+    <h3>What is the 7-digit date format?</h3>
+    <p>It is a 3-digit ROC year, a 2-digit month and a 2-digit day. Short years get a leading zero, so January 5 of ROC 89 (2000) is written 0890105.</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p>Some pages contain affiliate links. We may earn a small commission if you buy through them.</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/roc-year-converter.js"></script>
+</body>
+</html>

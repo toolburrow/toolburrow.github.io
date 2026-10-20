@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分壓電阻計算｜算 Vout、反推電阻和 E24 標準值 - ToolLamp</title>
+<meta name="description" content="免費的分壓電路計算工具：輸入 Vin、R1、R2 算出輸出電壓，或依目標電壓反推需要的電阻，列出最接近的 E24 標準值、電流和功率。">
+<link rel="canonical" href="https://toollamp.github.io/zh-tw/electronics/voltage-divider/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/voltage-divider/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/voltage-divider/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<style>
+  .divider-layout { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+  .divider-layout .row { flex: 1 1 16rem; }
+  .schematic { flex: 0 0 7.5rem; width: 7.5rem; color: var(--text); }
+  .schematic .wire { stroke: currentColor; stroke-width: 2; fill: none; }
+  .schematic .part { stroke: currentColor; stroke-width: 2; fill: var(--surface); }
+  .schematic text { fill: currentColor; font: 600 13px var(--font-body); }
+  .schematic .dot { fill: currentColor; }
+  .tool table { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: 1rem; font-variant-numeric: tabular-nums; }
+  .tool th, .tool td { border-bottom: 1px solid var(--line); padding: .4rem .5rem .4rem 0; text-align: left; }
+  .tool th { color: var(--muted); font-weight: 600; }
+  .tool tr.best td { font-weight: 700; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "分壓電阻計算",
+  "url": "https://toollamp.github.io/zh-tw/electronics/voltage-divider/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "zh-TW",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh-tw/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="主選單">
+      <a href="/zh-tw/" data-set-lang="zh-tw" aria-current="page">中文工具</a>
+      <a href="/en/" data-set-lang="en" lang="en">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="切換深淺色模式">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/zh-tw/">中文工具</a> / 電子工具</div>
+    <h1>分壓電阻計算</h1>
+    <p>算出兩顆電阻分壓後的輸出電壓，或是依目標電壓反推需要的電阻，並列出最接近的 E24 標準值。</p>
+  </div>
+
+  <section class="tool" aria-labelledby="fwd-h">
+    <h2 id="fwd-h">計算輸出電壓 Vout</h2>
+    <div class="divider-layout">
+      <svg class="schematic" viewBox="0 0 120 250" role="img" aria-label="Vin 經過 R1 接到 Vout，再經過 R2 接地">
+        <circle cx="40" cy="14" r="5" class="part"/>
+        <text x="54" y="19">Vin</text>
+        <path d="M40 19V45M40 105V155M40 215V228M40 125H92" class="wire"/>
+        <rect x="28" y="45" width="24" height="60" class="part"/>
+        <text x="60" y="80">R1</text>
+        <circle cx="40" cy="125" r="3.5" class="dot"/>
+        <circle cx="97" cy="125" r="5" class="part"/>
+        <text x="70" y="148">Vout</text>
+        <rect x="28" y="155" width="24" height="60" class="part"/>
+        <text x="60" y="190">R2</text>
+        <path d="M22 228H58M28 236H52M34 244H46" class="wire"/>
+      </svg>
+      <div class="row">
+        <div class="field">
+          <label for="fwd-vin">Vin（輸入電壓）</label>
+          <input id="fwd-vin" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 5、3.3、3V3">
+        </div>
+        <div class="field">
+          <label for="fwd-r1">R1（上方電阻）</label>
+          <input id="fwd-r1" type="text" autocomplete="off" spellcheck="false" placeholder="例如 10k、4k7、220">
+        </div>
+        <div class="field">
+          <label for="fwd-r2">R2（下方電阻）</label>
+          <input id="fwd-r2" type="text" autocomplete="off" spellcheck="false" placeholder="例如 10k、4k7、220">
+        </div>
+      </div>
+    </div>
+    <div class="result" id="fwd-result" aria-live="polite"></div>
+  </section>
+
+  <section class="tool" aria-labelledby="solve-h">
+    <h2 id="solve-h">反推電阻值</h2>
+    <div class="seg" id="known-seg" role="group" aria-label="要求哪一顆電阻">
+      <button type="button" data-known="r1" aria-pressed="true">求 R2</button>
+      <button type="button" data-known="r2" aria-pressed="false">求 R1</button>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="solve-vin">Vin（輸入電壓）</label>
+        <input id="solve-vin" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 12">
+      </div>
+      <div class="field">
+        <label for="solve-vout">目標 Vout</label>
+        <input id="solve-vout" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="例如 3.3">
+      </div>
+      <div class="field">
+        <label for="solve-known" id="solve-known-label">R1（上方電阻）</label>
+        <input id="solve-known" type="text" autocomplete="off" spellcheck="false" placeholder="例如 10k">
+      </div>
+    </div>
+    <div class="result" id="solve-result" aria-live="polite"></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="zh-tw/voltage-divider" hidden></aside>
+
+  <article class="article">
+    <h2>分壓電路的原理</h2>
+    <p>兩顆電阻串聯在 Vin 和地之間，電壓會依照電阻值的比例分配，輸出電壓從兩顆電阻中間取出：</p>
+    <p><strong>Vout = Vin × R2 / (R1 + R2)</strong></p>
+    <p>R1 是 Vin 到輸出端之間的電阻，R2 是輸出端到地之間的電阻。例如 R1 = 10 kΩ、R2 = 20 kΩ，輸入 5 V 時，輸出是 5 × 20 / 30 = 3.333 V。</p>
+    <p>流過兩顆電阻的電流相同：<strong>I = Vin / (R1 + R2)</strong>。每顆電阻消耗的功率是 <strong>I² × R</strong>，會變成熱，也就是計算結果裡顯示的功率。</p>
+
+    <h2>怎麼反推另一顆電阻</h2>
+    <p>把公式移項，就能直接算出另一顆電阻：</p>
+    <p><strong>R2 = R1 × Vout / (Vin − Vout)</strong><br>
+    <strong>R1 = R2 × (Vin − Vout) / Vout</strong></p>
+    <p>算出來的精確值通常買不到，所以工具會列出精確值兩側的 E24 標準值，以及每個值實際的輸出電壓。E24 是最常見的 ±5% 電阻系列，每 10 倍之間有 24 個值。</p>
+
+    <h2>常用的 E24 電阻組合</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Vin</th><th>R1</th><th>R2</th><th>Vout</th></tr></thead>
+        <tbody>
+          <tr><td>5 V</td><td>10 kΩ</td><td>10 kΩ</td><td>2.5 V</td></tr>
+          <tr><td>5 V</td><td>4.7 kΩ</td><td>9.1 kΩ</td><td>3.297 V</td></tr>
+          <tr><td>3.3 V</td><td>10 kΩ</td><td>12 kΩ</td><td>1.8 V</td></tr>
+          <tr><td>9 V</td><td>12 kΩ</td><td>15 kΩ</td><td>5 V</td></tr>
+          <tr><td>12 V</td><td>18 kΩ</td><td>13 kΩ</td><td>5.032 V</td></tr>
+          <tr><td>12 V</td><td>24 kΩ</td><td>9.1 kΩ</td><td>3.299 V</td></tr>
+          <tr><td>24 V</td><td>91 kΩ</td><td>24 kΩ</td><td>5.009 V</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>常見問題</h2>
+    <h3>可以用分壓電路幫其他電路供電嗎？</h3>
+    <p>通常不行。公式的前提是 Vout 沒有接任何負載。接上負載後，負載會吃電流，等於和 R2 並聯一顆電阻，Vout 就會被拉低。分壓電路適合接到高阻抗的輸入，例如 ADC 腳位、運算放大器或比較器。如果要供電，請用穩壓 IC。</p>
+    <h3>電阻值要選多大？</h3>
+    <p>Vout 只由比例決定，所以電阻大小是取捨：電阻太小會浪費電流、發熱；電阻太大則容易受後級輸入影響，也比較容易受雜訊干擾。用微控制器的 ADC 讀電壓時，兩顆電阻總和 10 kΩ 到 100 kΩ 是常見的起點，實際請參考晶片 datasheet 裡的輸入阻抗。</p>
+    <h3>可以用分壓把 5 V 訊號接到 3.3 V 腳位嗎？</h3>
+    <p>慢速訊號可以：上方 4.7 kΩ、下方 9.1 kΩ，5 V 會分壓成約 3.3 V。SPI 時脈這類高速訊號，電阻和腳位電容會讓訊號邊緣變慢，用電位轉換 IC 比較可靠。</p>
+    <h3>電阻的功率夠嗎？</h3>
+    <p>把結果裡每顆電阻的功率和它的額定功率比較。常見的插件電阻是 1/4 W（250 mW），小尺寸的 SMD 電阻常常只有 1/10 W 或更低。記得留餘裕，例如讓每顆電阻的功率不超過額定值的一半。</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp：小而好用的線上工具。所有計算都在你的瀏覽器裡完成，不會上傳任何資料。</p>
+    <p>部分頁面含有聯盟連結，透過連結購買時我們可能獲得少量分潤。</p>
+    <p class="footer-links"><a href="/zh-tw/about/">關於</a><a href="/zh-tw/privacy/">隱私權政策</a><a href="/zh-tw/contact/">聯絡我們</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/voltage-divider.js"></script>
+</body>
+</html>

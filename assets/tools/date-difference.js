@@ -1,7 +1,7 @@
-// 日期間隔計算. Pure logic first (testable with node), DOM wiring below.
+// Date difference calculator / 日期間隔計算, shared by /zh-tw/ and /en/ pages.
+// Pure logic first (testable with node), then page text per language, then DOM wiring.
 // Dates are plain { y, m, d } objects; day arithmetic uses a day count, never Date, so time zones and DST can't shift results.
 var DD = (function () {
-  var WEEKDAYS = '日一二三四五六';
   var MIN_DAY = toDays(1, 1, 1), MAX_DAY = toDays(9999, 12, 31);
 
   function isLeap(y) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
@@ -68,13 +68,13 @@ var DD = (function () {
     };
   }
 
-  // Signed whole number of days, half- or full-width digits. Returns { n } or { error }.
+  // Signed whole number of days, half- or full-width digits. Returns { n } or { error: 'empty' | 'integer' }.
   function parseDays(text) {
     var s = String(text == null ? '' : text).replace(/\s+/g, '')
       .replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); })
       .replace(/^[－−]/, '-').replace(/^＋/, '+');
-    if (!s) return { error: '請輸入天數，例如 30。' };
-    if (!/^[+-]?\d+$/.test(s)) return { error: '天數只能是整數，往前推請輸入負數，例如 -30。' };
+    if (!s) return { error: 'empty' };
+    if (!/^[+-]?\d+$/.test(s)) return { error: 'integer' };
     return { n: parseInt(s, 10) };
   }
 
@@ -90,23 +90,72 @@ var DD = (function () {
 
   function iso(a) { return pad(a.y, 4) + '-' + pad(a.m, 2) + '-' + pad(a.d, 2); }
 
-  function words(a) { return a.y + ' 年 ' + a.m + ' 月 ' + a.d + ' 日（星期' + WEEKDAYS[weekday(a)] + '）'; }
-
   function rocYear(y) { return y >= 1912 ? '民國 ' + (y - 1911) + ' 年' : '民前 ' + (1912 - y) + ' 年'; }
 
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var DAYS_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  function plural(n, word) { return n + ' ' + word + (n === 1 ? '' : 's'); }
+
+  // Everything the script writes on the page, per language. Both languages must have the same keys.
+  var TEXT = {
+    'zh-tw': {
+      copy: '複製', copied: '已複製',
+      words: function (a) { return a.y + ' 年 ' + a.m + ' 月 ' + a.d + ' 日（星期' + '日一二三四五六'[weekday(a)] + '）'; },
+      pick: function (which) { return '請選擇' + (which === 'start' ? '起始日' : '結束日') + '。'; },
+      sameDay: '同一天', days: function (n) { return n + ' 天'; },
+      reversed: '（結束日在起始日之前）',
+      weeksLabel: '週', weeks: function (w, d) { return w + ' 週' + (d ? '又 ' + d + ' 天' : ''); },
+      monthsLabel: '月', months: function (m, d) { return m + ' 個月' + (d ? '又 ' + d + ' 天' : ''); },
+      yearsLabel: '年', years: function (y, m, d) { return y + ' 年' + (m ? ' ' + m + ' 個月' : '') + (d ? ' ' + d + ' 天' : ''); },
+      daysError: { empty: '請輸入天數，例如 30。', integer: '天數只能是整數，往前推請輸入負數，例如 -30。' },
+      outOfRange: '結果超出西元 1 年到 9999 年的範圍，請把天數改小一點。',
+      how: function (a, n, countStart) {
+        if (n === 0) return this.words(a) + ' 就是起始日當天';
+        return this.words(a) + (n > 0 ? ' 往後 ' : ' 往前 ') + Math.abs(n) + ' 天' + (countStart ? '（起始日算第 1 天）' : '（起始日不算）');
+      },
+      rocLabel: '民國', roc: function (a) { return rocYear(a.y) + ' ' + a.m + ' 月 ' + a.d + ' 日'; },
+      howLabel: '計算方式'
+    },
+    en: {
+      copy: 'Copy', copied: 'Copied',
+      words: function (a) { return DAYS_EN[weekday(a)] + ', ' + MONTHS[a.m - 1] + ' ' + a.d + ', ' + a.y; },
+      pick: function (which) { return 'Pick a ' + which + ' date.'; },
+      sameDay: 'Same day', days: function (n) { return plural(n, 'day'); },
+      reversed: ' (the end date is before the start date)',
+      weeksLabel: 'Weeks', weeks: function (w, d) { return plural(w, 'week') + (d ? ', ' + plural(d, 'day') : ''); },
+      monthsLabel: 'Months', months: function (m, d) { return plural(m, 'month') + (d ? ', ' + plural(d, 'day') : ''); },
+      yearsLabel: 'Years', years: function (y, m, d) { return plural(y, 'year') + (m ? ', ' + plural(m, 'month') : '') + (d ? ', ' + plural(d, 'day') : ''); },
+      daysError: { empty: 'Enter a number of days, for example 30.', integer: 'Days must be a whole number. Use a negative number to go back, for example -30.' },
+      outOfRange: 'The result is outside the years 1 to 9999. Use fewer days.',
+      how: function (a, n, countStart) {
+        if (n === 0) return 'The start date itself, ' + this.words(a);
+        return plural(Math.abs(n), 'day') + (n > 0 ? ' after ' : ' before ') + this.words(a) +
+          (countStart ? ', counting the start date as day 1' : ', not counting the start date');
+      },
+      rocLabel: null, roc: null,
+      howLabel: 'How it was counted'
+    }
+  };
+
   return { isLeap: isLeap, daysInMonth: daysInMonth, parseDate: parseDate, addMonths: addMonths, diff: diff,
-    parseDays: parseDays, addDays: addDays, weekday: weekday, iso: iso, words: words, rocYear: rocYear,
-    toDays: toDays, fromDays: fromDays };
+    parseDays: parseDays, addDays: addDays, weekday: weekday, iso: iso, rocYear: rocYear,
+    toDays: toDays, fromDays: fromDays, TEXT: TEXT };
 })();
 
 if (typeof module !== 'undefined') module.exports = DD;
 
 if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded', function () {
   var $ = function (id) { return document.getElementById(id); };
+  var T = DD.TEXT[document.documentElement.lang === 'en' ? 'en' : 'zh-tw'];
 
   function todayIso() {
     var t = new Date();
     return DD.iso({ y: t.getFullYear(), m: t.getMonth() + 1, d: t.getDate() });
+  }
+
+  function copyable(id, text) {
+    return '<div class="result-main"><span id="' + id + '">' + text + '</span>' +
+      '<button class="copy-btn" type="button" data-copy="' + id + '" data-done="' + T.copied + '">' + T.copy + '</button></div>';
   }
 
   // ---- Difference between two dates ----
@@ -115,19 +164,16 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
     var a = DD.parseDate($('start-input').value), b = DD.parseDate($('end-input').value);
     out.hidden = false;
     if (!a || !b) {
-      out.innerHTML = '<p class="error">請選擇' + (!a ? '起始日' : '結束日') + '。</p>';
+      out.innerHTML = '<p class="error">' + T.pick(!a ? 'start' : 'end') + '</p>';
       return;
     }
     var r = DD.diff(a, b, $('inclusive').checked);
-    var lead = r.sign === 0 && !$('inclusive').checked ? '同一天' : r.days + ' 天';
-    var sub = DD.words(a) + ' → ' + DD.words(b) + (r.sign < 0 ? '（結束日在起始日之前）' : '');
-    var list = '<dt>週</dt><dd>' + r.weeks + ' 週' + (r.weekDays ? '又 ' + r.weekDays + ' 天' : '') + '</dd>' +
-      '<dt>月</dt><dd>' + r.months + ' 個月' + (r.monthDays ? '又 ' + r.monthDays + ' 天' : '') + '</dd>';
-    if (r.years) list += '<dt>年</dt><dd>' + r.years + ' 年' + (r.yearMonths ? ' ' + r.yearMonths + ' 個月' : '') +
-      (r.monthDays ? ' ' + r.monthDays + ' 天' : '') + '</dd>';
-    out.innerHTML =
-      '<div class="result-main"><span id="diff-main">' + lead + '</span>' +
-      '<button class="copy-btn" type="button" data-copy="diff-main" data-done="已複製">複製</button></div>' +
+    var lead = r.sign === 0 && !$('inclusive').checked ? T.sameDay : T.days(r.days);
+    var sub = T.words(a) + ' → ' + T.words(b) + (r.sign < 0 ? T.reversed : '');
+    var list = '<dt>' + T.weeksLabel + '</dt><dd>' + T.weeks(r.weeks, r.weekDays) + '</dd>' +
+      '<dt>' + T.monthsLabel + '</dt><dd>' + T.months(r.months, r.monthDays) + '</dd>';
+    if (r.years) list += '<dt>' + T.yearsLabel + '</dt><dd>' + T.years(r.years, r.yearMonths, r.monthDays) + '</dd>';
+    out.innerHTML = copyable('diff-main', lead) +
       '<div class="result-sub">' + sub + '</div>' +
       '<dl class="result-list">' + list + '</dl>';
   }
@@ -137,19 +183,15 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
     var out = $('add-result');
     var a = DD.parseDate($('base-input').value);
     out.hidden = false;
-    if (!a) { out.innerHTML = '<p class="error">請選擇起始日。</p>'; return; }
+    if (!a) { out.innerHTML = '<p class="error">' + T.pick('start') + '</p>'; return; }
     var p = DD.parseDays($('days-input').value);
-    if (p.error) { out.innerHTML = '<p class="error">' + p.error + '</p>'; return; }
+    if (p.error) { out.innerHTML = '<p class="error">' + T.daysError[p.error] + '</p>'; return; }
     var r = DD.addDays(a, p.n, $('count-start').checked);
-    if (!r) { out.innerHTML = '<p class="error">結果超出西元 1 年到 9999 年的範圍，請把天數改小一點。</p>'; return; }
-    var how = p.n === 0 ? '就是起始日當天' : (p.n > 0 ? '往後 ' : '往前 ') + Math.abs(p.n) + ' 天' +
-      ($('count-start').checked ? '（起始日算第 1 天）' : '（起始日不算）');
-    out.innerHTML =
-      '<div class="result-main"><span id="add-main">' + DD.iso(r) + '</span>' +
-      '<button class="copy-btn" type="button" data-copy="add-main" data-done="已複製">複製</button></div>' +
-      '<div class="result-sub">' + DD.words(r) + '</div>' +
-      '<dl class="result-list"><dt>民國</dt><dd>' + DD.rocYear(r.y) + ' ' + r.m + ' 月 ' + r.d + ' 日</dd>' +
-      '<dt>計算方式</dt><dd>' + DD.words(a) + ' ' + how + '</dd></dl>';
+    if (!r) { out.innerHTML = '<p class="error">' + T.outOfRange + '</p>'; return; }
+    out.innerHTML = copyable('add-main', DD.iso(r)) +
+      '<div class="result-sub">' + T.words(r) + '</div>' +
+      '<dl class="result-list">' + (T.rocLabel ? '<dt>' + T.rocLabel + '</dt><dd>' + T.roc(r) + '</dd>' : '') +
+      '<dt>' + T.howLabel + '</dt><dd>' + T.how(a, p.n, $('count-start').checked) + '</dd></dl>';
   }
 
   ['start-input', 'end-input'].forEach(function (id) { $(id).addEventListener('input', renderDiff); });

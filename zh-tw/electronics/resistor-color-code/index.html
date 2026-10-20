@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>電阻色碼計算｜4 環、5 環電阻色碼對照表 - ToolLamp</title>
+<meta name="description" content="免費的電阻色碼計算工具：選擇色環顏色就能讀出 4 環、5 環電阻的阻值和誤差，也能輸入 4.7k 這樣的阻值，反查要用哪些顏色。">
+<link rel="canonical" href="https://toollamp.github.io/zh-tw/electronics/resistor-color-code/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/resistor-color-code/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/resistor-color-code/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<style>
+  .resistor { display: block; width: 100%; max-width: 30rem; margin: 0 auto 1.2rem; }
+  .mini-resistor { display: block; width: 100%; max-width: 18rem; margin: .4rem 0 .2rem; }
+  .resistor .lead, .mini-resistor .lead { stroke: var(--muted); stroke-width: 5; stroke-linecap: round; }
+  .resistor .body, .mini-resistor .body { fill: #D9C29A; stroke: #B49C72; stroke-width: 2; }
+  .band-field { flex: 1 1 9rem; }
+  .band-names { margin: 0; color: var(--muted); font-size: .92rem; }
+  #encode-result h3 { margin: 1rem 0 0; font-size: 1rem; }
+  #encode-result h3:first-child { margin-top: 0; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "電阻色碼計算",
+  "url": "https://toollamp.github.io/zh-tw/electronics/resistor-color-code/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "zh-TW",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/zh-tw/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="主選單">
+      <a href="/zh-tw/" data-set-lang="zh-tw" aria-current="page">中文工具</a>
+      <a href="/en/" data-set-lang="en" lang="en">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="切換深淺色模式">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/zh-tw/">中文工具</a> / 電子工具</div>
+    <h1>電阻色碼計算</h1>
+    <p>選擇色環顏色就能讀出 4 環、5 環電阻的阻值，也可以輸入阻值，查出需要哪些顏色。</p>
+  </div>
+
+  <section class="tool" aria-labelledby="decode-h">
+    <h2 id="decode-h">色環 → 阻值</h2>
+    <div class="seg" id="count-seg" role="group" aria-label="色環數量">
+      <button type="button" data-count="4" aria-pressed="true">4 環</button>
+      <button type="button" data-count="5" aria-pressed="false">5 環</button>
+    </div>
+    <svg class="resistor" id="resistor-svg" viewBox="0 0 400 100" aria-hidden="true">
+      <line x1="0" y1="50" x2="400" y2="50" class="lead"/>
+      <rect x="80" y="22" width="240" height="56" rx="24" class="body"/>
+      <g class="bands"></g>
+    </svg>
+    <div class="row" id="band-selects"></div>
+    <div class="result" aria-live="polite">
+      <div class="result-main"><span id="decode-main"></span><button class="copy-btn" type="button" data-copy="decode-main" data-done="已複製">複製</button></div>
+      <dl class="result-list">
+        <dt>範圍</dt><dd id="decode-range"></dd>
+        <dt>色環</dt><dd id="decode-bands"></dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="tool" aria-labelledby="encode-h">
+    <h2 id="encode-h">阻值 → 色環</h2>
+    <div class="row">
+      <div class="field">
+        <label for="value-input">電阻值</label>
+        <input id="value-input" type="text" autocomplete="off" spellcheck="false" placeholder="例如 4.7k、4k7、220、1M、R47">
+      </div>
+      <div class="field">
+        <label for="tol-select">誤差色環</label>
+        <select id="tol-select"></select>
+      </div>
+    </div>
+    <div class="result" id="encode-result" aria-live="polite" hidden></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="zh-tw/resistor-color-code" hidden></aside>
+
+  <article class="article">
+    <h2>電阻色環怎麼讀？</h2>
+    <p>先把誤差環放在右邊。誤差環通常是金色或銀色，和其他色環的間隔也比較大。然後從左往右讀。</p>
+    <p><strong>4 環電阻</strong>：前兩環是數字，第三環是倍率，第四環是誤差。黃、紫、紅、金代表 4、7、×100、±5%，也就是 4.7 kΩ ±5%。</p>
+    <p><strong>5 環電阻</strong>：前三環是數字，通常是誤差 1% 以內的精密電阻。棕、黑、黑、紅、棕代表 1、0、0、×100、±1%，也就是 10 kΩ ±1%。</p>
+    <p>數字 0 到 9 的顏色依序是「黑、棕、紅、橙、黃、綠、藍、紫、灰、白」，背熟這個順序就能讀大部分的電阻。</p>
+
+    <h2>電阻色碼對照表</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>顏色</th><th>數字</th><th>倍率</th><th>誤差</th></tr></thead>
+        <tbody>
+          <tr><td>黑</td><td>0</td><td>×1</td><td></td></tr>
+          <tr><td>棕</td><td>1</td><td>×10</td><td>±1%</td></tr>
+          <tr><td>紅</td><td>2</td><td>×100</td><td>±2%</td></tr>
+          <tr><td>橙</td><td>3</td><td>×1k</td><td></td></tr>
+          <tr><td>黃</td><td>4</td><td>×10k</td><td></td></tr>
+          <tr><td>綠</td><td>5</td><td>×100k</td><td>±0.5%</td></tr>
+          <tr><td>藍</td><td>6</td><td>×1M</td><td>±0.25%</td></tr>
+          <tr><td>紫</td><td>7</td><td>×10M</td><td>±0.1%</td></tr>
+          <tr><td>灰</td><td>8</td><td>×100M</td><td>±0.05%</td></tr>
+          <tr><td>白</td><td>9</td><td>×1G</td><td></td></tr>
+          <tr><td>金</td><td></td><td>×0.1</td><td>±5%</td></tr>
+          <tr><td>銀</td><td></td><td>×0.01</td><td>±10%</td></tr>
+          <tr><td>無色環</td><td></td><td></td><td>±20%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>常見問題</h2>
+    <h3>要從哪一端開始讀？</h3>
+    <p>從離金色或銀色色環最遠的那一端開始。如果兩端看起來差不多，第一環通常比較靠近引腳。第一環不會是金色、銀色或黑色。</p>
+    <h3>4k7 是什麼意思？</h3>
+    <p>這是 4.7 kΩ 的另一種寫法，用字母取代小數點，印刷模糊時比較不會看錯。R47 是 0.47 Ω，2M2 是 2.2 MΩ。這些寫法都可以直接輸入上面的工具。</p>
+    <h3>為什麼有些阻值無法精確表示？</h3>
+    <p>4 環電阻只有兩位有效數字，所以 4.75 kΩ 要用 5 環電阻才能表示。工具會四捨五入到最接近、能表示的值，並提醒你有四捨五入。</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp：小而好用的線上工具。所有計算都在你的瀏覽器裡完成，不會上傳任何資料。</p>
+    <p>部分頁面含有聯盟連結，透過連結購買時我們可能獲得少量分潤。</p>
+    <p class="footer-links"><a href="/zh-tw/about/">關於</a><a href="/zh-tw/privacy/">隱私權政策</a><a href="/zh-tw/contact/">聯絡我們</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/resistor-color-code.js"></script>
+</body>
+</html>

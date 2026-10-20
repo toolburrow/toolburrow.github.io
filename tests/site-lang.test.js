@@ -74,3 +74,12 @@ test('lang: hreflang alternates point to real pages that list the same set', () 
     }
   }
 });
+test('lang: every tool exists in both languages and the pages list each other', () => {
+  const tools = pages.filter(rel => /^(zh-tw|en)\/[^/]+\/[^/]+\/index\.html$/.test(rel) && !/^(zh-tw|en)\/(about|privacy|contact)\//.test(rel));
+  eq(tools.length >= 8, true);
+  for (const rel of tools) {
+    const other = rel.startsWith('en/') ? rel.replace(/^en\//, 'zh-tw/') : rel.replace(/^zh-tw\//, 'en/');
+    eq([rel, pages.includes(other)], [rel, true]);
+    eq([rel, alternates(read(rel)).map(a => a[0])], [rel, ['zh-Hant', 'en']]);
+  }
+});

@@ -1,4 +1,4 @@
-const DD = require('../zh-tw/life/date-difference/tool.js');
+const DD = require('../assets/tools/date-difference.js');
 const D = (s) => DD.parseDate(s);
 
 test('閏年規則', () => {
@@ -34,7 +34,9 @@ test('日數換算與 Date 一致', () => {
 test('星期', () => {
   eq(DD.weekday(D('2026-10-19')), 1);
   eq(DD.weekday(D('2000-01-01')), 6);
-  eq(DD.words(D('2026-10-19')), '2026 年 10 月 19 日（星期一）');
+  eq(DD.TEXT['zh-tw'].words(D('2026-10-19')), '2026 年 10 月 19 日（星期一）');
+  eq(DD.TEXT.en.words(D('2026-10-19')), 'Monday, October 19, 2026');
+  eq(DD.TEXT.en.words(D('2000-01-01')), 'Saturday, January 1, 2000');
 });
 test('相差天數：同月、跨月、跨年', () => {
   eq(DD.diff(D('2026-10-01'), D('2026-10-10')).days, 9);
@@ -99,8 +101,8 @@ test('解析天數', () => {
   eq(DD.parseDays('30'), { n: 30 }); eq(DD.parseDays(' 30 '), { n: 30 });
   eq(DD.parseDays('-30'), { n: -30 }); eq(DD.parseDays('+7'), { n: 7 });
   eq(DD.parseDays('0'), { n: 0 }); eq(DD.parseDays('３０'), { n: 30 }); eq(DD.parseDays('－５'), { n: -5 });
-  eq(!!DD.parseDays('').error, true); eq(!!DD.parseDays('  ').error, true); eq(!!DD.parseDays(null).error, true);
-  eq(!!DD.parseDays('1.5').error, true); eq(!!DD.parseDays('abc').error, true); eq(!!DD.parseDays('3-').error, true);
+  eq(DD.parseDays(''), { error: 'empty' }); eq(!!DD.parseDays('  ').error, true); eq(!!DD.parseDays(null).error, true);
+  eq(DD.parseDays('1.5'), { error: 'integer' }); eq(!!DD.parseDays('abc').error, true); eq(!!DD.parseDays('3-').error, true);
 });
 test('加減天數', () => {
   const add = (a, n, c) => DD.iso(DD.addDays(D(a), n, c));
@@ -129,3 +131,10 @@ test('加減天數超出範圍', () => {
   eq(DD.addDays(D('2026-10-19'), 99999999), null);
 });
 test('民國年', () => { eq(DD.rocYear(2026), '民國 115 年'); eq(DD.rocYear(1912), '民國 1 年'); eq(DD.rocYear(1911), '民前 1 年'); });
+test('英文頁的單複數', () => {
+  const T = DD.TEXT.en;
+  eq(T.days(1), '1 day'); eq(T.days(0), '0 days'); eq(T.weeks(1, 0), '1 week'); eq(T.weeks(2, 1), '2 weeks, 1 day');
+  eq(T.months(1, 3), '1 month, 3 days'); eq(T.years(1, 0, 0), '1 year'); eq(T.years(2, 1, 1), '2 years, 1 month, 1 day');
+  eq(T.how(D('2026-10-19'), 1, false), '1 day after Monday, October 19, 2026, not counting the start date');
+  eq(T.how(D('2026-10-19'), -30, true), '30 days before Monday, October 19, 2026, counting the start date as day 1');
+});
