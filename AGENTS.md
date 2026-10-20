@@ -68,8 +68,9 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
    `.tool` panels → affiliate slot `<aside>` (see below) → `.article` with an explanation, a reference table where useful,
    and a short FAQ (2–4 questions people actually search for) → related tools
    `<nav class="tool-group" aria-labelledby="related-h">` (copy one from another tool page).
-   The related list holds 2–4 tools, preferably from the same category, and each `<li>` is copied exactly from the
-   language home page (the tests check).
+   The related list holds 2–4 hand-picked tools, the ones a reader of this tool is most likely to need next (any
+   category). Each `<li>` is copied exactly from the language home page, and both language versions list the same
+   tools in the same order (the tests check).
 5. SEO in `<head>`: unique `<title>` (tool name + what it does + "- ToolLamp"), meta description under
    ~155 characters, canonical URL, `hreflang` links to both versions (see "Languages"), Open Graph tags right after the
    `hreflang` links (`og:title` is the `<title>` without " - ToolLamp", `og:description` repeats the meta description,
@@ -78,7 +79,8 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
 6. Add the tool to both language home pages AND the root `index.html`, and add both URLs to `sitemap.xml`.
    Add empty slots `zh-tw/<slug>` and `en/<slug>` to `SLOTS` in `/assets/affiliates.js` (the tests check this).
    Load `/assets/favorites.js` right after `affiliates.js` (the tests check this).
-   Add the new tool to the related list of the other tools in its category while that list has fewer than 4 entries.
+   Add the new tool to the related lists of the 2–3 tools it fits best, in both languages, replacing a weaker pick
+   when a list already has 4.
 7. The tool must show a useful result on first load (pre-fill a sensible default) and update live as the user types.
 
 ## Languages

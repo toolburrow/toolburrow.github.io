@@ -93,3 +93,9 @@ test('site: every tool page lists 2-4 related tools, copied from its home page',
     }
   }
 });
+test('site: both language versions of a tool list the same related tools', () => {
+  const picks = (rel) => [...(fs.readFileSync(path.join(root, rel), 'utf8').match(/<nav class="tool-group" aria-labelledby="related-h">[\s\S]*?<\/nav>/) || [''])[0]
+    .matchAll(/<li><a href="\/(?:zh-tw|en)\/([^"]+)">/g)].map(m => m[1]);
+  for (const rel of pages.filter(p => p.startsWith('zh-tw/') && p.split('/').length === 4))
+    eq([rel, picks(rel)], [rel, picks(rel.replace(/^zh-tw\//, 'en/'))]);
+});
