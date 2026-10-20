@@ -213,7 +213,12 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
   $('rocdate-input').addEventListener('input', renderRocDate);
   $('wdate-input').addEventListener('input', renderWesternDate);
 
-  // Start with today's year so the page is never empty.
-  $('year-input').value = new Date().getFullYear();
+  // Start with today's year and date so no panel is empty.
+  var now = new Date();
+  $('year-input').value = now.getFullYear();
   setMode('w2r');
+  $('rocdate-input').value = ROC.formatRocDate(now.getFullYear(), now.getMonth() + 1, now.getDate()).slash;
+  $('wdate-input').value = now.getFullYear() + '-' + ROC.pad(now.getMonth() + 1, 2) + '-' + ROC.pad(now.getDate(), 2);
+  renderRocDate();
+  renderWesternDate();
 });

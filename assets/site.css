@@ -122,6 +122,12 @@ input:focus, select:focus { border-color: var(--accent); }
 .tool-name { font-weight: 650; }
 .tool-desc { color: var(--muted); font-size: .92rem; text-align: right; }
 
+/* Tables inside tool panels (results such as E24 options or baud rate tables) */
+.tool table { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: 1rem; font-variant-numeric: tabular-nums; }
+.tool th, .tool td { border-bottom: 1px solid var(--line); padding: .4rem .5rem .4rem 0; text-align: left; }
+.tool th { color: var(--muted); font-weight: 600; }
+.tool tr.best td { font-weight: 700; }
+
 /* Favorites (filled by /assets/favorites.js) */
 .fav-btn { margin: 0 0 .8rem; border: 1px solid var(--line); background: none; color: var(--muted); border-radius: 999px;
   padding: .3rem .9rem; cursor: pointer; font-size: .9rem; }

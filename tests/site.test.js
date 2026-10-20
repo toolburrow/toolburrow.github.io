@@ -99,3 +99,24 @@ test('site: both language versions of a tool list the same related tools', () =>
   for (const rel of pages.filter(p => p.startsWith('zh-tw/') && p.split('/').length === 4))
     eq([rel, picks(rel)], [rel, picks(rel.replace(/^zh-tw\//, 'en/'))]);
 });
+test('site: meta descriptions fit in a search result', () => {
+  for (const rel of pages) {
+    if (rel === '404.html') continue; // not indexed
+    const m = fs.readFileSync(path.join(root, rel), 'utf8').match(/<meta name="description" content="([^"]*)">/);
+    if (!m) continue;
+    const width = [...m[1]].reduce((w, c) => w + (c.codePointAt(0) > 0x2e7f ? 2 : 1), 0); // full-width counts as two
+    eq([rel, width > 50 && width <= 160], [rel, true]);
+  }
+});
+test('site: page-level <style> rules are not copied between tools', () => {
+  const seen = {};
+  for (const rel of pages.filter(p => p.split('/').length === 4)) {
+    const tool = rel.split('/').slice(1, 3).join('/');
+    const style = (fs.readFileSync(path.join(root, rel), 'utf8').match(/<style>([\s\S]*?)<\/style>/) || ['', ''])[1];
+    for (const rule of style.split('\n').map(l => l.trim()).filter(Boolean)) {
+      seen[rule] = seen[rule] || new Set();
+      seen[rule].add(tool);
+    }
+  }
+  for (const rule of Object.keys(seen)) eq([rule, seen[rule].size], [rule, 1]);
+});

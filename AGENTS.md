@@ -53,7 +53,8 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
 
 1. Every tool is built in both languages. Create `/zh-tw/<category>/<slug>/index.html` and
    `/en/<category>/<slug>/index.html` by copying an existing tool page in each language. Keep the header, footer,
-   font links and theme script identical to other pages in that language.
+   font links and theme script identical to other pages in that language. Only the root page and 404 have the
+   bilingual footer; every other page has the single-language footer of its own language.
 2. Put the logic in `/assets/tools/<slug>.js`, loaded by both pages, in this shape:
    - a pure-logic object at the top (no DOM access, no language), exported with
      `if (typeof module !== 'undefined') module.exports = X;`. Errors are codes such as `{ error: 'format' }`,
@@ -72,7 +73,7 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
    category). Each `<li>` is copied exactly from the language home page, and both language versions list the same
    tools in the same order (the tests check).
 5. SEO in `<head>`: unique `<title>` (tool name + what it does + "- ToolLamp"), meta description under
-   ~155 characters, canonical URL, `hreflang` links to both versions (see "Languages"), Open Graph tags right after the
+   160 characters in English or 80 in Chinese (the tests count a full-width character as two), canonical URL, `hreflang` links to both versions (see "Languages"), Open Graph tags right after the
    `hreflang` links (`og:title` is the `<title>` without " - ToolLamp", `og:description` repeats the meta description,
    `og:url` is the canonical URL, shared image `/assets/og.png`), `WebApplication` JSON-LD.
    No FAQPage JSON-LD: Google only shows FAQ results for government and health sites.
@@ -81,7 +82,8 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
    Load `/assets/favorites.js` right after `affiliates.js` (the tests check this).
    Add the new tool to the related lists of the 2–3 tools it fits best, in both languages, replacing a weaker pick
    when a list already has 4.
-7. The tool must show a useful result on first load (pre-fill a sensible default) and update live as the user types.
+7. Every `.tool` panel must show a useful result on first load (pre-fill a sensible default), and update live as the
+   user types. A panel that starts empty looks broken.
 
 ## Languages
 
@@ -121,6 +123,8 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
 
 Use only the tokens in `site.css` (`--bg`, `--surface`, `--text`, `--muted`, `--line`, `--accent`, `--lamp`, …).
 Never hard-code colors except in content that represents a real-world color (e.g. resistor bands).
+A page may have one `<style>` block in `<head>` for rules only that tool uses. A rule that a second tool needs moves to
+`site.css` instead of being copied (the tests check that no two tools share a page-level rule).
 Light and dark mode must both work. Keep layouts usable at 360 px wide. Don't add animations.
 
 ## Favorites

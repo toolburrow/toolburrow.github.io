@@ -248,4 +248,7 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
   $('tol-select').value = 'gold';
 
   setCount(4);
+  // Start with a common value so the panel is never empty.
+  $('value-input').value = '4.7k';
+  renderEncode();
 });
