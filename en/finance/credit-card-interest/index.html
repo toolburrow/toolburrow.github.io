@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Credit Card Interest Calculator: Payoff Time and Installment APR - ToolLamp</title>
+<meta name="description" content="Free credit card payoff calculator. See how many months a balance takes to clear and the interest you pay, and turn an installment fee into an APR.">
+<link rel="canonical" href="https://toollamp.github.io/en/finance/credit-card-interest/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/finance/credit-card-interest/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/finance/credit-card-interest/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="Credit Card Interest Calculator: Payoff Time and Installment APR">
+<meta property="og:description" content="Free credit card payoff calculator. See how many months a balance takes to clear and the interest you pay, and turn an installment fee into an APR.">
+<meta property="og:url" content="https://toollamp.github.io/en/finance/credit-card-interest/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script src="/assets/favorites.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Credit card interest calculator",
+  "url": "https://toollamp.github.io/en/finance/credit-card-interest/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Finance</div>
+    <h1>Credit card interest calculator</h1>
+    <p>See how long a card balance takes to pay off and how much interest it costs, or what rate an installment fee really is.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="payoff-h">
+    <h2 id="payoff-h">Payoff time</h2>
+    <div class="row">
+      <div class="field">
+        <label for="balance-input">Card balance</label>
+        <input id="balance-input" type="text" inputmode="decimal" autocomplete="off" value="5000" placeholder="e.g. 5000">
+      </div>
+      <div class="field">
+        <label for="apr-input">APR (%)</label>
+        <input id="apr-input" type="text" inputmode="decimal" autocomplete="off" value="22" placeholder="e.g. 22">
+      </div>
+      <div class="field">
+        <label for="payment-input">Monthly payment</label>
+        <input id="payment-input" type="text" inputmode="decimal" autocomplete="off" value="200" placeholder="e.g. 200">
+      </div>
+    </div>
+    <div class="result" id="payoff-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="tool" aria-labelledby="installment-h">
+    <h2 id="installment-h">Installment plan: fee as an APR</h2>
+    <div class="row">
+      <div class="field">
+        <label for="price-input">Purchase amount</label>
+        <input id="price-input" type="text" inputmode="decimal" autocomplete="off" value="1200" placeholder="e.g. 1200">
+      </div>
+      <div class="field">
+        <label for="count-input">Number of monthly payments</label>
+        <input id="count-input" type="text" inputmode="numeric" autocomplete="off" value="12" placeholder="e.g. 12">
+      </div>
+      <div class="field">
+        <label for="fee-input">Fee (% of the amount, 0 for none)</label>
+        <input id="fee-input" type="text" inputmode="decimal" autocomplete="off" value="3" placeholder="e.g. 3">
+      </div>
+    </div>
+    <div class="choice">
+      <span id="when-label">How the fee is charged</span>
+      <div class="seg" id="when-seg" role="group" aria-labelledby="when-label"></div>
+    </div>
+    <div class="result" id="installment-result" aria-live="polite" hidden></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/credit-card-interest" hidden></aside>
+
+  <article class="article">
+    <h2>How credit card interest is calculated</h2>
+    <p>If you don’t pay the full statement balance, the rest carries over and is charged interest at the card’s APR. This calculator uses APR ÷ 12 as the monthly rate: each month the interest is added to the balance, then your payment comes off, until nothing is left.</p>
+    <p>Most card issuers actually charge interest daily on the average daily balance, so your statement will differ a little. The payoff time and the size of the interest bill come out very close.</p>
+
+    <h2>Why small payments take so long</h2>
+    <p>Early on, most of a small payment goes to interest and only a little reduces the balance. For a 5,000 balance at 22% APR:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Monthly payment</th><th>Paid off in</th><th>Total interest</th></tr></thead>
+        <tbody>
+          <tr><td>100</td><td>11 years 5 months</td><td>8,678.06</td></tr>
+          <tr><td>200</td><td>2 years 10 months</td><td>1,749.88</td></tr>
+          <tr><td>500</td><td>1 year</td><td>574.44</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>What a 0% installment fee really costs</h2>
+    <p>Many “0% interest” installment plans charge a one-time fee instead. That fee is interest, and the shorter the plan, the higher the rate it works out to. APR when the fee is spread evenly over the payments:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Fee</th><th>3 payments</th><th>6</th><th>12</th><th>24</th></tr></thead>
+        <tbody>
+          <tr><td>1%</td><td>5.99%</td><td>3.42%</td><td>1.84%</td><td>0.96%</td></tr>
+          <tr><td>2%</td><td>11.96%</td><td>6.82%</td><td>3.67%</td><td>1.91%</td></tr>
+          <tr><td>3%</td><td>17.91%</td><td>10.21%</td><td>5.49%</td><td>2.85%</td></tr>
+          <tr><td>5%</td><td>29.76%</td><td>16.94%</td><td>9.1%</td><td>4.73%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The APR is the internal rate of return: the monthly rate at which the payments are worth exactly the purchase amount today, times 12. A fee charged with the first payment is paid sooner, so its APR is a little higher.</p>
+
+    <h2>FAQ</h2>
+    <h3>How is the minimum payment set?</h3>
+    <p>It depends on the issuer. A common formula is a small percentage of the balance (often 1–3%) plus that month’s interest and fees, with a fixed floor. Your statement shows the exact amount.</p>
+    <h3>What about a 0% intro APR?</h3>
+    <p>Enter 0 for the APR to see how long a promotional balance takes at your payment. Remember the regular APR applies to whatever is left when the promotion ends.</p>
+    <h3>Is a personal loan cheaper?</h3>
+    <p>Often, if its rate is lower than the card’s. Compare the total interest here with the <a href="/en/finance/loan-calculator/">loan calculator</a> for the same amount and time.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/finance/loan-calculator/"><span class="tool-name">Loan calculator</span><span class="tool-desc">Monthly payment, interest and schedule</span></a></li>
+      <li><a href="/en/life/split-bill/"><span class="tool-name">Split bill calculator</span><span class="tool-desc">Tip, shares and leftover cents</span></a></li>
+      <li><a href="/en/life/date-difference/"><span class="tool-name">Date difference calculator</span><span class="tool-desc">Days between dates, add or subtract days</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/credit-card-interest.js"></script>
+</body>
+</html>

@@ -27,9 +27,6 @@
 <script src="/assets/affiliates.js"></script>
 <script src="/assets/favorites.js"></script>
 <style>
-  .method { margin-top: 1rem; }
-  .method > span { display: block; font-size: .9rem; color: var(--muted); }
-  .method .seg { margin: .3rem 0 0; }
   #year-result th, #year-result td { white-space: nowrap; }
 </style>
 <script type="application/ld+json">
@@ -87,7 +84,7 @@
         <input id="grace-input" type="text" inputmode="numeric" autocomplete="off" value="0" placeholder="例如 3">
       </div>
     </div>
-    <div class="method">
+    <div class="choice">
       <span id="method-label">還款方式</span>
       <div class="seg" id="method-seg" role="group" aria-labelledby="method-label"></div>
     </div>
@@ -110,7 +107,7 @@
         <input id="penalty-input" type="text" inputmode="decimal" autocomplete="off" value="0" placeholder="例如 1">
       </div>
     </div>
-    <div class="method">
+    <div class="choice">
       <span id="prepay-label">還款後</span>
       <div class="seg" id="prepay-seg" role="group" aria-labelledby="prepay-label"></div>
     </div>
@@ -175,6 +172,7 @@
   <nav class="tool-group" aria-labelledby="related-h">
     <h2 id="related-h">相關工具</h2>
     <ul class="tool-list">
+      <li><a href="/zh-tw/finance/credit-card-interest/"><span class="tool-name">信用卡利息試算</span><span class="tool-desc">循環利息多久還清，分期年利率</span></a></li>
       <li><a href="/zh-tw/life/ping-converter/"><span class="tool-name">坪數換算</span><span class="tool-desc">坪、平方公尺互換，扣除公設</span></a></li>
       <li><a href="/zh-tw/life/date-difference/"><span class="tool-name">日期間隔計算</span><span class="tool-desc">相差幾天、幾個月，加減天數</span></a></li>
       <li><a href="/zh-tw/life/roc-year-converter/"><span class="tool-name">民國西元換算</span><span class="tool-desc">年份、日期互轉，附干支生肖</span></a></li>

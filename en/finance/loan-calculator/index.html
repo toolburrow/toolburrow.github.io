@@ -27,9 +27,6 @@
 <script src="/assets/affiliates.js"></script>
 <script src="/assets/favorites.js"></script>
 <style>
-  .method { margin-top: 1rem; }
-  .method > span { display: block; font-size: .9rem; color: var(--muted); }
-  .method .seg { margin: .3rem 0 0; }
   #year-result th, #year-result td { white-space: nowrap; }
 </style>
 <script type="application/ld+json">
@@ -87,7 +84,7 @@
         <input id="grace-input" type="text" inputmode="numeric" autocomplete="off" value="0" placeholder="e.g. 3">
       </div>
     </div>
-    <div class="method">
+    <div class="choice">
       <span id="method-label">Repayment</span>
       <div class="seg" id="method-seg" role="group" aria-labelledby="method-label"></div>
     </div>
@@ -110,7 +107,7 @@
         <input id="penalty-input" type="text" inputmode="decimal" autocomplete="off" value="0" placeholder="e.g. 1">
       </div>
     </div>
-    <div class="method">
+    <div class="choice">
       <span id="prepay-label">Afterwards</span>
       <div class="seg" id="prepay-seg" role="group" aria-labelledby="prepay-label"></div>
     </div>
@@ -169,6 +166,7 @@
   <nav class="tool-group" aria-labelledby="related-h">
     <h2 id="related-h">Related tools</h2>
     <ul class="tool-list">
+      <li><a href="/en/finance/credit-card-interest/"><span class="tool-name">Credit card interest calculator</span><span class="tool-desc">Payoff time and installment APR</span></a></li>
       <li><a href="/en/life/ping-converter/"><span class="tool-name">Ping to square meters</span><span class="tool-desc">Taiwan’s floor-area unit, m² and ft²</span></a></li>
       <li><a href="/en/life/date-difference/"><span class="tool-name">Date difference calculator</span><span class="tool-desc">Days between dates, add or subtract days</span></a></li>
       <li><a href="/en/life/roc-year-converter/"><span class="tool-name">ROC year converter</span><span class="tool-desc">Taiwan’s Minguo years and dates</span></a></li>
