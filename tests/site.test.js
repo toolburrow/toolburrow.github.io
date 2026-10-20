@@ -6,6 +6,7 @@ const root = path.join(__dirname, '..');
 function htmlPages(dir = root, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (e.name.startsWith('.') || e.name === 'tests' || e.name === 'node_modules') continue;
+    if (/^google[0-9a-f]+\.html$/.test(e.name)) continue; // Search Console verification file, not a page
     const p = path.join(dir, e.name);
     if (e.isDirectory()) htmlPages(p, out);
     else if (e.name.endsWith('.html')) out.push(path.relative(root, p).split(path.sep).join('/'));

@@ -126,7 +126,7 @@ Adrian 2026-10-20 決定插隊先做。繁中、台灣、港澳的使用者看�
 - [x] 把 repo `toolburrow.github.io` 改名為 `toollamp.github.io`（repo Settings → Repository name），確認網站在 `https://toollamp.github.io/` 能打開：已完成，13 頁都能正常開啟，舊網址已失效。
 - [ ] 考慮現在就買下 `toollamp.com`，避免好名字被別人註冊走（買之前先到註冊商網站確認還沒人註冊）
 - [ ] 到智慧財產局和美國 USPTO 查 ToolLamp 有沒有人註冊商標
-- [ ] 到 Google Search Console 驗證網站並提交 `https://toollamp.github.io/sitemap.xml`
+- [ ] 到 Google Search Console 驗證網站並提交 `https://toollamp.github.io/sitemap.xml`（驗證檔 `google93ec6f7db77f90e7.html` 已放上網站，等 Adrian 按驗證並提交 sitemap）
 - [ ] 申請蝦皮分潤計畫
 - [ ] 申請 AliExpress 聯盟或 Amazon Associates
 - [ ] 流量穩定後購買自有網域，再申請 AdSense

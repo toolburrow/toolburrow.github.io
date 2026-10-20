@@ -40,6 +40,7 @@ check tasks off as you finish them, and update PLAN.md before the session ends.
 /assets/affiliates.js   affiliate products per tool (see "Affiliate slots")
 /tests/                 node tests for tool logic
 sitemap.xml, robots.txt, 404.html, .nojekyll
+google93ec6f7db77f90e7.html   Google Search Console verification. Never edit or delete it.
 ```
 
 Current categories: `life` (生活工具 / Everyday) and `electronics` (電子工具 / Electronics), in both languages.
