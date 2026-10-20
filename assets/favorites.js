@@ -48,7 +48,7 @@ var FAV = (function () {
   var TEXT = {
     'zh-tw': {
       add: '☆ 加入收藏', added: '★ 已收藏', addLabel: '加入我的收藏', removeLabel: '從我的收藏移除',
-      title: '我的收藏',
+      title: '我的收藏', empty: '在工具頁按「☆ 加入收藏」，常用的工具就會出現在這裡。',
       remove: function (name) { return '從收藏移除「' + name + '」'; },
       copy: '複製收藏連結', copied: '已複製', copyFailed: '請手動複製這個連結：',
       hint: '在另一台裝置打開這個連結，就能把收藏帶過去。',
@@ -57,7 +57,7 @@ var FAV = (function () {
     },
     en: {
       add: '☆ Add to favorites', added: '★ In favorites', addLabel: 'Add to my favorites', removeLabel: 'Remove from my favorites',
-      title: 'My favorites',
+      title: 'My favorites', empty: 'Press “☆ Add to favorites” on a tool page and your tools will show up here.',
       remove: function (name) { return 'Remove ' + name + ' from favorites'; },
       copy: 'Copy favorites link', copied: 'Copied', copyFailed: 'Copy this link yourself:',
       hint: 'Open this link on another device to bring your favorites along.',
@@ -75,6 +75,13 @@ if (typeof module !== 'undefined') module.exports = FAV;
 if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded', function () {
   var lang = document.documentElement.lang === 'en' ? 'en' : 'zh-tw';
   var T = FAV.TEXT[lang];
+
+  // Redraw when the page comes back from the back/forward cache (no reload, so the list may be stale)
+  // or when another tab changes the favorites.
+  function refreshOn(fn) {
+    window.addEventListener('pageshow', function (ev) { if (ev.persisted) fn(); });
+    window.addEventListener('storage', function (ev) { if (ev.key === FAV.KEY) fn(); });
+  }
 
   function load() { try { return FAV.parse(localStorage.getItem(FAV.KEY)); } catch (e) { return []; } }
   function save(list) { try { localStorage.setItem(FAV.KEY, JSON.stringify(list)); } catch (e) {} }
@@ -95,6 +102,7 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
     btn.addEventListener('click', function () { save(FAV.toggle(load(), page.id)); paint(); });
     paint();
     h1.after(btn);
+    refreshOn(paint);
     return;
   }
 
@@ -114,8 +122,7 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
 
   function render() {
     var list = load().filter(function (id) { return entries[id]; });
-    box.hidden = !list.length;
-    if (!list.length) { box.innerHTML = ''; return; }
+    if (!list.length) { box.innerHTML = '<h2 id="fav-h">' + T.title + '</h2><p class="fav-empty">' + T.empty + '</p>'; return; }
     box.innerHTML = '<h2 id="fav-h">' + T.title + '</h2><ul class="tool-list fav-list"></ul>' +
       '<p class="fav-share"><button type="button" class="copy-btn fav-copy">' + T.copy + '</button></p>';
     var ul = box.querySelector('ul');
@@ -171,4 +178,5 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
     box.before(bar);
   }
   render();
+  refreshOn(render);
 });

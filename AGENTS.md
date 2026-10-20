@@ -134,6 +134,9 @@ tool groups on `/zh-tw/` and `/en/`. Nothing is in the HTML; the script builds i
 
 - The list is stored in localStorage `tb-fav` as `<category>/<slug>` ids. It is shared by both languages, since the ids
   are the same; each home page shows the names from its own tool list, so a tool must be on the home page to show up.
+- With no favorites, the home page box shows a one-line hint pointing to the ☆ button, so people can find the feature.
+- Both the button and the list redraw on `pageshow` from the back/forward cache and on `storage` events, so going
+  back to the home page after adding a tool shows it without a reload.
 - "Copy favorites link" gives `/<lang>/?fav=<id>,<id>`. Opening it asks before adding anything, then removes `?fav=` from the address.
 - No accounts and no server. The privacy pages describe this; update them if the stored data changes.
 
