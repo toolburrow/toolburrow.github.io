@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Split Bill Calculator with Tip: How Much Each Person Pays - ToolLamp</title>
+<meta name="description" content="Free split bill calculator. Enter the bill, tip or service charge and number of people to see what each person pays, rounded to the cent or dollar.">
+<link rel="canonical" href="https://toollamp.github.io/en/life/split-bill/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/life/split-bill/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/life/split-bill/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="Split Bill Calculator with Tip: How Much Each Person Pays">
+<meta property="og:description" content="Free split bill calculator. Enter the bill, tip or service charge and number of people to see what each person pays, rounded to the cent or dollar.">
+<meta property="og:url" content="https://toollamp.github.io/en/life/split-bill/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<style>
+  .round { margin-top: 1rem; }
+  .round > span { display: block; font-size: .9rem; color: var(--muted); }
+  .round .seg { margin: .3rem 0 0; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Split bill calculator",
+  "url": "https://toollamp.github.io/en/life/split-bill/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Everyday</div>
+    <h1>Split bill calculator</h1>
+    <p>Enter the bill, the tip or service charge and the number of people to see what each person pays.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="split-h">
+    <h2 id="split-h">Split the bill</h2>
+    <div class="row">
+      <div class="field">
+        <label for="amount-input">Bill total</label>
+        <input id="amount-input" type="text" inputmode="decimal" autocomplete="off" value="86.40" placeholder="for example 86.40">
+      </div>
+      <div class="field">
+        <label for="people-input">People</label>
+        <input id="people-input" type="text" inputmode="numeric" autocomplete="off" value="3" placeholder="for example 3">
+      </div>
+      <div class="field">
+        <label for="percent-input">Tip or service charge (%)</label>
+        <input id="percent-input" type="text" inputmode="decimal" autocomplete="off" value="18" placeholder="for example 18, or 0">
+      </div>
+    </div>
+    <div class="round">
+      <span id="round-label">Round each share up to</span>
+      <div class="seg" id="round-seg" role="group" aria-labelledby="round-label"></div>
+    </div>
+    <div class="result" id="split-result" aria-live="polite" hidden></div>
+  </section>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/split-bill" hidden></aside>
+
+  <article class="article">
+    <h2>How to split a bill</h2>
+    <p>Add the tip or service charge to the bill, then divide by the number of people: <strong>share = bill × (1 + tip %) ÷ people</strong>. For a bill of 86.40 with an 18% tip and 3 people, the total is 101.95 and each share is about 33.98.</p>
+    <p>The calculator works in any currency. The total with tip is rounded to the nearest cent. If the tip or service charge is already on the bill, enter 0.</p>
+
+    <h2>When the total doesn’t divide evenly</h2>
+    <p>The result shows two ways to handle the leftover cents:</p>
+    <ul>
+      <li><strong>Everyone pays the same</strong>: each share is rounded up to the cent, the whole unit or 5 units. The small extra can go toward the tip or to whoever paid the bill.</li>
+      <li><strong>Exact split</strong>: some people pay one cent more so the shares add up to exactly the total. For 101.95 split 3 ways, 1 person pays 33.99 and 2 people pay 33.98.</li>
+    </ul>
+
+    <h2>Tip amounts on common bills</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Bill</th><th>15% tip</th><th>18% tip</th><th>20% tip</th></tr></thead>
+        <tbody>
+          <tr><td>50.00</td><td>7.50</td><td>9.00</td><td>10.00</td></tr>
+          <tr><td>100.00</td><td>15.00</td><td>18.00</td><td>20.00</td></tr>
+          <tr><td>150.00</td><td>22.50</td><td>27.00</td><td>30.00</td></tr>
+          <tr><td>200.00</td><td>30.00</td><td>36.00</td><td>40.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <h3>Should the tip be on the amount before or after tax?</h3>
+    <p>Either is common. The calculator applies the percentage to the bill total you enter, so enter the amount before tax if you want to tip on that, and add the tax to the bill total afterwards.</p>
+    <h3>What if someone ordered a lot more?</h3>
+    <p>This calculator splits evenly. Take that person’s extra items off the bill first and let them pay for those, then split the rest.</p>
+    <h3>How much should I tip?</h3>
+    <p>It depends on the country. In the US, 15 to 20 percent is common for table service. In many other places a service charge is already included in the bill, or tipping is not expected.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/life/date-difference/"><span class="tool-name">Date difference calculator</span><span class="tool-desc">Days between dates, add or subtract days</span></a></li>
+      <li><a href="/en/life/age-calculator/"><span class="tool-name">Age calculator</span><span class="tool-desc">Exact age in years, months and days</span></a></li>
+      <li><a href="/en/life/roc-year-converter/"><span class="tool-name">ROC year converter</span><span class="tool-desc">Taiwan’s Minguo years and dates</span></a></li>
+      <li><a href="/en/life/bmi-calculator/"><span class="tool-name">BMI calculator</span><span class="tool-desc">WHO categories, lb or kg</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/split-bill.js"></script>
+</body>
+</html>

@@ -13,6 +13,7 @@ var AFF = (function () {
     'zh-tw/ping-converter': [],
     'zh-tw/bmi-calculator': [],
     'zh-tw/age-calculator': [],
+    'zh-tw/split-bill': [],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
@@ -21,7 +22,8 @@ var AFF = (function () {
     'en/led-resistor': [],
     'en/ping-converter': [],
     'en/bmi-calculator': [],
-    'en/age-calculator': []
+    'en/age-calculator': [],
+    'en/split-bill': []
   };
 
   var TEXT = {
