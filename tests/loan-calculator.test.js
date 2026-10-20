@@ -88,3 +88,61 @@ test('loan: random loans always pay off exactly', () => {
     if (method === 'annuity') near(s.rows[s.rows.length - 1].payment, s.rows[grace].payment, P * 1e-9);
   }
 });
+
+test('loan: prepay and keep the term = a new loan on the balance left', () => {
+  const s = LN.schedule(1e7, 2.2, 360, 0, 'annuity', { month: 60, amount: 2e6, mode: 'payment' });
+  const left = s.rows[59].balance;
+  near(s.rows[59].extra, 2e6); eq(s.rows.length, 360);
+  const fresh = LN.schedule(left, 2.2, 300, 0, 'annuity');
+  near(s.rows[60].payment, fresh.rows[0].payment, 1e-6);
+  near(s.totalInterest, s.rows.slice(0, 60).reduce((t, x) => t + x.interest, 0) + fresh.totalInterest, 1e-3);
+  const p = LN.schedule(1.2e6, 3, 120, 0, 'principal', { month: 24, amount: 240000, mode: 'payment' });
+  near(p.rows[24].principal, (1.2e6 - 240000 - 240000) / 96, 1e-6); // 24 months of 10,000 paid, then 240,000 extra
+});
+
+test('loan: prepay and keep the payment ends the loan early', () => {
+  const s = LN.schedule(1e7, 2.2, 360, 0, 'annuity', { month: 60, amount: 2e6, mode: 'term' });
+  eq(s.rows.length, 276);
+  near(s.rows[60].payment, s.rows[0].payment, 1e-6); near(s.rows[274].payment, s.rows[0].payment, 1e-6);
+  if (!(s.rows[275].payment <= s.rows[0].payment)) throw new Error('last payment must not exceed the regular one');
+  const p = LN.schedule(1.2e6, 3, 120, 0, 'principal', { month: 24, amount: 240000, mode: 'term' });
+  eq(p.rows.length, 96); near(p.rows[24].principal, 10000);
+});
+
+test('loan: prepayment summary', () => {
+  const p = LN.prepayment(1e7, 2.2, 360, 0, 'annuity', 5, 2e6, 'term', 1);
+  eq([p.monthsAfter, p.monthsSaved, p.paidOff], [276, 84, false]);
+  near(p.penalty, 20000); near(p.net, p.saved - 20000);
+  const base = LN.schedule(1e7, 2.2, 360, 0, 'annuity');
+  near(p.saved, base.totalInterest - LN.schedule(1e7, 2.2, 360, 0, 'annuity', { month: 60, amount: 2e6, mode: 'term' }).totalInterest);
+  near(p.balance, base.rows[59].balance, 1e-6);
+  const q = LN.prepayment(1e7, 2.2, 360, 0, 'annuity', 5, 2e6, 'payment', 0);
+  eq([q.monthsSaved, q.penalty], [0, 0]);
+  if (!(q.after < q.before && q.saved > 0 && q.saved < p.saved)) throw new Error('keeping the payment must save more interest');
+  // more than the balance pays the loan off, and the penalty applies only to what was owed
+  const all = LN.prepayment(1e6, 2, 240, 0, 'annuity', 5, 5e6, 'term', 1);
+  eq([all.paidOff, all.monthsAfter], [true, 60]); near(all.extra, all.balance); near(all.penalty, all.balance / 100);
+  // during a grace period the first changed payment is the first one after it
+  const g = LN.prepayment(1e7, 2.2, 360, 36, 'annuity', 2, 2e6, 'payment', 0);
+  near(g.after, LN.schedule(8e6, 2.2, 324, 0, 'annuity').rows[0].payment, 1e-6);
+});
+
+test('loan: durations', () => {
+  eq([LN.duration(75), LN.duration(12), LN.duration(5), LN.duration(0)], ['6 年 3 個月', '1 年', '5 個月', '0 個月']);
+  eq([LN.durationEn(13), LN.durationEn(24), LN.durationEn(1), LN.durationEn(0)], ['1 year 1 month', '2 years', '1 month', '0 months']);
+});
+
+test('loan: random prepayments still repay exactly the principal', () => {
+  let seed = 23;
+  const rnd = (n) => Math.floor((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648 * n);
+  for (let i = 0; i < 2000; i++) {
+    const P = 1000 + rnd(1e8), rate = rnd(3001) / 100, years = 2 + rnd(39), grace = Math.min(rnd(6), years - 1) * 12;
+    const method = ['annuity', 'principal'][rnd(2)], mode = ['term', 'payment'][rnd(2)];
+    const month = 12 * (1 + rnd(years - 1)), amount = 1 + rnd(P);
+    const s = LN.schedule(P, rate, years * 12, grace, method, { month, amount, mode });
+    if (s.rows.length > years * 12) throw new Error('prepaying must never lengthen the loan');
+    eq(s.rows[s.rows.length - 1].balance, 0);
+    near(s.rows.reduce((t, x) => t + x.principal + x.extra, 0), P, P * 1e-9);
+    if (!(s.totalInterest <= LN.schedule(P, rate, years * 12, grace, method).totalInterest + P * 1e-9)) throw new Error('prepaying must not add interest');
+  }
+});

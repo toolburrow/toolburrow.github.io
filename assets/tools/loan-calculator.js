@@ -25,11 +25,11 @@ var LOAN = (function () {
     return { value: v };
   }
 
-  // Annual rate in percent, 0 to 30. Returns { value } or { error: 'empty' | 'rate' }.
-  function parseRate(text) {
+  // Percentage from 0 to max (default 30), e.g. an annual rate. Returns { value } or { error: 'empty' | 'rate' }.
+  function parseRate(text, max) {
     if (!clean(text)) return { error: 'empty' };
     var v = num(text);
-    if (isNaN(v) || v > 30) return { error: 'rate' };
+    if (isNaN(v) || v > (max || 30)) return { error: 'rate' };
     return { value: v };
   }
 
@@ -43,18 +43,31 @@ var LOAN = (function () {
 
   // principal; ratePct: annual rate in %; months: whole term; grace: interest-only months at the start (< months);
   // method: 'annuity' (本息平均攤還, equal payments) or 'principal' (本金平均攤還, equal principal each month).
-  // Returns { rows: [{ month, payment, interest, principal, balance }], totalInterest, totalPayment }.
-  function schedule(principal, ratePct, months, grace, method) {
-    var r = ratePct / 1200, n = months - grace, rows = [], balance = principal, totalInterest = 0;
-    var pmt = r === 0 ? principal / n : principal * r / (1 - Math.pow(1 + r, -n));
-    for (var m = 1; m <= months; m++) {
-      var interest = balance * r, part;
-      if (m <= grace) part = 0;
-      else if (m === months) part = balance;   // last month clears what's left, so rounding never leaves a remainder
-      else part = method === 'principal' ? principal / n : pmt - interest;
-      balance -= part;
+  // prepay (optional): { month, amount, mode } pays `amount` extra right after that month's payment.
+  //   mode 'term' keeps the payment (or the monthly principal) and ends the loan early;
+  //   mode 'payment' keeps the end date and spreads the lower balance over the months left.
+  // Returns { rows: [{ month, payment, interest, principal, extra, balance }], totalInterest, totalPayment }.
+  // payment is interest + principal; extra is the prepaid amount, so totalPayment = principal + totalInterest.
+  function schedule(principal, ratePct, months, grace, method, prepay) {
+    var r = ratePct / 1200, rows = [], balance = principal, totalInterest = 0;
+    function level(bal, n) { return r === 0 ? bal / n : bal * r / (1 - Math.pow(1 + r, -n)); }
+    var pmt = level(principal, months - grace), part = principal / (months - grace);
+    for (var m = 1; m <= months && balance > 0; m++) {
+      var interest = balance * r, paid, extra = 0;
+      if (m <= grace) paid = 0;
+      else if (m === months) paid = balance;   // last month clears what's left, so rounding never leaves a remainder
+      else paid = Math.min(balance, method === 'principal' ? part : pmt - interest);
+      balance -= paid;
+      if (balance < principal * 1e-12) balance = 0;
+      if (prepay && m === prepay.month) {
+        extra = Math.min(prepay.amount, balance);
+        balance -= extra;
+        if (balance < principal * 1e-12) balance = 0;
+        var left = months - Math.max(m, grace);
+        if (prepay.mode === 'payment' && left > 0) { pmt = level(balance, left); part = balance / left; }
+      }
       totalInterest += interest;
-      rows.push({ month: m, payment: interest + part, interest: interest, principal: part, balance: m === months ? 0 : balance });
+      rows.push({ month: m, payment: interest + paid, interest: interest, principal: paid, extra: extra, balance: balance });
     }
     return { rows: rows, totalInterest: totalInterest, totalPayment: principal + totalInterest };
   }
@@ -65,9 +78,33 @@ var LOAN = (function () {
     rows.forEach(function (x, i) {
       var y = Math.floor(i / 12);
       if (!years[y]) years[y] = { year: y + 1, payment: 0, interest: 0, principal: 0, balance: 0 };
-      years[y].payment += x.payment; years[y].interest += x.interest; years[y].principal += x.principal; years[y].balance = x.balance;
+      years[y].payment += x.payment + x.extra; years[y].interest += x.interest; years[y].principal += x.principal + x.extra; years[y].balance = x.balance;
     });
     return years;
+  }
+
+  // Compares a loan with and without one extra payment at the end of `year`. penaltyPct is charged on the amount prepaid.
+  function prepayment(principal, ratePct, months, grace, method, year, amount, mode, penaltyPct) {
+    var base = schedule(principal, ratePct, months, grace, method);
+    var after = schedule(principal, ratePct, months, grace, method, { month: year * 12, amount: amount, mode: mode });
+    var row = after.rows[year * 12 - 1], next = Math.max(year * 12, grace);   // index of the first payment that changes
+    var penalty = row.extra * penaltyPct / 100, saved = base.totalInterest - after.totalInterest;
+    return {
+      mode: mode, year: year, balance: row.balance + row.extra, extra: row.extra, paidOff: row.balance === 0,
+      saved: saved, penalty: penalty, net: saved - penalty,
+      monthsBefore: months, monthsAfter: after.rows.length, monthsSaved: months - after.rows.length,
+      before: base.rows[next].payment, after: after.rows[next] ? after.rows[next].payment : 0
+    };
+  }
+
+  // 75 -> "6 年 3 個月"; "6 years 3 months" in English.
+  function duration(n) {
+    var y = Math.floor(n / 12), m = n % 12;
+    return (y ? y + ' 年' : '') + (y && m ? ' ' : '') + (m ? m + ' 個月' : '') + (y || m ? '' : '0 個月');
+  }
+  function durationEn(n) {
+    var y = Math.floor(n / 12), m = n % 12, p = function (v, w) { return v + ' ' + w + (v === 1 ? '' : 's'); };
+    return y && m ? p(y, 'year') + ' ' + p(m, 'month') : y ? p(y, 'year') : p(m, 'month');
   }
 
   // Groups digits: 12345.6 -> "12,346" (decimals 0) or "12,345.60" (decimals 2).
@@ -104,6 +141,22 @@ var LOAN = (function () {
         return name + '：總利息' + (Math.round(diff) === 0 ? '一樣' : (diff < 0 ? '少 ' : '多 ') + money(Math.abs(diff), 0) + ' 元');
       },
       amount: function (v) { return money(v, 0) + ' 元'; },
+      modes: { term: '縮短年限', payment: '降低月付' },
+      prepayAmountError: { empty: '請輸入提前還款金額，例如 200（萬元）。', number: '提前還款金額只能輸入數字，例如 200。',
+        zero: '提前還款金額要大於 0。', big: '金額太大了，請輸入 1000 億元以內的金額。' },
+      prepayYearError: function (max) { return '提前還款時間請輸入 1 到 ' + max + ' 的整數（第幾年底），要比貸款年限短。'; },
+      penaltyError: '違約金請輸入 0 到 10 之間的數字，例如 1，沒有就填 0。',
+      prepayMain: function (p) {
+        if (p.paidOff) return '第 ' + p.year + ' 年底一次還清';
+        return p.mode === 'term' ? '提早 ' + duration(p.monthsSaved) + '還清' : '每月少繳 ' + money(p.before - p.after, 0) + ' 元';
+      },
+      prepaySub: function (p) {
+        return '第 ' + p.year + ' 年底剩餘本金 ' + money(p.balance, 0) + ' 元，提前還 ' + money(p.extra, 0) + ' 元後剩 ' +
+          money(p.balance - p.extra, 0) + ' 元';
+      },
+      savedLabel: '省下利息', penaltyLabel: '違約金', netLabel: '實際省下', endLabel: '還清時間', paymentLabel: '每月還款',
+      end: function (p) { return duration(p.monthsBefore) + ' → ' + duration(p.monthsAfter); },
+      payment: function (p) { return money(p.before, 0) + ' → ' + money(p.after, 0) + ' 元'; },
       head: ['年', '繳款', '本金', '利息', '剩餘本金'],
       year: function (y) { return String(y); }
     },
@@ -133,12 +186,29 @@ var LOAN = (function () {
           : money(Math.abs(diff), 2) + (diff < 0 ? ' less' : ' more') + ' interest');
       },
       amount: function (v) { return money(v, 2); },
+      modes: { term: 'Shorter term', payment: 'Lower payment' },
+      prepayAmountError: { empty: 'Enter the extra payment, for example 50000.', number: 'The extra payment must be a number, for example 50000.',
+        zero: 'The extra payment must be more than 0.', big: 'That amount is too large. Enter up to 100,000,000,000.' },
+      prepayYearError: function (max) { return 'Enter when you pay it as a whole year from 1 to ' + max + ', before the end of the loan.'; },
+      penaltyError: 'Enter a prepayment penalty from 0 to 10%, or 0 for none.',
+      prepayMain: function (p) {
+        if (p.paidOff) return 'Paid off at the end of year ' + p.year;
+        return p.mode === 'term' ? 'Paid off ' + durationEn(p.monthsSaved) + ' sooner' : money(p.before - p.after, 2) + ' less a month';
+      },
+      prepaySub: function (p) {
+        return 'Balance at the end of year ' + p.year + ': ' + money(p.balance, 2) + ', ' + money(p.balance - p.extra, 2) +
+          ' after paying ' + money(p.extra, 2);
+      },
+      savedLabel: 'Interest saved', penaltyLabel: 'Penalty', netLabel: 'Net saving', endLabel: 'Loan length', paymentLabel: 'Monthly payment',
+      end: function (p) { return durationEn(p.monthsBefore) + ' → ' + durationEn(p.monthsAfter); },
+      payment: function (p) { return money(p.before, 2) + ' → ' + money(p.after, 2); },
       head: ['Year', 'Paid', 'Principal', 'Interest', 'Balance'],
       year: function (y) { return String(y); }
     }
   };
 
-  return { parseAmount: parseAmount, parseRate: parseRate, parseYears: parseYears, schedule: schedule, byYear: byYear,
+  return { parseAmount: parseAmount, parseRate: parseRate, parseYears: parseYears, schedule: schedule, byYear: byYear, prepayment: prepayment,
+    duration: duration, durationEn: durationEn,
     money: money, TEXT: TEXT };
 })();
 
@@ -160,13 +230,45 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
     render();
   });
 
+  var mode = 'term';
+  var modeSeg = $('prepay-seg');
+  modeSeg.innerHTML = ['term', 'payment'].map(function (m) {
+    return '<button type="button" data-mode="' + m + '" aria-pressed="' + (m === mode) + '">' + T.modes[m] + '</button>';
+  }).join('');
+  modeSeg.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (!b) return;
+    mode = b.dataset.mode;
+    modeSeg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    render();
+  });
+
   function fail(msg) {
-    $('loan-result').innerHTML = '<p class="error">' + msg + '</p>';
-    $('year-result').innerHTML = '<p class="error">' + msg + '</p>';
+    ['loan-result', 'prepay-result', 'year-result'].forEach(function (id) { $(id).innerHTML = '<p class="error">' + msg + '</p>'; });
+  }
+
+  // The prepayment panel, for a loan that is already valid.
+  function renderPrepay(amount, rate, years, grace) {
+    var out = $('prepay-result');
+    var a = LOAN.parseAmount($('prepay-amount-input').value, T.unit);
+    if (a.error) { out.innerHTML = '<p class="error">' + T.prepayAmountError[a.error] + '</p>'; return; }
+    var y = LOAN.parseYears($('prepay-year-input').value, 1, years - 1);
+    if (y.error) { out.innerHTML = '<p class="error">' + T.prepayYearError(years - 1) + '</p>'; return; }
+    var pen = LOAN.parseRate($('penalty-input').value, 10);
+    if (pen.error === 'empty') pen = { value: 0 };
+    if (pen.error) { out.innerHTML = '<p class="error">' + T.penaltyError + '</p>'; return; }
+    var p = LOAN.prepayment(amount, rate, years * 12, grace, method, y.value, a.value, mode, pen.value);
+    var list = '<dt>' + T.savedLabel + '</dt><dd>' + T.amount(p.saved) + '</dd>';
+    if (p.penalty) list += '<dt>' + T.penaltyLabel + '</dt><dd>' + T.amount(p.penalty) + '</dd>' +
+      '<dt>' + T.netLabel + '</dt><dd>' + T.amount(p.net) + '</dd>';
+    if (p.monthsSaved) list += '<dt>' + T.endLabel + '</dt><dd>' + T.end(p) + '</dd>';
+    if (!p.paidOff && Math.abs(p.before - p.after) >= 0.005) list += '<dt>' + T.paymentLabel + '</dt><dd>' + T.payment(p) + '</dd>';
+    out.innerHTML = '<div class="result-main">' + T.prepayMain(p) + '</div>' +
+      '<div class="result-sub">' + T.prepaySub(p) + '</div><dl class="result-list">' + list + '</dl>';
   }
 
   function render() {
     $('loan-result').hidden = false;
+    $('prepay-result').hidden = false;
     var a = LOAN.parseAmount($('amount-input').value, T.unit);
     if (a.error) return fail(T.amountError[a.error]);
     var r = LOAN.parseRate($('rate-input').value);
@@ -188,6 +290,8 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
       '<dt>' + T.otherLabel + '</dt><dd>' + T.other(T.methods[otherMethod], o.totalInterest - s.totalInterest) + '</dd>' +
       '</dl>';
 
+    renderPrepay(a.value, r.value, y.value, grace);
+
     $('year-result').innerHTML = '<div class="table-scroll"><table><thead><tr>' +
       T.head.map(function (h) { return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>' +
       LOAN.byYear(s.rows).map(function (x) {
@@ -196,6 +300,6 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
       }).join('') + '</tbody></table></div>';
   }
 
-  ['amount-input', 'rate-input', 'years-input', 'grace-input'].forEach(function (id) { $(id).addEventListener('input', render); });
+  ['amount-input', 'rate-input', 'years-input', 'grace-input', 'prepay-amount-input', 'prepay-year-input', 'penalty-input'].forEach(function (id) { $(id).addEventListener('input', render); });
   render();
 });

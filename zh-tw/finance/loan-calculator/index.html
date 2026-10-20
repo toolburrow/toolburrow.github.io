@@ -64,7 +64,7 @@
   <div class="page-head">
     <div class="crumbs"><a href="/zh-tw/">中文工具</a> / 理財工具</div>
     <h1>貸款試算</h1>
-    <p>輸入貸款金額、年利率和年限，算出每月要繳多少、總共付多少利息，房貸、信貸、車貸都能用。</p>
+    <p>輸入貸款金額、年利率和年限，算出每月要繳多少、總共付多少利息，也能試算提前還款省多少，房貸、信貸、車貸都能用。</p>
   </div>
 
   <section class="tool" aria-labelledby="loan-h">
@@ -94,6 +94,29 @@
     <div class="result" id="loan-result" aria-live="polite" hidden></div>
   </section>
 
+  <section class="tool" aria-labelledby="prepay-h">
+    <h2 id="prepay-h">提前還款試算</h2>
+    <div class="row">
+      <div class="field">
+        <label for="prepay-amount-input">提前還款金額（萬元）</label>
+        <input id="prepay-amount-input" type="text" inputmode="decimal" autocomplete="off" value="200" placeholder="例如 200">
+      </div>
+      <div class="field">
+        <label for="prepay-year-input">在第幾年底還</label>
+        <input id="prepay-year-input" type="text" inputmode="numeric" autocomplete="off" value="5" placeholder="例如 5">
+      </div>
+      <div class="field">
+        <label for="penalty-input">違約金（%，沒有就填 0）</label>
+        <input id="penalty-input" type="text" inputmode="decimal" autocomplete="off" value="0" placeholder="例如 1">
+      </div>
+    </div>
+    <div class="method">
+      <span id="prepay-label">還款後</span>
+      <div class="seg" id="prepay-seg" role="group" aria-labelledby="prepay-label"></div>
+    </div>
+    <div class="result" id="prepay-result" aria-live="polite" hidden></div>
+  </section>
+
   <section class="tool" aria-labelledby="year-h">
     <h2 id="year-h">每年還款明細</h2>
     <div id="year-result"></div>
@@ -114,6 +137,15 @@
     <h2>寬限期是什麼？</h2>
     <p>寬限期內只繳利息、不還本金，每月負擔比較輕。寬限期結束後，要在剩下的年限內還完全部本金，每月金額會變高，總利息也會增加。</p>
     <p>同樣 1,000 萬元、2.2%、30 年，如果有 3 年寬限期：前 3 年每月只繳 18,333 元，第 4 年起每月 40,961 元，總利息約 393.1 萬元，比沒有寬限期多約 26 萬元。</p>
+
+    <h2>提前還款划算嗎？</h2>
+    <p>提前還的錢直接減少本金，之後每個月的利息跟著變少。還款後通常可以選：</p>
+    <ul>
+      <li><strong>縮短年限</strong>：月付金不變，提早還清。省下的利息比較多。</li>
+      <li><strong>降低月付</strong>：年限不變，之後每月少繳。每月壓力變小，但省下的利息比較少。</li>
+    </ul>
+    <p>例如 1,000 萬元、2.2%、30 年本息平均攤還，在第 5 年底多還 200 萬元：選縮短年限會提早 7 年還清，省下約 120.7 萬元利息；選降低月付，每月從 37,970 元降到 29,297 元，省下約 60.2 萬元利息。</p>
+    <p>很多房貸在前 2～3 年提前還款要付違約金，常見是還款金額的 1% 左右，條件以合約為準。工具會從省下的利息扣掉違約金，算出實際省多少。如果手上的錢投資報酬率比房貸利率高，也可以考慮不提前還。</p>
 
     <h2>每 100 萬元貸款的月付金</h2>
     <p>本息平均攤還，金額四捨五入到元。貸款 500 萬元就乘以 5。</p>

@@ -64,7 +64,7 @@
   <div class="page-head">
     <div class="crumbs"><a href="/en/">English tools</a> / Finance</div>
     <h1>Loan calculator</h1>
-    <p>Enter the loan amount, interest rate and term to see the monthly payment and how much interest you pay in total.</p>
+    <p>Enter the loan amount, interest rate and term to see the monthly payment, the total interest and what an extra payment saves.</p>
   </div>
 
   <section class="tool" aria-labelledby="loan-h">
@@ -94,6 +94,29 @@
     <div class="result" id="loan-result" aria-live="polite" hidden></div>
   </section>
 
+  <section class="tool" aria-labelledby="prepay-h">
+    <h2 id="prepay-h">Extra payment</h2>
+    <div class="row">
+      <div class="field">
+        <label for="prepay-amount-input">Extra payment</label>
+        <input id="prepay-amount-input" type="text" inputmode="decimal" autocomplete="off" value="50000" placeholder="e.g. 50000">
+      </div>
+      <div class="field">
+        <label for="prepay-year-input">Paid at the end of year</label>
+        <input id="prepay-year-input" type="text" inputmode="numeric" autocomplete="off" value="5" placeholder="e.g. 5">
+      </div>
+      <div class="field">
+        <label for="penalty-input">Prepayment penalty (%, 0 for none)</label>
+        <input id="penalty-input" type="text" inputmode="decimal" autocomplete="off" value="0" placeholder="e.g. 1">
+      </div>
+    </div>
+    <div class="method">
+      <span id="prepay-label">Afterwards</span>
+      <div class="seg" id="prepay-seg" role="group" aria-labelledby="prepay-label"></div>
+    </div>
+    <div class="result" id="prepay-result" aria-live="polite" hidden></div>
+  </section>
+
   <section class="tool" aria-labelledby="year-h">
     <h2 id="year-h">Yearly schedule</h2>
     <div id="year-result"></div>
@@ -110,6 +133,15 @@
 
     <h2>Interest-only periods</h2>
     <p>During an interest-only period (called a grace period in Taiwan) you pay only the interest, so the balance does not fall. Afterwards the full amount has to be repaid over the remaining years, so the payment jumps and the total interest goes up.</p>
+
+    <h2>Paying extra: shorter term or lower payment?</h2>
+    <p>An extra payment goes straight to the principal, so every later month charges less interest. Lenders usually let you choose what happens next:</p>
+    <ul>
+      <li><strong>Shorter term</strong>: the payment stays the same and the loan ends early. This saves the most interest.</li>
+      <li><strong>Lower payment</strong> (sometimes called recasting): the end date stays the same and the payment drops.</li>
+    </ul>
+    <p>For 300,000 at 6.5% over 30 years, paying 50,000 extra at the end of year 5 ends the loan 8 years 4 months early and saves about 140,800 in interest. Keeping the term instead lowers the payment from 1,896.20 to 1,558.60 and saves about 51,300.</p>
+    <p>Some loans charge a prepayment penalty, usually a percentage of the amount paid early in the first few years. The calculator subtracts it from the interest saved.</p>
 
     <h2>Monthly payment per 100,000 borrowed</h2>
     <p>Equal payments, rounded to the cent. For 250,000, multiply by 2.5.</p>
