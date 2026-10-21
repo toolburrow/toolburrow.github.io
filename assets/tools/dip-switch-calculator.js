@@ -58,6 +58,14 @@ var DIP = (function () {
   function bits(value, count, order) {
     return toSwitches(value, count, order).map(function (on) { return on ? '1' : '0'; }).join('');
   }
+  // bits() with a space every 4 bits, counted from the lowest bit so each group is one hex digit:
+  // from the left in 'lsb' order (switch 1 first), from the right in 'msb' order. 4095 -> '1111 1111 1111'.
+  function groupedBits(value, count, order) {
+    var s = bits(value, count, order);
+    if (order === 'msb') s = s.split('').reverse().join('');
+    var g = s.match(/.{1,4}/g).join(' ');
+    return order === 'msb' ? g.split('').reverse().join('') : g;
+  }
   function hex(value) { return '0x' + value.toString(16).toUpperCase(); }
 
   // Addresses for `fixtures` DMX fixtures of `channels` channels each, starting at `start`, packed back to back.
@@ -115,7 +123,7 @@ var DIP = (function () {
   };
 
   return { COUNTS: COUNTS, parseValue: parseValue, parseInt10: parseInt10, weight: weight, toSwitches: toSwitches,
-    fromSwitches: fromSwitches, onList: onList, bits: bits, hex: hex, dmxPlan: dmxPlan, TEXT: TEXT };
+    fromSwitches: fromSwitches, onList: onList, bits: bits, groupedBits: groupedBits, hex: hex, dmxPlan: dmxPlan, TEXT: TEXT };
 })();
 
 if (typeof module !== 'undefined') module.exports = DIP;
@@ -180,7 +188,7 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
       '<dl class="result-list">' +
       '<dt>' + T.onLabel + '</dt><dd>' + T.onList(on) + '</dd>' +
       '<dt>' + T.sumLabel + '</dt><dd>' + T.sum(on.map(function (n) { return DIP.weight(n, count, order); })) + '</dd>' +
-      '<dt>' + T.binLabel + '</dt><dd>' + DIP.bits(value, count, order) + '</dd>' +
+      '<dt>' + T.binLabel + '</dt><dd>' + DIP.groupedBits(value, count, order) + '</dd>' +
       '<dt>' + T.hexLabel + '</dt><dd>' + DIP.hex(value) + '</dd>' +
       '</dl>';
   }

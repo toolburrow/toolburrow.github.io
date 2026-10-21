@@ -27,6 +27,21 @@ test('dip: switch 1 is the highest bit in MSB order', () => {
   eq(DS.hex(37), '0x25'); eq(DS.hex(0), '0x0'); eq(DS.hex(65535), '0xFFFF');
 });
 
+test('dip: binary is grouped in fours from the lowest bit', () => {
+  eq(DS.groupedBits(4095, 12, 'lsb'), '1111 1111 1111'); eq(DS.groupedBits(4095, 12, 'msb'), '1111 1111 1111');
+  eq(DS.groupedBits(37, 9, 'lsb'), '1010 0100 0');      // switches 1-4, 5-8, 9
+  eq(DS.groupedBits(37, 9, 'msb'), '0 0010 0101');      // reads like 0x025
+  eq(DS.groupedBits(5, 4, 'lsb'), '1010'); eq(DS.groupedBits(37, 6, 'msb'), '10 0101');
+  for (const count of DS.COUNTS) for (const order of ['lsb', 'msb']) for (let v = 0; v < Math.pow(2, count); v++) {
+    const g = DS.groupedBits(v, count, order);
+    if (g.replace(/ /g, '') !== DS.bits(v, count, order)) throw new Error(`${count} ${order} ${v}`);
+    // each group (read in normal binary order) is one hex digit
+    const groups = order === 'msb' ? g.split(' ').reverse() : g.split(' ').map(x => x.split('').reverse().join(''));
+    const digits = groups.map(x => parseInt(x, 2).toString(16)).reverse().join('').replace(/^0+(?=.)/, '');
+    if (digits !== v.toString(16)) throw new Error(`hex ${count} ${order} ${v}`);
+  }
+});
+
 test('dip: offers 4 to 12 switches', () => {
   eq(DS.COUNTS, [4, 6, 8, 9, 10, 12]);
 });
