@@ -134,3 +134,18 @@ test('site: the home pages name the site ToolLamp for search results', () => {
     eq([rel, data['@type'], data.name, data.url], [rel, 'WebSite', 'ToolLamp', 'https://toollamp.github.io/']);
   }
 });
+test('site: every tool page links to the feedback form with its own address prefilled', () => {
+  const form = 'https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform';
+  for (const rel of pages.filter(p => p.split('/').length === 4)) {
+    const html = fs.readFileSync(path.join(root, rel), 'utf8');
+    const links = [...html.matchAll(/<p class="feedback">[^<]*<a href="([^"]+)" target="_blank" rel="noopener">[^<]+<\/a><\/p>/g)];
+    eq([rel, links.length], [rel, 1]);
+    const page = '/' + rel.replace(/index\.html$/, '');
+    eq([rel, links[0][1]], [rel, form + '?usp=pp_url&amp;entry.243321783=' + encodeURIComponent(page)]);
+    // Right under the tool panels, before the affiliate slot.
+    eq([rel, links[0].index < html.indexOf('<aside class="affiliate"')], [rel, true]);
+  }
+  for (const rel of ['zh-tw/contact/index.html', 'en/contact/index.html']) {
+    eq([rel, fs.readFileSync(path.join(root, rel), 'utf8').includes('href="' + form + '"')], [rel, true]);
+  }
+});

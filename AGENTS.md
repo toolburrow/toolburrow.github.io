@@ -67,7 +67,8 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
      starting with `var T = X.TEXT[document.documentElement.lang === 'en' ? 'en' : 'zh-tw'];`
 3. Add tests in `/tests/<slug>.test.js` and run `node tests/run.js`. All tests must pass.
 4. Page content, in this order: `.page-head` (breadcrumb, h1, one-sentence description) → one or more
-   `.tool` panels → affiliate slot `<aside>` (see below) → `.article` with an explanation, a reference table where useful,
+   `.tool` panels → feedback line `<p class="feedback">` (copy it from another tool page in that language and change
+   the prefilled address at the end of the link, see "Feedback form") → affiliate slot `<aside>` (see below) → `.article` with an explanation, a reference table where useful,
    and a short FAQ (2–4 questions people actually search for) → related tools
    `<nav class="tool-group" aria-labelledby="related-h">` (copy one from another tool page).
    The related list holds 2–4 hand-picked tools, the ones a reader of this tool is most likely to need next (any
@@ -111,6 +112,20 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
 - The privacy pages (`/zh-tw/privacy/`, `/en/privacy/`) must match what the site really does. Before adding anything
   that collects or shares data (ads, analytics, cookies, a new third-party resource), update both privacy pages
   and their "last updated" date in the same commit.
+
+## Feedback form
+
+Feedback goes to a Google Form the owner made (`https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform`).
+The site only links to it, opening in a new tab; never embed the form or post to it from a script, since that would send
+input from our pages to a third party.
+
+- Every tool page has `<p class="feedback">` right under its last `.tool` panel. Its link adds
+  `?usp=pp_url&amp;entry.243321783=` plus the URL-encoded page path (`%2Fzh-tw%2Flife%2Fbmi-calculator%2F`), which fills
+  in the form's "which tool" question. Never put the reader's tool input in the link. `tests/site.test.js` checks the
+  link on every tool page and on both contact pages.
+- The contact pages offer the form first and GitHub Issues second. The responses spreadsheet is private: never put its
+  URL in the repo.
+- The privacy pages describe the form. Update them if the form starts asking for more personal data.
 
 ## Talking to the owner
 
