@@ -86,7 +86,7 @@ input:focus, select:focus { border-color: var(--accent); }
 .result-sub { color: var(--muted); margin-top: .3rem; }
 .result-list { display: grid; grid-template-columns: max-content 1fr; gap: .35rem 1.2rem; margin: .8rem 0 0; }
 .result-list dt { color: var(--muted); }
-.result-list dd { margin: 0; font-variant-numeric: tabular-nums; }
+.result-list dd { margin: 0; min-width: 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 .copy-btn { border: 1px solid var(--line); background: none; color: var(--muted); border-radius: var(--radius-sm);
   padding: .05rem .5rem; margin-left: .5rem; cursor: pointer; font-size: .8rem; vertical-align: middle; }
 .notice { color: var(--lamp); font-size: .92rem; margin-top: .6rem; }
