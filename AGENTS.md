@@ -123,6 +123,9 @@ input from our pages to a third party.
   `?usp=pp_url&amp;entry.243321783=` plus the URL-encoded page path (`%2Fzh-tw%2Flife%2Fbmi-calculator%2F`), which fills
   in the form's "which tool" question. Never put the reader's tool input in the link. `tests/site.test.js` checks the
   link on every tool page and on both contact pages.
+- Every footer has a 意見回饋 / Feedback link right after the contact link, prefilled the same way with that page's path
+  (the 404 page links to the plain form, since its path is unknown). Readers looking for a way to report a problem
+  scroll straight to the footer, so it's the link most of them see.
 - The contact pages offer the form first and GitHub Issues second. The responses spreadsheet is private: never put its
   URL in the repo.
 - The privacy pages describe the form. Update them if the form starts asking for more personal data.

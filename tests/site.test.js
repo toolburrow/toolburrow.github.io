@@ -149,3 +149,15 @@ test('site: every tool page links to the feedback form with its own address pref
     eq([rel, fs.readFileSync(path.join(root, rel), 'utf8').includes('href="' + form + '"')], [rel, true]);
   }
 });
+test('site: every footer links to the feedback form right after the contact link', () => {
+  const form = 'https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform';
+  for (const rel of pages) {
+    const footer = (fs.readFileSync(path.join(root, rel), 'utf8').match(/<footer class="site-footer">[\s\S]*?<\/footer>/) || [''])[0];
+    const href = rel === '404.html' ? form : form + '?usp=pp_url&amp;entry.243321783=' + encodeURIComponent('/' + rel.replace(/index\.html$/, ''));
+    const langs = rel.startsWith('en/') ? ['en'] : rel.startsWith('zh-tw/') ? ['zh-tw'] : ['zh-tw', 'en'];
+    for (const l of langs) {
+      const label = l === 'en' ? '<a href="/en/contact/">Contact</a>' : '<a href="/zh-tw/contact/">聯絡我們</a>';
+      eq([rel, l, footer.includes(label + '<a href="' + href + '" target="_blank" rel="noopener">')], [rel, l, true]);
+    }
+  }
+});
