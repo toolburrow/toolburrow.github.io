@@ -129,6 +129,11 @@ input from our pages to a third party.
 - The contact pages offer the form first and GitHub Issues second. The responses spreadsheet is private: never put its
   URL in the repo.
 - The privacy pages describe the form. Update them if the form starts asking for more personal data.
+- Responses land in the owner's Google Sheet "ToolLamp 意見回饋 / Feedback (回覆)" (find it by that title with the Google
+  Drive or Sheets connector). Columns A–E come from the form; F 決議 (待處理 / 要做 / 不做 / 已完成), G 理由／備註 and
+  H 處理日期 are the owner's. At the start of a session, if a Google connector is available, list the rows whose F is
+  empty or 待處理 for the owner and let them decide; fill F–H only after they do. Never copy email addresses or other
+  personal details from the sheet into the repo, PLAN.md or commit messages; summarize the feedback instead.
 
 ## Talking to the owner
 
