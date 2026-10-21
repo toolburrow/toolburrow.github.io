@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capacitor Code Calculator (104, 472 to pF, nF, µF) - ToolLamp</title>
+<meta name="description" content="Free capacitor code calculator. Type a code like 104, 472J or 2A104K to get pF, nF and µF, tolerance and voltage, or turn a value into its code.">
+<link rel="canonical" href="https://toollamp.github.io/en/electronics/capacitor-code/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/capacitor-code/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/capacitor-code/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="Capacitor Code Calculator (104, 472 to pF, nF, µF)">
+<meta property="og:description" content="Free capacitor code calculator. Type a code like 104, 472J or 2A104K to get pF, nF and µF, tolerance and voltage, or turn a value into its code.">
+<meta property="og:url" content="https://toollamp.github.io/en/electronics/capacitor-code/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script src="/assets/favorites.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Capacitor Code Calculator",
+  "url": "https://toollamp.github.io/en/electronics/capacitor-code/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Electronics</div>
+    <h1>Capacitor code calculator</h1>
+    <p>Type the code printed on a ceramic, film or tantalum capacitor to get its value in pF, nF and µF, or type a value to find its code.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="decode-h">
+    <h2 id="decode-h">Code to value</h2>
+    <div class="row">
+      <div class="field">
+        <label for="code-input">Code on the capacitor</label>
+        <input id="code-input" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 104, 472J, 2A104K, 4R7">
+      </div>
+    </div>
+    <div class="result" id="decode-result" aria-live="polite"></div>
+  </section>
+
+  <section class="tool" aria-labelledby="encode-h">
+    <h2 id="encode-h">Value to code</h2>
+    <div class="row">
+      <div class="field">
+        <label for="value-input">Capacitance</label>
+        <input id="value-input" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 100n, 0.1u, 4.7nF, 22p">
+      </div>
+    </div>
+    <div class="result" id="encode-result" aria-live="polite"></div>
+  </section>
+
+  <p class="feedback">Wrong result or a typo? <a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fcapacitor-code%2F" target="_blank" rel="noopener">Send feedback</a></p>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/capacitor-code" hidden></aside>
+
+  <article class="article">
+    <h2>How to read a capacitor code</h2>
+    <p>Small capacitors have no room for “100 nF”, so they carry a three-digit code in <strong>picofarads (pF)</strong>. The first two digits are the value and the third is the number of zeros to add.</p>
+    <p><strong>104</strong> is 10 followed by four zeros: 100,000 pF, which is 100 nF or 0.1 µF. <strong>472</strong> is 4,700 pF, or 4.7 nF. A third digit of 9 or 8 means ×0.1 or ×0.01, so 109 is 1 pF.</p>
+    <p>Below 10 pF the letter R marks the decimal point: 4R7 is 4.7 pF. Values from 10 to 99 pF are often printed with just two digits, so 22 and 220 both mean 22 pF.</p>
+    <p>A letter after the digits is the tolerance, as in 104K (±10%). A digit and a letter in front, as in 2A104J, is the rated voltage: 2A is 100 V. Aluminum electrolytic capacitors usually have the value and voltage printed in full, such as 470 µF 25 V. SMD ceramic capacitors often have no marking at all, so you have to measure them.</p>
+
+    <h2>Common capacitor codes</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Code</th><th>pF</th><th>nF</th><th>µF</th></tr></thead>
+        <tbody>
+          <tr><td>100</td><td>10</td><td>0.01</td><td>0.00001</td></tr>
+          <tr><td>220</td><td>22</td><td>0.022</td><td>0.000022</td></tr>
+          <tr><td>101</td><td>100</td><td>0.1</td><td>0.0001</td></tr>
+          <tr><td>471</td><td>470</td><td>0.47</td><td>0.00047</td></tr>
+          <tr><td>102</td><td>1,000</td><td>1</td><td>0.001</td></tr>
+          <tr><td>222</td><td>2,200</td><td>2.2</td><td>0.0022</td></tr>
+          <tr><td>472</td><td>4,700</td><td>4.7</td><td>0.0047</td></tr>
+          <tr><td>103</td><td>10,000</td><td>10</td><td>0.01</td></tr>
+          <tr><td>223</td><td>22,000</td><td>22</td><td>0.022</td></tr>
+          <tr><td>473</td><td>47,000</td><td>47</td><td>0.047</td></tr>
+          <tr><td>104</td><td>100,000</td><td>100</td><td>0.1</td></tr>
+          <tr><td>224</td><td>220,000</td><td>220</td><td>0.22</td></tr>
+          <tr><td>474</td><td>470,000</td><td>470</td><td>0.47</td></tr>
+          <tr><td>105</td><td>1,000,000</td><td>1,000</td><td>1</td></tr>
+          <tr><td>106</td><td>10,000,000</td><td>10,000</td><td>10</td></tr>
+          <tr><td>107</td><td>100,000,000</td><td>100,000</td><td>100</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Tolerance letters</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Letter</th><th>Tolerance</th></tr></thead>
+        <tbody>
+          <tr><td>B</td><td>±0.1 pF</td></tr>
+          <tr><td>C</td><td>±0.25 pF</td></tr>
+          <tr><td>D</td><td>±0.5 pF below 10 pF, otherwise ±0.5%</td></tr>
+          <tr><td>F</td><td>±1%</td></tr>
+          <tr><td>G</td><td>±2%</td></tr>
+          <tr><td>J</td><td>±5%</td></tr>
+          <tr><td>K</td><td>±10%</td></tr>
+          <tr><td>M</td><td>±20%</td></tr>
+          <tr><td>Z</td><td>+80% / −20%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Voltage codes</h2>
+    <p>The voltage code is a digit and a letter printed before the value, mostly on film capacitors.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Code</th><th>Voltage</th><th>Code</th><th>Voltage</th></tr></thead>
+        <tbody>
+          <tr><td>0G</td><td>4 V</td><td>2C</td><td>160 V</td></tr>
+          <tr><td>0J</td><td>6.3 V</td><td>2D</td><td>200 V</td></tr>
+          <tr><td>1A</td><td>10 V</td><td>2E</td><td>250 V</td></tr>
+          <tr><td>1C</td><td>16 V</td><td>2F</td><td>315 V</td></tr>
+          <tr><td>1E</td><td>25 V</td><td>2V</td><td>350 V</td></tr>
+          <tr><td>1V</td><td>35 V</td><td>2G</td><td>400 V</td></tr>
+          <tr><td>1H</td><td>50 V</td><td>2W</td><td>450 V</td></tr>
+          <tr><td>1J</td><td>63 V</td><td>2H</td><td>500 V</td></tr>
+          <tr><td>1K</td><td>80 V</td><td>2J</td><td>630 V</td></tr>
+          <tr><td>2A</td><td>100 V</td><td>3A</td><td>1000 V</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <h3>What is a 104 capacitor?</h3>
+    <p>A 104 capacitor is 100 nF, the same as 0.1 µF or 100,000 pF. It’s the most common decoupling capacitor, placed next to the power pins of almost every chip.</p>
+    <h3>Can I use a 0.1 µF capacitor in place of a 100 nF one?</h3>
+    <p>Yes. 0.1 µF and 100 nF are the same value written in different units. Check that the voltage rating is at least as high as the original.</p>
+    <h3>What does the K in 104K mean?</h3>
+    <p>K is the tolerance, ±10%, so a 104K capacitor can be anywhere from 90 nF to 110 nF. J is ±5% and M is ±20%.</p>
+    <h3>Why is my value not exact?</h3>
+    <p>A code has only two significant digits, so 4.75 nF can’t be written exactly. The calculator picks the closest code (482, 4.8 nF) and tells you it rounded.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/electronics/resistor-color-code/"><span class="tool-name">Resistor color code calculator</span><span class="tool-desc">4 and 5 band, both directions</span></a></li>
+      <li><a href="/en/electronics/rc-time-constant/"><span class="tool-name">RC time constant calculator</span><span class="tool-desc">τ, cutoff frequency, charge time</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p>© 2026 ToolLamp</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a><a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fcapacitor-code%2F" target="_blank" rel="noopener">Feedback</a></p>
+  </div>
+</footer>
+<script src="/assets/elec.js"></script>
+<script src="/assets/tools/capacitor-code.js"></script>
+</body>
+</html>

@@ -19,6 +19,7 @@ var AFF = (function () {
     'zh-tw/loan-calculator': [],
     'zh-tw/credit-card-interest': [],
     'zh-tw/dip-switch-calculator': [],
+    'zh-tw/capacitor-code': [],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
@@ -33,7 +34,8 @@ var AFF = (function () {
     'en/uart-baud-rate': [],
     'en/loan-calculator': [],
     'en/credit-card-interest': [],
-    'en/dip-switch-calculator': []
+    'en/dip-switch-calculator': [],
+    'en/capacitor-code': []
   };
 
   var TEXT = {
