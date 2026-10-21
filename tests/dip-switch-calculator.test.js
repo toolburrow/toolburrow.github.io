@@ -3,10 +3,10 @@ const DS = require('../assets/tools/dip-switch-calculator.js');
 test('dip: parse values', () => {
   eq(DS.parseValue('37', 9), { value: 37 }); eq(DS.parseValue('0x25', 9), { value: 37 }); eq(DS.parseValue('0X1ff', 9), { value: 511 });
   eq(DS.parseValue('0b100101', 9), { value: 37 }); eq(DS.parseValue('０ｘ２５', 9), { value: 37 }); eq(DS.parseValue('1_000', 10), { value: 1000 });
-  eq(DS.parseValue('0', 4), { value: 0 }); eq(DS.parseValue('15', 4), { value: 15 }); eq(DS.parseValue('65535', 16), { value: 65535 });
+  eq(DS.parseValue('0', 4), { value: 0 }); eq(DS.parseValue('15', 4), { value: 15 }); eq(DS.parseValue('4095', 12), { value: 4095 });
   eq(DS.parseValue('', 8), { error: 'empty' });
   ['-1', '1.5', 'abc', '0x', '0b2', '0xg', '25h'].forEach(s => eq([s, DS.parseValue(s, 8)], [s, { error: 'format' }]));
-  eq(DS.parseValue('16', 4), { error: 'range' }); eq(DS.parseValue('512', 9), { error: 'range' }); eq(DS.parseValue('0x10000', 16), { error: 'range' });
+  eq(DS.parseValue('16', 4), { error: 'range' }); eq(DS.parseValue('512', 9), { error: 'range' }); eq(DS.parseValue('0x1000', 12), { error: 'range' });
   eq(DS.parseInt10('8', 1, 512), { value: 8 }); eq(DS.parseInt10('', 1, 512), { error: 'empty' });
   ['0', '513', '2.5', 'x'].forEach(s => eq([s, DS.parseInt10(s, 1, 512)], [s, { error: 'range' }]));
 });
@@ -27,10 +27,13 @@ test('dip: switch 1 is the highest bit in MSB order', () => {
   eq(DS.hex(37), '0x25'); eq(DS.hex(0), '0x0'); eq(DS.hex(65535), '0xFFFF');
 });
 
+test('dip: offers 4 to 12 switches', () => {
+  eq(DS.COUNTS, [4, 6, 8, 9, 10, 12]);
+});
+
 test('dip: switches round-trip for every value and order', () => {
   for (const count of DS.COUNTS) for (const order of ['lsb', 'msb']) {
-    const step = count > 12 ? 97 : 1;
-    for (let v = 0; v < Math.pow(2, count); v += step) {
+    for (let v = 0; v < Math.pow(2, count); v++) {
       const sw = DS.toSwitches(v, count, order);
       if (sw.length !== count || DS.fromSwitches(sw, order) !== v) throw new Error(`${count} ${order} ${v}`);
       const l = DS.onList(v, count, order);

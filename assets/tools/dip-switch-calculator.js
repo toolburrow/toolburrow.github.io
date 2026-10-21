@@ -3,7 +3,7 @@
 // Switches are numbered from 1 as printed on the part. With 'lsb' order switch 1 is worth 1 (the DMX convention);
 // with 'msb' order switch 1 is the highest bit.
 var DIP = (function () {
-  var COUNTS = [4, 6, 8, 9, 10, 12, 16];
+  var COUNTS = [4, 6, 8, 9, 10, 12];
   var DMX_MAX = 512;
 
   function clean(text) {
