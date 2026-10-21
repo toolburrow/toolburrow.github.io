@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMD Resistor Code Calculator (103, 1002, EIA-96 01C) - ToolLamp</title>
+<meta name="description" content="Free SMD resistor code calculator. Type a 3-digit, 4-digit or EIA-96 code like 103, 1002 or 01C to get the resistance, or turn a value into all three codes.">
+<link rel="canonical" href="https://toollamp.github.io/en/electronics/smd-resistor-code/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/smd-resistor-code/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/smd-resistor-code/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="SMD Resistor Code Calculator (103, 1002, EIA-96 01C)">
+<meta property="og:description" content="Free SMD resistor code calculator. Type a 3-digit, 4-digit or EIA-96 code like 103, 1002 or 01C to get the resistance, or turn a value into all three codes.">
+<meta property="og:url" content="https://toollamp.github.io/en/electronics/smd-resistor-code/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script src="/assets/favorites.js"></script>
+<style>
+  .e96 th, .e96 td { padding-left: .35rem; padding-right: .35rem; font-variant-numeric: tabular-nums; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SMD Resistor Code Calculator",
+  "url": "https://toollamp.github.io/en/electronics/smd-resistor-code/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Electronics</div>
+    <h1>SMD resistor code calculator</h1>
+    <p>Type the code printed on an SMD resistor (3-digit, 4-digit or EIA-96) to get its resistance, or type a value to see how it’s marked.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="decode-h">
+    <h2 id="decode-h">Code to resistance</h2>
+    <div class="row">
+      <div class="field">
+        <label for="code-input">Code on the resistor</label>
+        <input id="code-input" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 103, 4R7, 1002, 01C">
+      </div>
+    </div>
+    <div class="result" id="decode-result" aria-live="polite"></div>
+  </section>
+
+  <section class="tool" aria-labelledby="encode-h">
+    <h2 id="encode-h">Resistance to code</h2>
+    <div class="row">
+      <div class="field">
+        <label for="value-input">Resistance (Ω)</label>
+        <input id="value-input" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 4.7k, 4k7, 49.9, 1M, R005">
+      </div>
+    </div>
+    <div class="result" id="encode-result" aria-live="polite"></div>
+  </section>
+
+  <p class="feedback">Wrong result or a typo? <a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fsmd-resistor-code%2F" target="_blank" rel="noopener">Send feedback</a></p>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/smd-resistor-code" hidden></aside>
+
+  <article class="article">
+    <h2>How to read SMD resistor codes</h2>
+    <p>SMD resistors of size 0603 and larger usually carry a short code. There are three systems, and you can tell them apart by the number of digits and whether there is a letter at the end. Resistors of size 0402 and smaller usually have no marking, so you have to measure them.</p>
+    <ul>
+      <li><strong>3-digit code</strong>, usually ±5%: the first two digits are the value and the third is the number of zeros. 103 is 10 followed by three zeros, which is 10 kΩ. 472 is 4.7 kΩ.</li>
+      <li><strong>4-digit code</strong>, usually ±1%: the first three digits are the value and the fourth is the number of zeros. 1002 is 100 followed by two zeros, which is 10 kΩ. 4701 is 4.7 kΩ.</li>
+      <li><strong>EIA-96 code</strong>, ±1%: two digits and a letter, used on small 1% parts. The digits are a position in the E96 series (table below) and the letter is the multiplier. 01C is 100 × 100 = 10 kΩ.</li>
+    </ul>
+    <p>In 3-digit and 4-digit codes the letter R marks the decimal point: 4R7 is 4.7 Ω, R47 is 0.47 Ω and R010 is 0.01 Ω, a typical current sense resistor. A code of 0, 000 or 0000 is a zero-ohm resistor used as a jumper.</p>
+
+    <h2>EIA-96 multiplier letters</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Letter</th><th>Multiplier</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>Z</td><td>×0.001</td><td>01Z = 0.1 Ω</td></tr>
+          <tr><td>Y or R</td><td>×0.01</td><td>01Y = 1 Ω</td></tr>
+          <tr><td>X or S</td><td>×0.1</td><td>01X = 10 Ω</td></tr>
+          <tr><td>A</td><td>×1</td><td>01A = 100 Ω</td></tr>
+          <tr><td>B or H</td><td>×10</td><td>01B = 1 kΩ</td></tr>
+          <tr><td>C</td><td>×100</td><td>01C = 10 kΩ</td></tr>
+          <tr><td>D</td><td>×1,000</td><td>01D = 100 kΩ</td></tr>
+          <tr><td>E</td><td>×10,000</td><td>01E = 1 MΩ</td></tr>
+          <tr><td>F</td><td>×100,000</td><td>01F = 10 MΩ</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>EIA-96 code table</h2>
+    <p>Find the two digits of the code, take the value next to them and multiply it by the letter. 68X is 499 × 0.1 = 49.9 Ω.</p>
+    <div class="table-scroll">
+      <table class="e96">
+        <thead><tr><th>Code</th><th>Value</th><th>Code</th><th>Value</th><th>Code</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>01</td><td>100</td><td>33</td><td>215</td><td>65</td><td>464</td></tr>
+          <tr><td>02</td><td>102</td><td>34</td><td>221</td><td>66</td><td>475</td></tr>
+          <tr><td>03</td><td>105</td><td>35</td><td>226</td><td>67</td><td>487</td></tr>
+          <tr><td>04</td><td>107</td><td>36</td><td>232</td><td>68</td><td>499</td></tr>
+          <tr><td>05</td><td>110</td><td>37</td><td>237</td><td>69</td><td>511</td></tr>
+          <tr><td>06</td><td>113</td><td>38</td><td>243</td><td>70</td><td>523</td></tr>
+          <tr><td>07</td><td>115</td><td>39</td><td>249</td><td>71</td><td>536</td></tr>
+          <tr><td>08</td><td>118</td><td>40</td><td>255</td><td>72</td><td>549</td></tr>
+          <tr><td>09</td><td>121</td><td>41</td><td>261</td><td>73</td><td>562</td></tr>
+          <tr><td>10</td><td>124</td><td>42</td><td>267</td><td>74</td><td>576</td></tr>
+          <tr><td>11</td><td>127</td><td>43</td><td>274</td><td>75</td><td>590</td></tr>
+          <tr><td>12</td><td>130</td><td>44</td><td>280</td><td>76</td><td>604</td></tr>
+          <tr><td>13</td><td>133</td><td>45</td><td>287</td><td>77</td><td>619</td></tr>
+          <tr><td>14</td><td>137</td><td>46</td><td>294</td><td>78</td><td>634</td></tr>
+          <tr><td>15</td><td>140</td><td>47</td><td>301</td><td>79</td><td>649</td></tr>
+          <tr><td>16</td><td>143</td><td>48</td><td>309</td><td>80</td><td>665</td></tr>
+          <tr><td>17</td><td>147</td><td>49</td><td>316</td><td>81</td><td>681</td></tr>
+          <tr><td>18</td><td>150</td><td>50</td><td>324</td><td>82</td><td>698</td></tr>
+          <tr><td>19</td><td>154</td><td>51</td><td>332</td><td>83</td><td>715</td></tr>
+          <tr><td>20</td><td>158</td><td>52</td><td>340</td><td>84</td><td>732</td></tr>
+          <tr><td>21</td><td>162</td><td>53</td><td>348</td><td>85</td><td>750</td></tr>
+          <tr><td>22</td><td>165</td><td>54</td><td>357</td><td>86</td><td>768</td></tr>
+          <tr><td>23</td><td>169</td><td>55</td><td>365</td><td>87</td><td>787</td></tr>
+          <tr><td>24</td><td>174</td><td>56</td><td>374</td><td>88</td><td>806</td></tr>
+          <tr><td>25</td><td>178</td><td>57</td><td>383</td><td>89</td><td>825</td></tr>
+          <tr><td>26</td><td>182</td><td>58</td><td>392</td><td>90</td><td>845</td></tr>
+          <tr><td>27</td><td>187</td><td>59</td><td>402</td><td>91</td><td>866</td></tr>
+          <tr><td>28</td><td>191</td><td>60</td><td>412</td><td>92</td><td>887</td></tr>
+          <tr><td>29</td><td>196</td><td>61</td><td>422</td><td>93</td><td>909</td></tr>
+          <tr><td>30</td><td>200</td><td>62</td><td>432</td><td>94</td><td>931</td></tr>
+          <tr><td>31</td><td>205</td><td>63</td><td>442</td><td>95</td><td>953</td></tr>
+          <tr><td>32</td><td>210</td><td>64</td><td>453</td><td>96</td><td>976</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <h3>What is a 103 SMD resistor?</h3>
+    <p>103 is 10 × 10³ = 10 kΩ, usually with ±5% tolerance. The same value is marked 1002 on a 1% resistor and 01C in EIA-96.</p>
+    <h3>Is 4R7 4.7 Ω or 4.7 kΩ?</h3>
+    <p>4.7 Ω. On SMD resistors R always stands for the decimal point in ohms. Codes don’t use K or M; 4.7 kΩ is written 472 or 4701.</p>
+    <h3>How do I tell a 3-digit code from an EIA-96 code?</h3>
+    <p>An EIA-96 code always ends in a letter (01C, 68X). A 3-digit code is all digits, or has an R in the middle (4R7). If a code like 10R ends in R, it’s EIA-96 by the standard (1.24 Ω), but some makers use it for 10 Ω, so compare it with the other resistors on the board.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/electronics/resistor-color-code/"><span class="tool-name">Resistor color code calculator</span><span class="tool-desc">4 and 5 band, both directions</span></a></li>
+      <li><a href="/en/electronics/capacitor-code/"><span class="tool-name">Capacitor code calculator</span><span class="tool-desc">104, 472 to pF, nF, µF</span></a></li>
+      <li><a href="/en/electronics/voltage-divider/"><span class="tool-name">Voltage divider calculator</span><span class="tool-desc">Vout, missing resistor, E24 values</span></a></li>
+      <li><a href="/en/electronics/ohms-law/"><span class="tool-name">Ohm’s law calculator</span><span class="tool-desc">Any two of V, I, R, P</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p>© 2026 ToolLamp</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a><a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fsmd-resistor-code%2F" target="_blank" rel="noopener">Feedback</a></p>
+  </div>
+</footer>
+<script src="/assets/elec.js"></script>
+<script src="/assets/tools/smd-resistor-code.js"></script>
+</body>
+</html>
