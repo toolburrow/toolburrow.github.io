@@ -14,7 +14,7 @@ var AFF = (function () {
       { name: '1/4W 金屬膜電阻 30 種阻值包', url: 'https://s.shopee.tw/9APaXk1R1X', note: '搭配常用阻值，實作與驗證分壓電路。' }
     ],
     'zh-tw/ohms-law': [
-      { name: '寶工 MT-1506 口袋型電錶', url: 'https://s.shopee.tw/gR2Qc76ro', note: '可量測電壓與電阻，此款不提供電流量測。' }
+      { name: '寶工 MT-1210 數位三用電錶', url: 'https://s.shopee.tw/BUltD912c', note: '可量測電壓、直流電流與電阻，適合實作驗證歐姆定律。' }
     ],
     'zh-tw/led-resistor': [
       { name: '電容、電阻、LED 綜合元件包', url: 'https://s.shopee.tw/BUlplcOxs', note: '含 LED 與電阻，可實作限流電路。' }
