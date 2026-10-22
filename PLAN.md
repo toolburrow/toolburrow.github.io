@@ -241,6 +241,13 @@ Rup／Rdown 分壓已經有分壓電阻工具，不另外做。
 - 英文：PCB trace width（IPC-2221）
 - 英文：Battery life calculator
 
+## 之後的維護自動化
+
+Adrian 2026-10-22 提出：也想藉這個網站學 AI 的使用方式，例如用排程定期維護分潤連結。等第一批蝦皮連結上線後再做。
+
+- 每月排程（Claude Code Routine）：檢查 `affiliates.js` 每個連結還能不能打開、列出意見回饋表單的新意見、跑全部測試，整理成摘要給 Adrian。
+- 分潤連結本身只能由 Adrian 從後台產生（AI 不能產生或猜連結）。蝦皮可能有給推廣者用的 Open API，還沒查證；如果要用，API 金鑰不能放進公開 repo。
+
 ## Adrian 要自己做的事
 
 這些需要本人帳號或個人資料，AI 不能代勞。AI 可以提醒，但不要假設已經完成。
