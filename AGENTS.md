@@ -203,7 +203,9 @@ affiliate links (zh-tw pages, Shopee); update them when a new program's links go
 No page has ads yet. AdSense accepts `toollamp.github.io` as it is (`github.io` is on the Public Suffix List), so no own
 domain is needed to apply. No ad code may be added until PLAN.md marks Google AdSense as 已核准. To verify the site while
 it is under review, use the `google-adsense-account` meta tag or a root `ads.txt` with the publisher ID the owner gives,
-not the ad script. `site.css` already defines `.ad-slot` so ads can go in later without the layout jumping.
+not the ad script. Every page carries
+`<meta name="google-adsense-account" content="ca-pub-2504634231316841">` right after the viewport tag (the tests check);
+copy it into new pages. `site.css` already defines `.ad-slot` so ads can go in later without the layout jumping.
 
 - Markup: `<div class="ad-slot" data-label="廣告"></div>` on zh-tw pages, `data-label="Advertisement"` on en pages.
   The ad code goes inside. The slot reserves 300px (a 20px label + a 280px ad); don't set a smaller height, and never

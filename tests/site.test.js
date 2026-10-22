@@ -179,3 +179,11 @@ test('site: every tool has an icon, in its lists and next to its title', () => {
     if (parts.length === 4) eq([rel, h.includes('<h1>' + tile(parts[1], parts[2]))], [rel, true]);
   }
 });
+test('site: every page carries the AdSense site verification tag and no ad script', () => {
+  // Verification only (PLAN.md): the meta tag sends nothing. No ad script until AdSense is marked 已核准.
+  for (const rel of pages) {
+    const h = fs.readFileSync(path.join(root, rel), 'utf8');
+    eq([rel, (h.match(/<meta name="google-adsense-account" content="ca-pub-2504634231316841">/g) || []).length], [rel, 1]);
+    eq([rel, /adsbygoogle|googlesyndication/.test(h)], [rel, false]);
+  }
+});
