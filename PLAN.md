@@ -266,7 +266,7 @@ Adrian 2026-10-22 提出：也想藉這個網站學 AI 的使用方式，例如�
 - [x] 申請蝦皮分潤計畫：2026-10-22 核准，用網站申請。
 - [ ] 完成蝦皮分潤的付款設定（填收款資料、上傳存摺封面）。收款資料不能寫進 repo 或交給 AI
 - [x] 挑選中文工具頁要放的蝦皮商品，從分潤後台產生連結交給 AI：2026-10-22 完成，16 個中文工具頁各 1 個商品（用 ChatGPT 的 Chrome 外掛挑選、產生連結）。
-- [ ] 申請 AliExpress 聯盟或 Amazon Associates
+- [ ] 申請 AliExpress 聯盟或 Amazon Associates（2026-10-22 Adrian 決定先暫停，等英文頁有流量再考慮）
 - [x] 申請 AdSense：2026-10-22 建立帳戶（由 ChatGPT 的 Chrome 外掛協助操作），網站加上 meta 驗證標記。
 - [x] 在 AdSense 按「驗證」和「提交審查」：2026-10-22 完成。
 - [ ] AdSense 審查結果出來後告訴 AI（核准後要先更新隱私權政策、footer，並決定廣告放哪些頁面，才能加廣告程式；AdSense 後台的「自動廣告」要關掉，至少關掉插頁式和錨定廣告，只用 AGENTS.md 規定的手動廣告單元）
@@ -322,3 +322,4 @@ Adrian 2026-10-22 提出：也想藉這個網站學 AI 的使用方式，例如�
 - 2026-10-22：更正 AdSense 的條件。Adrian 轉來其他 AI 的說法，查證 Google 官方說明（support.google.com/adsense/answer/12170421）：可以加入 AdSense 的網站包括「已列在 Public Suffix List 上的平台的子網域（例如 site.appspot.com）」，而 `github.io` 在 Public Suffix List 上（2026-10-22 確認），所以 `toollamp.github.io` 可以直接申請，不用先買網域。之前「github.io 子網域不能申請」是根據第三方說明，是錯的。能加入不代表一定核准，Google 還是會審內容。
 - 2026-10-22：蝦皮分潤計畫核准，用網站申請就通過，不用開 Facebook 粉絲專頁。還沒放任何連結；第一批連結放上去時，同一個 commit 把 footer 的聯盟揭露加回來（AGENTS.md「Affiliate slots」）。
 - 2026-10-22：確認蝦皮分潤付款規定（官方說明 help.shopee.tw 文章 202269「分潤金請款流程」）：付款和稅務資訊審核通過前，佣金會保留並持續累積，不會失效；個人戶累積到 NT$500 才撥款；每月 1 日產生撥款明細，要在 5 天內確認，逾期就累計到下期。所以不用等付款設定完成就能先放連結。
+- 2026-10-22：收益來源先維持兩種：蝦皮分潤（中文頁推薦商品，已上線）和 AdSense（審查中）。AliExpress、Amazon 先不申請，等英文頁有流量再說（Adrian 決定）。接下來的重點放在工具和內容，以及觀察兩種收入的報表。
