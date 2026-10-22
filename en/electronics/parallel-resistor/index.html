@@ -92,8 +92,8 @@
       </svg>
       <div class="row">
         <div class="field">
-          <label for="total-list">Resistors, separated by commas</label>
-          <input id="total-list" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 10k, 4.7k, 2.2k">
+          <label for="total-list">Resistors, separated by commas or spaces</label>
+          <input id="total-list" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 10k 4.7k 2.2k">
         </div>
       </div>
     </div>
@@ -192,7 +192,7 @@
     <h3>Does combining resistors change the tolerance?</h3>
     <p>The tolerance of the combination is no worse than that of the parts. Two ±5% resistors give a total that is still within ±5%, and often closer, because their errors tend to partly cancel.</p>
     <h3>How do I enter the values?</h3>
-    <p>Separate them with commas, for example <code>10k, 4k7, 2.2M</code>. You can write 4.7k or 4k7, R47 for 0.47 Ω, and M for megohms. Up to 20 resistors at a time.</p>
+    <p>Separate them with commas or spaces, for example <code>10k 4k7 2.2M</code> or <code>10 kΩ, 4.7 kΩ</code>. You can write 4.7k or 4k7, R47 for 0.47 Ω, and M for megohms. Up to 20 resistors at a time.</p>
   </article>
 
   <nav class="tool-group" aria-labelledby="related-h">
@@ -214,6 +214,6 @@
   </div>
 </footer>
 <script src="/assets/elec.js"></script>
-<script src="/assets/tools/parallel-resistor.js?v=2"></script>
+<script src="/assets/tools/parallel-resistor.js?v=3"></script>
 </body>
 </html>

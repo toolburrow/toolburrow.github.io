@@ -92,8 +92,8 @@
       </svg>
       <div class="row">
         <div class="field">
-          <label for="total-list">電阻值，用逗號分開</label>
-          <input id="total-list" type="text" autocomplete="off" spellcheck="false" placeholder="例如 10k, 4.7k, 2.2k">
+          <label for="total-list">電阻值，用逗號或空格分開</label>
+          <input id="total-list" type="text" autocomplete="off" spellcheck="false" placeholder="例如 10k 4.7k 2.2k">
         </div>
       </div>
     </div>
@@ -192,7 +192,7 @@
     <h3>電阻組合後誤差會變大嗎？</h3>
     <p>不會比單顆差。兩顆 ±5% 的電阻組合起來，總阻值的誤差還是在 ±5% 以內，而且常常更小，因為兩顆的誤差會互相抵消一部分。</p>
     <h3>阻值要怎麼輸入？</h3>
-    <p>用逗號分開，例如 <code>10k, 4k7, 2.2M</code>。4.7k 也可以寫成 4k7，0.47 Ω 寫成 R47，M 代表 MΩ。一次最多 20 顆。</p>
+    <p>用逗號或空格分開，例如 <code>10k 4k7 2.2M</code> 或 <code>10 kΩ, 4.7 kΩ</code>。4.7k 也可以寫成 4k7，0.47 Ω 寫成 R47，M 代表 MΩ。一次最多 20 顆。</p>
   </article>
 
   <nav class="tool-group" aria-labelledby="related-h">
@@ -214,6 +214,6 @@
   </div>
 </footer>
 <script src="/assets/elec.js"></script>
-<script src="/assets/tools/parallel-resistor.js?v=2"></script>
+<script src="/assets/tools/parallel-resistor.js?v=3"></script>
 </body>
 </html>

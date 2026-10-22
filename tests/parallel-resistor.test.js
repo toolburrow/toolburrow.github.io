@@ -32,11 +32,17 @@ test('parallel resistor: list parsing', () => {
   eq(PR.parseList('10k + 10k').values, [10000, 10000]);
   eq(PR.parseList('10k // 10k').values, [10000, 10000]);
   eq(PR.parseList('10k || 10k').values, [10000, 10000]);
+  eq(PR.parseList('10 k 4.7 k').values, [10000, 4700]);       // a unit after a space belongs to the number
+  eq(PR.parseList('10 kΩ 4.7 kΩ 220 ohm').values, [10000, 4700, 220]);
+  eq(PR.parseList('1 M  2.2M\u30004k7').values, [1000000, 2200000, 4700]); // runs of spaces, full-width space
+  eq(PR.parseList('10k\t4k7\n1k').values, [10000, 4700, 1000]);
+  eq(PR.parseList('k 10k'), { error: 'list-format', item: 'k' });
   eq(PR.parseList(' , ').error, 'list-empty');
   eq(PR.parseList('').error, 'list-empty');
   eq(PR.parseList('10k').error, 'list-one');
   eq(PR.parseList('10k, abc'), { error: 'list-format', item: 'abc' });
   eq(PR.parseList('10k, 4k7 x'), { error: 'list-format', item: 'x' });
+  eq(PR.parseList('10k 4.7kk'), { error: 'list-format', item: '4.7kk' });
   eq(PR.parseList('10k, 0'), { error: 'list-positive', item: '0' });
   eq(PR.parseList('10k, -1k'), { error: 'list-positive', item: '-1k' });
   eq(PR.parseList(Array(21).fill('1k').join(',')).error, 'list-many');
@@ -89,7 +95,7 @@ test('parallel resistor: E24 pairs', () => {
 });
 test('parallel resistor: error messages name the problem', () => {
   const msg = (r, lang = 'en') => PR.TEXT[lang].errors[r.error](r);
-  eq(msg(PR.parseList('10k, abc')), '“abc” isn’t a resistance. Use values like 10k, 4k7, 220 or 1M, separated by commas.');
+  eq(msg(PR.parseList('10k, abc')), '“abc” isn’t a resistance. Use values like 10k, 4k7, 220 or 1M, separated by commas or spaces.');
   eq(msg(PR.missing('', '1k', 'series'), 'zh-tw'), '請輸入手上的電阻，例如 10k。');
   eq(msg(PR.missing('1k', '', 'series'), 'zh-tw'), '請輸入想要的總阻值，例如 3.3k。');
 });

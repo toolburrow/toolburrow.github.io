@@ -16,28 +16,27 @@ var PR = (function () {
     return clean(1 / values.reduce(function (s, r) { return s + 1 / r; }, 0));
   }
 
-  // A list as typed: "10k, 4k7, 2.2k". Commas, semicolons, +, / and | separate values; spaces separate them too
-  // when an item doesn't read as one value ("10k 4k7"), but "10 kΩ" stays one value.
+  // A list as typed: "10k, 4k7, 2.2k" or "10k 4k7 2.2k". Commas, semicolons, spaces, +, / and | separate values.
+  // A unit written after a space belongs to the number before it, so "10 k 4.7 kΩ" is two values.
   // Returns { values } or { error: 'list-empty' | 'list-format' | 'list-positive' | 'list-one' | 'list-many', item }.
   function parseList(text) {
-    var items = String(text == null ? '' : text).split(/[,;，、；+\/|\n]+/).map(function (s) { return s.trim(); })
-      .filter(function (s) { return s; });
+    var tokens = String(text == null ? '' : text).split(/[\s,;，、；+\/|]+/).filter(function (s) { return s; });
+    var items = [];
+    tokens.forEach(function (t) {
+      if (items.length && /^([kmg]|[kmg]?(Ω|ω|ohms?))$/i.test(t) && /\d$/.test(items[items.length - 1])) items[items.length - 1] += t;
+      else items.push(t);
+    });
     if (!items.length) return { error: 'list-empty' };
     var values = [];
     for (var i = 0; i < items.length; i++) {
       var v = ELEC.parseResistance(items[i]);
-      if (v !== null) { values.push({ v: v, item: items[i] }); continue; }
-      var parts = items[i].split(/\s+/);
-      for (var j = 0; j < parts.length; j++) {
-        var p = ELEC.parseResistance(parts[j]);
-        if (p === null) return { error: 'list-format', item: parts.length > 1 ? parts[j] : items[i] };
-        values.push({ v: p, item: parts[j] });
-      }
+      if (v === null) return { error: 'list-format', item: items[i] };
+      if (!(v > 0)) return { error: 'list-positive', item: items[i] };
+      values.push(v);
     }
-    for (var k = 0; k < values.length; k++) if (!(values[k].v > 0)) return { error: 'list-positive', item: values[k].item };
     if (values.length < 2) return { error: 'list-one' };
     if (values.length > MAX_COUNT) return { error: 'list-many', max: MAX_COUNT };
-    return { values: values.map(function (x) { return x.v; }) };
+    return { values: values };
   }
 
   // Total of a typed list. shares: each resistor's part of the current (parallel) or of the voltage (series), in %.
@@ -99,10 +98,10 @@ var PR = (function () {
         'resistance-empty': function (r) { return r.name === 'R1' ? 'Enter the resistor you have, for example 10k.' : 'Enter the total you want, for example 3.3k.'; },
         'resistance-format': function (r) { return (r.name === 'R1' ? 'The resistor you have' : 'The target') + ' isn’t a resistance. Use a value like 10k, 4k7, 220 or 1M.'; },
         'resistance-positive': function (r) { return (r.name === 'R1' ? 'The resistor you have' : 'The target') + ' must be greater than 0 Ω.'; },
-        'list-empty': function () { return 'Enter two or more resistors, for example 10k, 4.7k.'; },
-        'list-format': function (r) { return '“' + r.item + '” isn’t a resistance. Use values like 10k, 4k7, 220 or 1M, separated by commas.'; },
+        'list-empty': function () { return 'Enter two or more resistors, for example 10k 4.7k.'; },
+        'list-format': function (r) { return '“' + r.item + '” isn’t a resistance. Use values like 10k, 4k7, 220 or 1M, separated by commas or spaces.'; },
         'list-positive': function (r) { return '“' + r.item + '” must be greater than 0 Ω.'; },
-        'list-one': function () { return 'Add at least one more resistor, separated by a comma.'; },
+        'list-one': function () { return 'Add at least one more resistor, separated by a comma or a space.'; },
         'list-many': function (r) { return 'Enter at most ' + r.max + ' resistors.'; },
         'parallel-too-high': function () { return 'In parallel the total is always smaller than each resistor. Enter a target below the resistor you have, or switch to series.'; },
         'series-too-low': function () { return 'In series the total is always larger than each resistor. Enter a target above the resistor you have, or switch to parallel.'; },
@@ -128,10 +127,10 @@ var PR = (function () {
         'resistance-empty': function (r) { return r.name === 'R1' ? '請輸入手上的電阻，例如 10k。' : '請輸入想要的總阻值，例如 3.3k。'; },
         'resistance-format': function (r) { return (r.name === 'R1' ? '手上的電阻' : '目標阻值') + '不是有效的電阻值，請輸入像 10k、4k7、220 或 1M 這樣的值。'; },
         'resistance-positive': function (r) { return (r.name === 'R1' ? '手上的電阻' : '目標阻值') + '必須大於 0 Ω。'; },
-        'list-empty': function () { return '請輸入兩個以上的電阻，例如 10k, 4.7k。'; },
-        'list-format': function (r) { return '「' + r.item + '」不是有效的電阻值，請輸入像 10k、4k7、220 或 1M 這樣的值，用逗號分開。'; },
+        'list-empty': function () { return '請輸入兩個以上的電阻，例如 10k 4.7k。'; },
+        'list-format': function (r) { return '「' + r.item + '」不是有效的電阻值，請輸入像 10k、4k7、220 或 1M 這樣的值，用逗號或空格分開。'; },
         'list-positive': function (r) { return '「' + r.item + '」必須大於 0 Ω。'; },
-        'list-one': function () { return '請再輸入至少一個電阻，用逗號分開。'; },
+        'list-one': function () { return '請再輸入至少一個電阻，用逗號或空格分開。'; },
         'list-many': function (r) { return '最多輸入 ' + r.max + ' 個電阻。'; },
         'parallel-too-high': function () { return '並聯後的總阻值一定比每一顆都小，請輸入比手上電阻小的目標，或改成串聯。'; },
         'series-too-low': function () { return '串聯後的總阻值一定比每一顆都大，請輸入比手上電阻大的目標，或改成並聯。'; },
