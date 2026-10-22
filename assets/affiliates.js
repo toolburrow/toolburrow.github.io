@@ -23,6 +23,7 @@ var AFF = (function () {
     'zh-tw/smd-resistor-code': [],
     'zh-tw/parallel-resistor': [],
     'zh-tw/adc-calculator': [],
+    'zh-tw/pwm-frequency': [],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
@@ -41,7 +42,8 @@ var AFF = (function () {
     'en/capacitor-code': [],
     'en/smd-resistor-code': [],
     'en/parallel-resistor': [],
-    'en/adc-calculator': []
+    'en/adc-calculator': [],
+    'en/pwm-frequency': []
   };
 
   var TEXT = {
