@@ -189,8 +189,10 @@ Only the owner decides which products and links go there, and only programs mark
 When asked to fill one, only edit that slot's array in `affiliates.js`, using the exact URLs the owner gives.
 Never invent affiliate URLs or tracking IDs.
 
-Footers carry no affiliate disclosure while no page has affiliate links (`tests/site.test.js` checks). When the first
-program is approved and its links go in, add the disclosure line back to every footer in both languages and update that test.
+Every footer carries the affiliate disclosure line in its language, just above the copyright line (the root page and 404
+carry both): 「部分頁面含有聯盟連結，透過連結購買時我們可能獲得少量分潤。」 / “Some pages contain affiliate links. We may
+earn a small commission if you buy through them.” `tests/site.test.js` checks it. The privacy pages say which pages have
+affiliate links (zh-tw pages, Shopee); update them when a new program's links go in.
 
 ## Ad slots
 

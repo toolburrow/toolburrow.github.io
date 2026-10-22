@@ -55,10 +55,14 @@ test('site: every footer carries the copyright line', () => {
   }
 });
 
-test('site: footers carry no affiliate disclosure until a program is approved', () => {
+test('site: every footer carries the affiliate disclosure in its language', () => {
+  const zh = '部分頁面含有聯盟連結，透過連結購買時我們可能獲得少量分潤。';
+  const en = 'Some pages contain affiliate links. We may earn a small commission if you buy through them.';
   for (const rel of pages) {
     const footer = (fs.readFileSync(path.join(root, rel), 'utf8').match(/<footer class="site-footer">[\s\S]*?<\/footer>/) || [''])[0];
-    eq([rel, /聯盟|affiliate/i.test(footer)], [rel, false]);
+    const want = rel.startsWith('en/') ? [en] : rel.startsWith('zh-tw/') ? [zh] : [zh, en];
+    for (const line of want) eq([rel, footer.includes(line)], [rel, true]);
+    eq([rel, footer.indexOf(want[0]) < footer.indexOf('© 2026 ToolLamp')], [rel, true]);
   }
 });
 

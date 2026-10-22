@@ -8,8 +8,13 @@ test('affiliates: empty slots render nothing', () => {
   eq(AFF.render([], 'en'), ''); eq(AFF.render([], 'zh-Hant-TW'), '');
   eq(AFF.render(undefined, 'en'), ''); eq(AFF.render(null, 'en'), '');
 });
-test('affiliates: every slot starts empty', () => {
-  for (const k of Object.keys(AFF.SLOTS)) eq([k, AFF.SLOTS[k]], [k, []]);
+test('affiliates: every filled slot uses an approved program and renders all its items', () => {
+  // Approved programs (PLAN.md): 蝦皮分潤計畫 for zh-tw pages only. English pages stay empty until one is approved.
+  for (const [k, items] of Object.entries(AFF.SLOTS)) {
+    eq([k, items.length <= AFF.MAX_ITEMS], [k, true]);
+    eq([k, AFF.usable(items).length], [k, items.length]);
+    for (const it of items) eq([k, k.startsWith('zh-tw/') && /^https:\/\/s\.shopee\.tw\/[A-Za-z0-9]+$/.test(it.url)], [k, true]);
+  }
 });
 test('affiliates: renders items with sponsored links', () => {
   const html = AFF.render([item(1), item(2)], 'en');
@@ -61,7 +66,7 @@ test('affiliates: every tool page has a matching slot and loads the script', () 
   for (const [slot, file] of pages) {
     const html = fs.readFileSync(file, 'utf8');
     eq([slot, html.includes('<aside class="affiliate" data-slot="' + slot + '" hidden></aside>')], [slot, true]);
-    eq([slot, html.includes('<script src="/assets/affiliates.js"></script>')], [slot, true]);
+    eq([slot, /<script src="\/assets\/affiliates.js(\?v=\d+)?"><\/script>/.test(html)], [slot, true]);
     eq([slot, Object.prototype.hasOwnProperty.call(AFF.SLOTS, slot)], [slot, true]);
   }
   eq(Object.keys(AFF.SLOTS).sort(), pages.map(p => p[0]).sort()); // no slot without a page
