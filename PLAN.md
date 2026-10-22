@@ -269,7 +269,7 @@ Adrian 2026-10-22 提出：也想藉這個網站學 AI 的使用方式，例如�
 - [ ] 申請 AliExpress 聯盟或 Amazon Associates
 - [x] 申請 AdSense：2026-10-22 建立帳戶（由 ChatGPT 的 Chrome 外掛協助操作），網站加上 meta 驗證標記。
 - [x] 在 AdSense 按「驗證」和「提交審查」：2026-10-22 完成。
-- [ ] AdSense 審查結果出來後告訴 AI（核准後要先更新隱私權政策、footer，並決定廣告放哪些頁面，才能加廣告程式）
+- [ ] AdSense 審查結果出來後告訴 AI（核准後要先更新隱私權政策、footer，並決定廣告放哪些頁面，才能加廣告程式；AdSense 後台的「自動廣告」要關掉，至少關掉插頁式和錨定廣告，只用 AGENTS.md 規定的手動廣告單元）
 
 ## 待 Adrian 決定
 
