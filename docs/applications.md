@@ -125,14 +125,14 @@
 **申請條件**（2026-10-20 查詢）
 
 - 官方條件：內容要「高品質、原創，並能吸引讀者」；要能存取網站的 HTML 原始碼；年滿 18 歲；網站要符合計畫政策（[AdSense 資格條件](https://support.google.com/adsense/answer/9724)）。
-- 第三方說明指出，免費主機的子網域通常不被接受，要用自己的網域申請。`toollamp.github.io` 屬於這種情況，所以照計畫等買了自有網域再申請。官方頁面沒有直接寫到 github.io，標為待確認。
-- 申請前要做的事：買網域並設定到 GitHub Pages、更新 canonical 和 sitemap 的網址、完成第 6 階段的廣告版位、更新兩份隱私權政策（AdSense 會使用 cookie）。
+- 網址：Google 官方說明列出可以加入的網站包括「已列在 Public Suffix List 上的平台的子網域（例如 site.appspot.com）」（[可以加入哪些網站](https://support.google.com/adsense/answer/12170421)）。`github.io` 在 Public Suffix List 上，所以 `toollamp.github.io` 可以直接申請，不用先買網域（2026-10-22 查證，更正之前「免費子網域不被接受」的第三方說法）。
+- 申請前要做的事：把 Google 給的發布商 ID 交給 AI，用 `google-adsense-account` meta 標籤或 `ads.txt` 驗證網站（不用先放廣告程式碼）。核准後、真的放廣告前，要更新兩份隱私權政策（AdSense 會使用 cookie）和 footer。
 
 **申請表可能會問的欄位**
 
 | 欄位 | 填寫內容 |
 |---|---|
-| 網站網址 | 之後的自有網域 |
+| 網站網址 | `https://toollamp.github.io/` |
 | 網站內容語言 | 繁體中文、英文 |
 
 ## 建議的申請順序
@@ -140,4 +140,4 @@
 1. **蝦皮分潤計畫**：先確認只有網站能不能申請。如果一定要有社群帳號，再決定要不要開 Facebook 粉絲專頁。
 2. **AliExpress 聯盟**：沒有查到流量門檻，可以現在申請。
 3. **Amazon Associates**：等英文頁有穩定流量再申請，避免 180 天的成交門檻（待確認）讓帳號被關。
-4. **Google AdSense**：等買了自有網域。
+4. **Google AdSense**：可以用 `toollamp.github.io` 申請，不用等網域；什麼時候申請由 Adrian 決定。

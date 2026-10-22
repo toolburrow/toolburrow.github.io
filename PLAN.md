@@ -12,7 +12,7 @@
 
 - 中文生活工具：對象是台灣使用者，搭配蝦皮分潤。
 - 英文電子工程工具：對象是全球工程師，搭配電子零件、開發板的聯盟連結。
-- 先用 `toollamp.github.io` 免費經營，流量起來後再買自有網域、申請 AdSense。
+- 先用 `toollamp.github.io` 免費經營。AdSense 可以直接用這個網址申請（`github.io` 在 Public Suffix List 上），自有網域等流量起來再考慮。
 
 ## 怎麼使用這份計畫
 
@@ -36,7 +36,7 @@
 | 蝦皮分潤計畫 | 中文工具頁（`zh-tw/`） | 尚未申請 | |
 | AliExpress 聯盟 | 英文工具頁（`en/`） | 尚未申請 | |
 | Amazon Associates | 英文工具頁（`en/`） | 尚未申請 | 新帳號有成交門檻，申請前先確認 |
-| Google AdSense | 全站 | 等待自有網域 | github.io 子網域不能申請 |
+| Google AdSense | 全站 | 尚未申請 | 可以用 `toollamp.github.io` 申請，不用先買網域（2026-10-22 查證，見決策紀錄） |
 
 Adrian 告訴你某個計畫通過時：更新這張表，再把他提供的連結填進 `assets/affiliates.js`。
 不要自己產生或猜測任何聯盟連結。
@@ -253,13 +253,14 @@ Rup／Rdown 分壓已經有分壓電阻工具，不另外做。
 - [x] 用無痕視窗打開任一個工具頁的「填寫意見回饋」，送出一筆測試：2026-10-21 完成，新回應的 email 通知已開啟，測試有收到通知。
 - [ ] 申請蝦皮分潤計畫
 - [ ] 申請 AliExpress 聯盟或 Amazon Associates
-- [ ] 流量穩定後購買自有網域，再申請 AdSense
+- [ ] 申請 AdSense：可以直接用 `toollamp.github.io`，不用先買網域。網站驗證建議用 meta 標籤或 ads.txt（把 Google 給的發布商 ID 交給 AI 加），不用先放廣告程式碼。
 
 ## 待 Adrian 決定
 
 - 日期工具開啟時的預設情境是「到明年 1 月 1 日還有幾天」，要不要換成別的？
 - 理財分類還要不要加別的工具？剩下的候選：定存利息、勞保／勞退試算。建議等 Search Console 有資料再決定。
 - 貸款試算中文頁預設 1000 萬、2.2%、30 年，要不要換成更常見的情境（例如新青安的利率）？利率會變動，所以頁面上沒有寫任何銀行的實際利率。
+- 要不要現在申請 AdSense？不用買網域了，審核主要看內容品質和原創性，目前有 40 個工具頁（中英各 20 個）。核准後真的放廣告前，要先更新兩份隱私權政策、footer，以及決定放哪些頁面。
 - 加廣告時，所有頁面 footer 的「不會上傳任何資料」要改寫。計算確實不會上傳，但 AdSense 會用 cookie。可以在第 3 階段做隱私權政策時一起處理。
 - 蝦皮分潤計畫官方說明只列 YouTube、Instagram、Facebook 粉絲專頁，沒提到網站。如果申請時一定要連結社群帳號，要不要開一個 ToolLamp 的 Facebook 粉絲專頁？（詳見 `docs/applications.md`）
 - Amazon Associates 建議等英文頁有穩定流量再申請，因為很多來源說新帳號要在 180 天內成交 3 筆，否則帳號會被關（官方文件沒找到這條，待確認）。
@@ -304,3 +305,4 @@ Rup／Rdown 分壓已經有分壓電阻工具，不另外做。
 - 2026-10-21：第 12 階段的兩個工具都放在 electronics 分類。電容代碼輸入電容值時一定要帶單位（只打數字不知道是 pF 還是 µF）；SMD 電阻輸入阻值時只打數字就是 Ω，和其他電阻工具一致。
 - 2026-10-22：Adrian 的試算表做成三個新工具（並聯電阻、ADC、PWM 頻率），BootApp 不放上網站。ADC 預設除以 2^N（4096），可切換成 2^N − 1（Adrian 決定）。PWM 公式用 STM32 的 (PSC+1)(ARR+1)，中央對齊用 2 × ARR。
 - 2026-10-22：第 13 階段先推到 `claude/stoic-davinci-yqjnli` 分支，Adrian 確認後合併到 `main` 發布。
+- 2026-10-22：更正 AdSense 的條件。Adrian 轉來其他 AI 的說法，查證 Google 官方說明（support.google.com/adsense/answer/12170421）：可以加入 AdSense 的網站包括「已列在 Public Suffix List 上的平台的子網域（例如 site.appspot.com）」，而 `github.io` 在 Public Suffix List 上（2026-10-22 確認），所以 `toollamp.github.io` 可以直接申請，不用先買網域。之前「github.io 子網域不能申請」是根據第三方說明，是錯的。能加入不代表一定核准，Google 還是會審內容。
