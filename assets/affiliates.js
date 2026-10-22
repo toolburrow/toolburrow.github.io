@@ -57,6 +57,7 @@ var AFF = (function () {
     'zh-tw/pwm-frequency': [
       { name: 'STM32 NUCLEO-F446RE 開發板', url: 'https://s.shopee.tw/gR2QkPsRj', note: '適合練習計時器、PWM 頻率與佔空比設定。' }
     ],
+    'zh-tw/number-base-converter': [],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
@@ -76,7 +77,8 @@ var AFF = (function () {
     'en/smd-resistor-code': [],
     'en/parallel-resistor': [],
     'en/adc-calculator': [],
-    'en/pwm-frequency': []
+    'en/pwm-frequency': [],
+    'en/number-base-converter': []
   };
 
   var TEXT = {

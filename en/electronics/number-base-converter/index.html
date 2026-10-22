@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google-adsense-account" content="ca-pub-2504634231316841">
+<title>Number Base Converter: Binary, Decimal, Hex and ASCII - ToolLamp</title>
+<meta name="description" content="Free number base converter. Binary, decimal and hex both ways, 8 to 64-bit two’s complement, and text to ASCII or UTF-8 codes and back.">
+<link rel="canonical" href="https://toollamp.github.io/en/electronics/number-base-converter/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/number-base-converter/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/number-base-converter/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="Number Base Converter: Binary, Decimal, Hex and ASCII">
+<meta property="og:description" content="Free number base converter. Binary, decimal and hex both ways, 8 to 64-bit two’s complement, and text to ASCII or UTF-8 codes and back.">
+<meta property="og:url" content="https://toollamp.github.io/en/electronics/number-base-converter/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=2">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js?v=3"></script>
+<script src="/assets/favorites.js"></script>
+<style>
+  textarea { width: 100%; min-height: 5.5rem; padding: .6rem .75rem; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--field); color: var(--text); font: inherit; resize: vertical; }
+  textarea:focus { border-color: var(--accent); }
+  .choice + .field { margin-top: 1rem; }
+  #dec-input, #hex-input, #bin-input, #code-input { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .ascii-table th, .ascii-table td { padding: .3rem .45rem; font-variant-numeric: tabular-nums; }
+  .ascii-table td:nth-child(3n) { padding-right: 1.2rem; font-weight: 650; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Number base converter",
+  "url": "https://toollamp.github.io/en/electronics/number-base-converter/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Electronics</div>
+    <h1><span class="tile" aria-hidden="true"><svg class="ico" focusable="false"><use href="/assets/icons.svg#number-base-converter"/></svg></span>Number base converter</h1>
+    <p>Convert between binary, decimal and hex, with the ASCII character and byte order. Also turns text into ASCII or UTF-8 codes and back.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="num-h">
+    <h2 id="num-h">Binary, decimal and hex</h2>
+    <div class="row">
+      <div class="field">
+        <label for="dec-input">Decimal</label>
+        <input id="dec-input" type="text" autocomplete="off" spellcheck="false" value="65" placeholder="e.g. 65 or -1">
+      </div>
+      <div class="field">
+        <label for="hex-input">Hex</label>
+        <input id="hex-input" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 41 or 0x41">
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="bin-input">Binary</label>
+        <input id="bin-input" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 0100 0001">
+      </div>
+    </div>
+    <div class="choice">
+      <span id="width-label">Bit width (pick 8 to 64 bits to enter negative numbers as two’s complement)</span>
+      <div class="seg" id="width-seg" role="group" aria-labelledby="width-label"></div>
+    </div>
+    <div class="result" id="num-result" aria-live="polite" hidden></div>
+  </section>
+
+  <section class="tool" aria-labelledby="text-h">
+    <h2 id="text-h">Text and ASCII codes</h2>
+    <div class="field">
+      <label for="text-input">Text</label>
+      <textarea id="text-input" rows="3" spellcheck="false">Hello</textarea>
+    </div>
+    <div class="choice">
+      <span id="fmt-label">Code format</span>
+      <div class="seg" id="fmt-seg" role="group" aria-labelledby="fmt-label"></div>
+    </div>
+    <div class="field">
+      <label for="code-input">Codes (bytes separated by spaces; 0x48, 0x65 or 48656C also work)</label>
+      <textarea id="code-input" rows="3" spellcheck="false"></textarea>
+    </div>
+    <div class="result" id="text-result" aria-live="polite" hidden></div>
+  </section>
+
+  <p class="feedback">Wrong result or a typo? <a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fnumber-base-converter%2F" target="_blank" rel="noopener">Send feedback</a></p>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/number-base-converter" hidden></aside>
+
+  <article class="article">
+    <h2>How to convert between binary, decimal and hex</h2>
+    <p>Each binary digit, counted from the right, is worth 1, 2, 4, 8, 16, 32, 64, 128 and so on. Add up the places that hold a 1 to get the decimal value: 0100 0001 = 64 + 1 = 65.</p>
+    <p>To go from decimal to binary, subtract the largest power of two that fits and repeat: 65 = 64 + 1, so bits 7 and 1 are set and the rest are 0.</p>
+    <p>Hex uses 0–9 and A–F for 0 to 15, which is exactly four binary digits. Split the binary into groups of four from the right and replace each group with one hex digit: 0100 0001 → 4, 1 → 0x41. That’s why firmware and datasheets write register values in hex.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Decimal</th><th>Binary</th><th>Hex</th><th>Decimal</th><th>Binary</th><th>Hex</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0000</td><td>0</td><td>8</td><td>1000</td><td>8</td></tr>
+          <tr><td>1</td><td>0001</td><td>1</td><td>9</td><td>1001</td><td>9</td></tr>
+          <tr><td>2</td><td>0010</td><td>2</td><td>10</td><td>1010</td><td>A</td></tr>
+          <tr><td>3</td><td>0011</td><td>3</td><td>11</td><td>1011</td><td>B</td></tr>
+          <tr><td>4</td><td>0100</td><td>4</td><td>12</td><td>1100</td><td>C</td></tr>
+          <tr><td>5</td><td>0101</td><td>5</td><td>13</td><td>1101</td><td>D</td></tr>
+          <tr><td>6</td><td>0110</td><td>6</td><td>14</td><td>1110</td><td>E</td></tr>
+          <tr><td>7</td><td>0111</td><td>7</td><td>15</td><td>1111</td><td>F</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Negative numbers and two’s complement</h2>
+    <p>Computers store negative numbers in two’s complement: invert every bit of the positive number and add 1. In 8 bits, -1 is 1111 1111 (0xFF) and -128 is 1000 0000 (0x80). The same bits read as 255 unsigned or -1 signed, depending on how the program declares them.</p>
+    <p>Once you pick a bit width in the tool above, you can type a negative decimal number, and the result lists the signed value. The range of each width:</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Bits</th><th>Unsigned</th><th>Signed</th><th>C type</th></tr></thead>
+        <tbody>
+          <tr><td>8</td><td>0 to 255</td><td>-128 to 127</td><td>uint8_t / int8_t</td></tr>
+          <tr><td>16</td><td>0 to 65,535</td><td>-32,768 to 32,767</td><td>uint16_t / int16_t</td></tr>
+          <tr><td>32</td><td>0 to 4,294,967,295</td><td>-2,147,483,648 to 2,147,483,647</td><td>uint32_t / int32_t</td></tr>
+          <tr><td>64</td><td>0 to about 1.8 × 10¹⁹</td><td>about ±9.2 × 10¹⁸</td><td>uint64_t / int64_t</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>ASCII table</h2>
+    <p>ASCII uses 0 to 127 for English letters, digits, punctuation and control characters. 0 to 31 and 127 are control characters such as LF (line feed, 0x0A), CR (carriage return, 0x0D) and ESC (0x1B); 32 is the space (SP). A few patterns worth remembering: digits 0–9 are 0x30–0x39, uppercase A is 0x41, lowercase a is 0x61, and the two cases differ by exactly 0x20.</p>
+    <div class="table-scroll">
+      <table class="ascii-table">
+        <thead><tr><th>Dec</th><th>Hex</th><th>Char</th><th>Dec</th><th>Hex</th><th>Char</th><th>Dec</th><th>Hex</th><th>Char</th><th>Dec</th><th>Hex</th><th>Char</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>00</td><td>NUL</td><td>32</td><td>20</td><td>SP</td><td>64</td><td>40</td><td>@</td><td>96</td><td>60</td><td>`</td></tr>
+          <tr><td>1</td><td>01</td><td>SOH</td><td>33</td><td>21</td><td>!</td><td>65</td><td>41</td><td>A</td><td>97</td><td>61</td><td>a</td></tr>
+          <tr><td>2</td><td>02</td><td>STX</td><td>34</td><td>22</td><td>"</td><td>66</td><td>42</td><td>B</td><td>98</td><td>62</td><td>b</td></tr>
+          <tr><td>3</td><td>03</td><td>ETX</td><td>35</td><td>23</td><td>#</td><td>67</td><td>43</td><td>C</td><td>99</td><td>63</td><td>c</td></tr>
+          <tr><td>4</td><td>04</td><td>EOT</td><td>36</td><td>24</td><td>$</td><td>68</td><td>44</td><td>D</td><td>100</td><td>64</td><td>d</td></tr>
+          <tr><td>5</td><td>05</td><td>ENQ</td><td>37</td><td>25</td><td>%</td><td>69</td><td>45</td><td>E</td><td>101</td><td>65</td><td>e</td></tr>
+          <tr><td>6</td><td>06</td><td>ACK</td><td>38</td><td>26</td><td>&amp;</td><td>70</td><td>46</td><td>F</td><td>102</td><td>66</td><td>f</td></tr>
+          <tr><td>7</td><td>07</td><td>BEL</td><td>39</td><td>27</td><td>'</td><td>71</td><td>47</td><td>G</td><td>103</td><td>67</td><td>g</td></tr>
+          <tr><td>8</td><td>08</td><td>BS</td><td>40</td><td>28</td><td>(</td><td>72</td><td>48</td><td>H</td><td>104</td><td>68</td><td>h</td></tr>
+          <tr><td>9</td><td>09</td><td>HT</td><td>41</td><td>29</td><td>)</td><td>73</td><td>49</td><td>I</td><td>105</td><td>69</td><td>i</td></tr>
+          <tr><td>10</td><td>0A</td><td>LF</td><td>42</td><td>2A</td><td>*</td><td>74</td><td>4A</td><td>J</td><td>106</td><td>6A</td><td>j</td></tr>
+          <tr><td>11</td><td>0B</td><td>VT</td><td>43</td><td>2B</td><td>+</td><td>75</td><td>4B</td><td>K</td><td>107</td><td>6B</td><td>k</td></tr>
+          <tr><td>12</td><td>0C</td><td>FF</td><td>44</td><td>2C</td><td>,</td><td>76</td><td>4C</td><td>L</td><td>108</td><td>6C</td><td>l</td></tr>
+          <tr><td>13</td><td>0D</td><td>CR</td><td>45</td><td>2D</td><td>-</td><td>77</td><td>4D</td><td>M</td><td>109</td><td>6D</td><td>m</td></tr>
+          <tr><td>14</td><td>0E</td><td>SO</td><td>46</td><td>2E</td><td>.</td><td>78</td><td>4E</td><td>N</td><td>110</td><td>6E</td><td>n</td></tr>
+          <tr><td>15</td><td>0F</td><td>SI</td><td>47</td><td>2F</td><td>/</td><td>79</td><td>4F</td><td>O</td><td>111</td><td>6F</td><td>o</td></tr>
+          <tr><td>16</td><td>10</td><td>DLE</td><td>48</td><td>30</td><td>0</td><td>80</td><td>50</td><td>P</td><td>112</td><td>70</td><td>p</td></tr>
+          <tr><td>17</td><td>11</td><td>DC1</td><td>49</td><td>31</td><td>1</td><td>81</td><td>51</td><td>Q</td><td>113</td><td>71</td><td>q</td></tr>
+          <tr><td>18</td><td>12</td><td>DC2</td><td>50</td><td>32</td><td>2</td><td>82</td><td>52</td><td>R</td><td>114</td><td>72</td><td>r</td></tr>
+          <tr><td>19</td><td>13</td><td>DC3</td><td>51</td><td>33</td><td>3</td><td>83</td><td>53</td><td>S</td><td>115</td><td>73</td><td>s</td></tr>
+          <tr><td>20</td><td>14</td><td>DC4</td><td>52</td><td>34</td><td>4</td><td>84</td><td>54</td><td>T</td><td>116</td><td>74</td><td>t</td></tr>
+          <tr><td>21</td><td>15</td><td>NAK</td><td>53</td><td>35</td><td>5</td><td>85</td><td>55</td><td>U</td><td>117</td><td>75</td><td>u</td></tr>
+          <tr><td>22</td><td>16</td><td>SYN</td><td>54</td><td>36</td><td>6</td><td>86</td><td>56</td><td>V</td><td>118</td><td>76</td><td>v</td></tr>
+          <tr><td>23</td><td>17</td><td>ETB</td><td>55</td><td>37</td><td>7</td><td>87</td><td>57</td><td>W</td><td>119</td><td>77</td><td>w</td></tr>
+          <tr><td>24</td><td>18</td><td>CAN</td><td>56</td><td>38</td><td>8</td><td>88</td><td>58</td><td>X</td><td>120</td><td>78</td><td>x</td></tr>
+          <tr><td>25</td><td>19</td><td>EM</td><td>57</td><td>39</td><td>9</td><td>89</td><td>59</td><td>Y</td><td>121</td><td>79</td><td>y</td></tr>
+          <tr><td>26</td><td>1A</td><td>SUB</td><td>58</td><td>3A</td><td>:</td><td>90</td><td>5A</td><td>Z</td><td>122</td><td>7A</td><td>z</td></tr>
+          <tr><td>27</td><td>1B</td><td>ESC</td><td>59</td><td>3B</td><td>;</td><td>91</td><td>5B</td><td>[</td><td>123</td><td>7B</td><td>{</td></tr>
+          <tr><td>28</td><td>1C</td><td>FS</td><td>60</td><td>3C</td><td>&lt;</td><td>92</td><td>5C</td><td>\</td><td>124</td><td>7C</td><td>|</td></tr>
+          <tr><td>29</td><td>1D</td><td>GS</td><td>61</td><td>3D</td><td>=</td><td>93</td><td>5D</td><td>]</td><td>125</td><td>7D</td><td>}</td></tr>
+          <tr><td>30</td><td>1E</td><td>RS</td><td>62</td><td>3E</td><td>&gt;</td><td>94</td><td>5E</td><td>^</td><td>126</td><td>7E</td><td>~</td></tr>
+          <tr><td>31</td><td>1F</td><td>US</td><td>63</td><td>3F</td><td>?</td><td>95</td><td>5F</td><td>_</td><td>127</td><td>7F</td><td>DEL</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>FAQ</h2>
+    <h3>What does 0x mean in front of a hex number?</h3>
+    <p>It only marks the number as hex and isn’t part of the value: 0x41, 41h and $41 are the same number. C, Python and JavaScript use 0x; assembly often uses an h suffix. Binary is often written with 0b. The tool accepts numbers with or without these prefixes.</p>
+    <h3>What’s the difference between big-endian and little-endian?</h3>
+    <p>When a multi-byte number is stored in memory or sent over a wire, big-endian puts the most significant byte first and little-endian puts the least significant byte first. 0x12345678 is 12 34 56 78 in big-endian and 78 56 34 12 in little-endian. ARM Cortex-M and x86 are little-endian; network protocols and many sensor registers are big-endian. If the bytes on a logic analyzer or UART look reversed, this is usually why.</p>
+    <h3>Can Chinese or accented characters be converted to ASCII?</h3>
+    <p>No. ASCII only has 128 characters. Web pages and most software now use UTF-8, where ASCII characters stay one byte and other characters take 2 to 4 bytes: é is C3 A9 and 你 is E4 BD A0. The tool converts text as UTF-8.</p>
+    <h3>Why is the ASCII code of the digit 0 equal to 48?</h3>
+    <p>ASCII puts the digits 0–9 at 0x30–0x39. A '7' received over UART is the byte 0x37; subtract 0x30 (or '0') to get the number 7. Forgetting this is a common firmware bug.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/electronics/dip-switch-calculator/"><span class="tile" aria-hidden="true"><svg class="ico" focusable="false"><use href="/assets/icons.svg#dip-switch-calculator"/></svg></span><span class="tool-name">DIP switch calculator</span><span class="tool-desc">Switches to number, DMX addresses</span></a></li>
+      <li><a href="/en/electronics/uart-baud-rate/"><span class="tile" aria-hidden="true"><svg class="ico" focusable="false"><use href="/assets/icons.svg#uart-baud-rate"/></svg></span><span class="tool-name">UART baud rate error calculator</span><span class="tool-desc">Divisor, real baud rate, error %</span></a></li>
+      <li><a href="/en/electronics/adc-calculator/"><span class="tile" aria-hidden="true"><svg class="ico" focusable="false"><use href="/assets/icons.svg#adc-calculator"/></svg></span><span class="tool-name">ADC calculator</span><span class="tool-desc">Voltage to ADC value and back</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p>Some pages contain affiliate links. We may earn a small commission if you buy through them.</p>
+    <p>© 2026 ToolLamp</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a><a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fnumber-base-converter%2F" target="_blank" rel="noopener">Feedback</a></p>
+  </div>
+</footer>
+<script src="/assets/tools/number-base-converter.js"></script>
+</body>
+</html>
