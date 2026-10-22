@@ -57,7 +57,9 @@ var AFF = (function () {
     'zh-tw/pwm-frequency': [
       { name: 'STM32 NUCLEO-F446RE 開發板', url: 'https://s.shopee.tw/gR2QkPsRj', note: '適合練習計時器、PWM 頻率與佔空比設定。' }
     ],
-    'zh-tw/number-base-converter': [],
+    'zh-tw/number-base-converter': [
+      { name: 'CH340G USB 轉 TTL 模組', url: 'https://s.shopee.tw/4qGbYtkd5s', note: '抓 UART 資料，搭配本工具解讀 HEX 與 ASCII。' }
+    ],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
