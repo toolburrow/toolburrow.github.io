@@ -69,11 +69,30 @@
         <input id="fwd-clock" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 72, 16M, 170M">
       </div>
       <div class="field">
-        <label for="fwd-psc">Prescaler PSC</label>
+        <label for="fwd-presc">Prescaler type</label>
+        <select id="fwd-presc">
+          <option value="stm32">PSC register (STM32)</option>
+          <option value="avr">AVR prescaler N</option>
+        </select>
+      </div>
+      <div class="field" id="fwd-psc-field">
+        <label for="fwd-psc">Prescaler PSC (divides by PSC + 1)</label>
         <input id="fwd-psc" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="e.g. 0, 71">
       </div>
+      <div class="field" id="fwd-div-field" hidden>
+        <label for="fwd-div">AVR prescaler N</label>
+        <select id="fwd-div">
+          <option value="1">1</option>
+          <option value="8">8</option>
+          <option value="32">32 (Timer2 only)</option>
+          <option value="64" selected>64</option>
+          <option value="128">128 (Timer2 only)</option>
+          <option value="256">256</option>
+          <option value="1024">1024</option>
+        </select>
+      </div>
       <div class="field">
-        <label for="fwd-arr">Auto-reload ARR</label>
+        <label for="fwd-arr">Auto-reload ARR (AVR: TOP)</label>
         <input id="fwd-arr" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 999, 0xFFFF">
       </div>
     </div>
@@ -81,8 +100,8 @@
       <div class="field">
         <label for="fwd-mode">Counting</label>
         <select id="fwd-mode">
-          <option value="edge">Up (edge-aligned)</option>
-          <option value="center">Up/down (center-aligned)</option>
+          <option value="edge">Up (edge-aligned, AVR fast PWM)</option>
+          <option value="center">Up/down (center-aligned, AVR phase correct)</option>
         </select>
       </div>
       <div class="field">
@@ -90,6 +109,7 @@
         <select id="fwd-bits">
           <option value="16">16-bit (ARR up to 65535)</option>
           <option value="32">32-bit (TIM2, TIM5)</option>
+          <option value="8">8-bit (AVR Timer0, Timer2)</option>
         </select>
       </div>
       <div class="field">
@@ -114,10 +134,17 @@
     </div>
     <div class="row">
       <div class="field">
+        <label for="solve-presc">Prescaler type</label>
+        <select id="solve-presc">
+          <option value="stm32">PSC register (STM32)</option>
+          <option value="avr">AVR prescaler N</option>
+        </select>
+      </div>
+      <div class="field">
         <label for="solve-mode">Counting</label>
         <select id="solve-mode">
-          <option value="edge">Up (edge-aligned)</option>
-          <option value="center">Up/down (center-aligned)</option>
+          <option value="edge">Up (edge-aligned, AVR fast PWM)</option>
+          <option value="center">Up/down (center-aligned, AVR phase correct)</option>
         </select>
       </div>
       <div class="field">
@@ -125,6 +152,7 @@
         <select id="solve-bits">
           <option value="16">16-bit (ARR up to 65535)</option>
           <option value="32">32-bit (TIM2, TIM5)</option>
+          <option value="8">8-bit (AVR Timer0, Timer2)</option>
         </select>
       </div>
     </div>
@@ -165,7 +193,7 @@
     <h3>Which clock does my STM32 timer use?</h3>
     <p>Timers run from their APB bus clock. When the APB prescaler is more than 1, most STM32 parts run the timers at twice the APB clock, so on an STM32F103 at 72 MHz with APB1 at 36 MHz, TIM2 to TIM4 still see 72 MHz. Check the clock tree in your reference manual or CubeMX.</p>
     <h3>Does this work for AVR and Arduino?</h3>
-    <p>Yes. In AVR fast PWM, f = f<sub>clock</sub> / (N × (1 + TOP)), so enter PSC = N − 1 (0, 7, 63, 255 or 1023) and ARR = TOP. Phase-correct PWM matches the center-aligned formula. The Arduino Uno’s default PWM on pins 5 and 6 is 16 MHz / (64 × 256) ≈ 977 Hz.</p>
+    <p>Yes. In AVR fast PWM, f = f<sub>clock</sub> / (N × (1 + TOP)), so choose “AVR prescaler N” as the prescaler type, pick N from the list and enter TOP as ARR. For 8-bit Timer0 and Timer2, choose the 8-bit timer. Phase-correct PWM matches the center-aligned formula. The Arduino Uno’s default PWM on pins 5 and 6 is 16 MHz / (64 × 256) ≈ 977 Hz.</p>
     <h3>What PWM frequency should I use?</h3>
     <p>LED dimming is usually a few hundred Hz to a few kHz, high enough to avoid visible flicker. Motors are often driven at 20 kHz or more so the switching can’t be heard. Hobby servos expect 50 Hz with a 1 to 2 ms pulse.</p>
   </article>

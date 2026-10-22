@@ -69,11 +69,30 @@
         <input id="fwd-clock" type="text" autocomplete="off" spellcheck="false" placeholder="例如 72、16M、170M">
       </div>
       <div class="field">
-        <label for="fwd-psc">預除頻 PSC</label>
+        <label for="fwd-presc">預除頻方式</label>
+        <select id="fwd-presc">
+          <option value="stm32">PSC 暫存器（STM32）</option>
+          <option value="avr">AVR 預除頻 N</option>
+        </select>
+      </div>
+      <div class="field" id="fwd-psc-field">
+        <label for="fwd-psc">預除頻 PSC（除以 PSC + 1）</label>
         <input id="fwd-psc" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="例如 0、71">
       </div>
+      <div class="field" id="fwd-div-field" hidden>
+        <label for="fwd-div">AVR 預除頻 N</label>
+        <select id="fwd-div">
+          <option value="1">1</option>
+          <option value="8">8</option>
+          <option value="32">32（只有 Timer2）</option>
+          <option value="64" selected>64</option>
+          <option value="128">128（只有 Timer2）</option>
+          <option value="256">256</option>
+          <option value="1024">1024</option>
+        </select>
+      </div>
       <div class="field">
-        <label for="fwd-arr">自動重載 ARR</label>
+        <label for="fwd-arr">自動重載 ARR（AVR：TOP）</label>
         <input id="fwd-arr" type="text" autocomplete="off" spellcheck="false" placeholder="例如 999、0xFFFF">
       </div>
     </div>
@@ -81,8 +100,8 @@
       <div class="field">
         <label for="fwd-mode">計數方式</label>
         <select id="fwd-mode">
-          <option value="edge">向上計數（邊緣對齊）</option>
-          <option value="center">上下計數（中央對齊）</option>
+          <option value="edge">向上計數（邊緣對齊，AVR Fast PWM）</option>
+          <option value="center">上下計數（中央對齊，AVR Phase Correct）</option>
         </select>
       </div>
       <div class="field">
@@ -90,6 +109,7 @@
         <select id="fwd-bits">
           <option value="16">16 位元（ARR 最大 65535）</option>
           <option value="32">32 位元（TIM2、TIM5）</option>
+          <option value="8">8 位元（AVR Timer0、Timer2）</option>
         </select>
       </div>
       <div class="field">
@@ -114,10 +134,17 @@
     </div>
     <div class="row">
       <div class="field">
+        <label for="solve-presc">預除頻方式</label>
+        <select id="solve-presc">
+          <option value="stm32">PSC 暫存器（STM32）</option>
+          <option value="avr">AVR 預除頻 N</option>
+        </select>
+      </div>
+      <div class="field">
         <label for="solve-mode">計數方式</label>
         <select id="solve-mode">
-          <option value="edge">向上計數（邊緣對齊）</option>
-          <option value="center">上下計數（中央對齊）</option>
+          <option value="edge">向上計數（邊緣對齊，AVR Fast PWM）</option>
+          <option value="center">上下計數（中央對齊，AVR Phase Correct）</option>
         </select>
       </div>
       <div class="field">
@@ -125,6 +152,7 @@
         <select id="solve-bits">
           <option value="16">16 位元（ARR 最大 65535）</option>
           <option value="32">32 位元（TIM2、TIM5）</option>
+          <option value="8">8 位元（AVR Timer0、Timer2）</option>
         </select>
       </div>
     </div>
@@ -165,7 +193,7 @@
     <h3>STM32 的計時器時脈是多少？</h3>
     <p>計時器接在 APB 匯流排上。APB 預除頻大於 1 時，大部分 STM32 的計時器時脈是 APB 時脈的兩倍。例如 STM32F103 跑 72 MHz、APB1 是 36 MHz 時，TIM2～TIM4 還是 72 MHz。請以參考手冊或 CubeMX 的時脈樹為準。</p>
     <h3>AVR 和 Arduino 也能用嗎？</h3>
-    <p>可以。AVR 的 Fast PWM 是 f = f<sub>時脈</sub> /（N × (1 + TOP)），PSC 填 N − 1（0、7、63、255 或 1023），ARR 填 TOP。Phase Correct PWM 對應中央對齊的公式。Arduino Uno 的 5、6 腳預設 PWM 是 16 MHz /（64 × 256）≈ 977 Hz。</p>
+    <p>可以。AVR 的 Fast PWM 是 f = f<sub>時脈</sub> /（N × (1 + TOP)），預除頻方式選「AVR 預除頻 N」，從清單選 N，ARR 填 TOP。8 位元的 Timer0、Timer2 請選 8 位元計時器。Phase Correct PWM 對應中央對齊的公式。Arduino Uno 的 5、6 腳預設 PWM 是 16 MHz /（64 × 256）≈ 977 Hz。</p>
     <h3>PWM 頻率該設多少？</h3>
     <p>LED 調光通常用幾百 Hz 到幾 kHz，避免看得到閃爍。馬達常用 20 kHz 以上，讓切換的聲音超出人耳範圍。模型伺服馬達要 50 Hz、脈寬 1～2 ms。</p>
   </article>

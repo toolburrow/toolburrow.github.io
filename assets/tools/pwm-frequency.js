@@ -2,10 +2,12 @@
 // Pure logic first (testable with node), then page text per language, then DOM wiring.
 // A timer counts the prescaled clock up to ARR and starts again. Edge-aligned (up counting):
 // f = clock / ((PSC + 1) × (ARR + 1)). Center-aligned (up/down): f = clock / ((PSC + 1) × 2 × ARR).
-// The same form fits STM32 timers and AVR fast / phase-correct PWM (PSC + 1 = the AVR prescaler, ARR = TOP).
+// The same form fits AVR fast / phase-correct PWM, where the prescaler N is chosen from a fixed list (N = PSC + 1)
+// and TOP plays the part of ARR. presc is 'stm32' (PSC register, any value) or 'avr' (one of AVR_DIV).
 var PWM = (function () {
   var PSC_MAX = 65535;
-  var ARR_MAX = { 16: 65535, 32: 4294967295 };
+  var ARR_MAX = { 8: 255, 16: 65535, 32: 4294967295 };
+  var AVR_DIV = [1, 8, 32, 64, 128, 256, 1024]; // 32 and 128 exist on Timer2 of the ATmega328P only
 
   function clean(x) { return Number(x.toPrecision(12)); }
 
@@ -35,9 +37,16 @@ var PWM = (function () {
   function steps(arr, mode) { return mode === 'center' ? 2 * arr : arr + 1; }
 
   // Clock, PSC, ARR (and a duty cycle in %) -> frequency, period, resolution and the compare value.
-  function forward(clockText, pscText, arrText, mode, dutyText, arrBits) {
+  // For presc 'avr', pscText is the prescaler N itself.
+  function forward(clockText, pscText, arrText, mode, dutyText, arrBits, presc) {
     var c = readFreq(clockText, 'clock', 1e6); if (c.error) return c;
-    var p = readReg(pscText, 'psc', PSC_MAX); if (p.error) return p;
+    var p;
+    if (presc === 'avr') {
+      p = AVR_DIV.indexOf(Number(pscText)) < 0 ? { error: 'div-format' } : { v: Number(pscText) - 1 };
+    } else {
+      p = readReg(pscText, 'psc', PSC_MAX);
+    }
+    if (p.error) return p;
     var a = readReg(arrText, 'arr', ARR_MAX[arrBits]); if (a.error) return a;
     if (a.v < 1) return { error: 'arr-small' };
     var duty = String(dutyText == null ? '' : dutyText).trim().replace(/%$/, '');
@@ -49,34 +58,36 @@ var PWM = (function () {
     // Duty = CCR / (ARR + 1) edge-aligned, CCR / ARR center-aligned, so both use the counts per half or full period.
     var top = mode === 'center' ? a.v : a.v + 1;
     var ccr = d === null ? null : Math.round(d / 100 * top);
-    return { hz: c.hz, psc: p.v, arr: a.v, mode: mode, tick: clean(tick), freq: clean(freq), period: clean(1 / freq),
+    return { hz: c.hz, psc: p.v, div: p.v + 1, arr: a.v, mode: mode, tick: clean(tick), freq: clean(freq), period: clean(1 / freq),
       steps: top, bits: clean(Math.log2(top)), dutyStep: clean(100 / top),
       duty: d, ccr: ccr, dutyReal: ccr === null ? null : clean(ccr / top * 100) };
   }
 
   // Clock and target frequency -> PSC and ARR. rows[0] is the highest resolution (smallest PSC); the rest are
   // settings that get closer to the target, closest first.
-  function solve(clockText, targetText, mode, arrBits) {
+  function solve(clockText, targetText, mode, arrBits, presc) {
     var c = readFreq(clockText, 'clock', 1e6); if (c.error) return c;
     var t = readFreq(targetText, 'target', 1); if (t.error) return t;
     var maxArr = ARR_MAX[arrBits];
     var total = c.hz / t.hz; // clock cycles per PWM period
     var minSteps = mode === 'center' ? 4 : 2; // ARR of at least 1 (edge) or 2 (center), so the output can toggle
     if (total < minSteps - 0.5) return { error: 'too-fast', max: clean(c.hz / minSteps) };
+    var divs = presc === 'avr' ? AVR_DIV : null, last = divs ? divs.length : PSC_MAX + 1;
     var list = [];
-    for (var p = 1; p <= PSC_MAX + 1; p++) {
+    for (var i = 0; i < last; i++) {
+      var p = divs ? divs[i] : i + 1;
       var arr = mode === 'center' ? Math.round(total / (2 * p)) : Math.round(total / p) - 1;
       if (arr > maxArr) continue;
       if (steps(arr, mode) < minSteps) break; // larger prescalers only make it coarser
       var f = c.hz / (p * steps(arr, mode));
-      list.push({ psc: p - 1, arr: arr, freq: clean(f), errorPct: clean((f - t.hz) / t.hz * 100),
+      list.push({ psc: p - 1, div: p, arr: arr, freq: clean(f), errorPct: clean((f - t.hz) / t.hz * 100),
         steps: mode === 'center' ? arr : arr + 1 });
     }
-    if (!list.length) return { error: 'too-slow', min: clean(c.hz / ((PSC_MAX + 1) * steps(maxArr, mode))) };
+    if (!list.length) return { error: 'too-slow', min: clean(c.hz / ((divs ? divs[last - 1] : PSC_MAX + 1) * steps(maxArr, mode))) };
     var first = list[0];
     var better = list.slice(1).filter(function (x) { return Math.abs(x.errorPct) < Math.abs(first.errorPct) - 1e-12; })
       .sort(function (x, y) { return Math.abs(x.errorPct) - Math.abs(y.errorPct) || x.psc - y.psc; });
-    return { hz: c.hz, target: t.hz, mode: mode, rows: [first].concat(better.slice(0, 4)) };
+    return { hz: c.hz, target: t.hz, mode: mode, presc: presc, rows: [first].concat(better.slice(0, 4)) };
   }
 
   // Everything the script writes on the page, per language. Both languages must have the same keys.
@@ -95,11 +106,12 @@ var PWM = (function () {
         'psc-range': function (r) { return 'PSC goes up to ' + r.max + '.'; },
         'arr-empty': function () { return 'Enter ARR, for example 999.'; },
         'arr-format': function () { return 'ARR must be a whole number such as 999 or 0xFFFF.'; },
-        'arr-range': function (r) { return 'ARR goes up to ' + r.max + ' on this timer. Choose 32-bit for TIM2 or TIM5.'; },
+        'arr-range': function (r) { return 'ARR goes up to ' + r.max + ' on this timer. Choose a wider timer, or a larger prescaler.'; },
+        'div-format': function () { return 'Choose an AVR prescaler: 1, 8, 32, 64, 128, 256 or 1024.'; },
         'arr-small': function () { return 'ARR must be at least 1.'; },
         'duty-format': function () { return 'Enter the duty cycle as a number from 0 to 100, or leave it empty.'; },
         'too-fast': function (r) { return 'Too fast for this clock. The highest PWM frequency is ' + hzText(r.max) + '.'; },
-        'too-slow': function (r) { return 'Too slow for this timer. The lowest frequency is ' + hzText(r.min) + '; choose 32-bit or a slower clock.'; }
+        'too-slow': function (r) { return 'Too slow for this timer. The lowest frequency is ' + hzText(r.min) + '; choose a wider timer or a slower clock.'; }
       },
       tick: 'Counter clock', period: 'Period', resolution: 'Resolution',
       stepsText: function (n, bits) { return n.toLocaleString('en-US') + ' steps (' + bits + ' bits)'; },
@@ -107,7 +119,8 @@ var PWM = (function () {
       ccr: function (ccr, real) { return 'CCR = ' + ccr + ' gives ' + real + '% duty'; },
       ccrLabel: 'Compare value',
       solveSub: function (f, err) { return 'Gives ' + f + ' (' + err + ') with the finest duty cycle steps.'; },
-      head: { psc: 'PSC', arr: 'ARR', freq: 'Frequency', error: 'Error', steps: 'Steps' }
+      head: { psc: 'PSC', arr: 'ARR', freq: 'Frequency', error: 'Error', steps: 'Steps' },
+      avrHead: { psc: 'N', arr: 'TOP' }
     },
     'zh-tw': {
       copy: '複製', copied: '已複製',
@@ -123,11 +136,12 @@ var PWM = (function () {
         'psc-range': function (r) { return 'PSC 最大是 ' + r.max + '。'; },
         'arr-empty': function () { return '請輸入 ARR，例如 999。'; },
         'arr-format': function () { return 'ARR 要是整數，例如 999 或 0xFFFF。'; },
-        'arr-range': function (r) { return '這個計時器的 ARR 最大是 ' + r.max + '。TIM2、TIM5 請選 32 位元。'; },
+        'arr-range': function (r) { return '這個計時器的 ARR 最大是 ' + r.max + '，請改選位元數比較多的計時器，或加大預除頻。'; },
+        'div-format': function () { return '請選 AVR 的預除頻：1、8、32、64、128、256 或 1024。'; },
         'arr-small': function () { return 'ARR 至少要是 1。'; },
         'duty-format': function () { return '佔空比請輸入 0 到 100 的數字，或留空。'; },
         'too-fast': function (r) { return '這個時脈跑不到這麼快，PWM 頻率最高是 ' + hzText(r.max) + '。'; },
-        'too-slow': function (r) { return '這個計時器跑不到這麼慢，最低是 ' + hzText(r.min) + '，請改選 32 位元或降低時脈。'; }
+        'too-slow': function (r) { return '這個計時器跑不到這麼慢，最低是 ' + hzText(r.min) + '，請改選位元數比較多的計時器或降低時脈。'; }
       },
       tick: '計數時脈', period: '週期', resolution: '解析度',
       stepsText: function (n, bits) { return n.toLocaleString('en-US') + ' 階（' + bits + ' 位元）'; },
@@ -135,7 +149,8 @@ var PWM = (function () {
       ccr: function (ccr, real) { return 'CCR = ' + ccr + '，佔空比 ' + real + '%'; },
       ccrLabel: '比較值',
       solveSub: function (f, err) { return '實際 ' + f + '（' + err + '），佔空比可以調得最細。'; },
-      head: { psc: 'PSC', arr: 'ARR', freq: '頻率', error: '誤差', steps: '階數' }
+      head: { psc: 'PSC', arr: 'ARR', freq: '頻率', error: '誤差', steps: '階數' },
+      avrHead: { psc: 'N', arr: 'TOP' }
     }
   };
 
@@ -147,7 +162,7 @@ var PWM = (function () {
     }
   }
 
-  return { PSC_MAX: PSC_MAX, ARR_MAX: ARR_MAX, readFreq: readFreq, readReg: readReg, forward: forward, solve: solve,
+  return { PSC_MAX: PSC_MAX, ARR_MAX: ARR_MAX, AVR_DIV: AVR_DIV, readFreq: readFreq, readReg: readReg, forward: forward, solve: solve,
     hzText: hzText, TEXT: TEXT };
 })();
 
@@ -169,7 +184,9 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
 
   function renderForward() {
     var out = $('fwd-result');
-    var r = PWM.forward($('fwd-clock').value, $('fwd-psc').value, $('fwd-arr').value, $('fwd-mode').value, $('fwd-duty').value, $('fwd-bits').value);
+    var avr = $('fwd-presc').value === 'avr';
+    var r = PWM.forward($('fwd-clock').value, avr ? $('fwd-div').value : $('fwd-psc').value, $('fwd-arr').value,
+      $('fwd-mode').value, $('fwd-duty').value, $('fwd-bits').value, $('fwd-presc').value);
     if (r.error) { out.innerHTML = errorHtml(r); return; }
     out.innerHTML = main('fwd-main', 'f = ', PWM.hzText(r.freq)) +
       '<dl class="result-list">' +
@@ -180,23 +197,33 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
 
   function renderSolve() {
     var out = $('solve-result');
-    var r = PWM.solve($('solve-clock').value, $('solve-target').value, $('solve-mode').value, $('solve-bits').value);
+    var r = PWM.solve($('solve-clock').value, $('solve-target').value, $('solve-mode').value, $('solve-bits').value, $('solve-presc').value);
     if (r.error) { out.innerHTML = errorHtml(r); return; }
+    var avr = r.presc === 'avr';
+    var h = avr ? T.avrHead : T.head;
+    var reg = function (x) { return avr ? x.div : x.psc; };
     var b = r.rows[0];
     var rows = r.rows.map(function (x, i) {
-      return '<tr' + (i === 0 ? ' class="best"' : '') + '><td>' + x.psc + '</td><td>' + x.arr + '</td><td>' + PWM.hzText(x.freq) +
+      return '<tr' + (i === 0 ? ' class="best"' : '') + '><td>' + reg(x) + '</td><td>' + x.arr + '</td><td>' + PWM.hzText(x.freq) +
         '</td><td>' + pct(x.errorPct) + '</td><td>' + x.steps.toLocaleString('en-US') + '</td></tr>';
     }).join('');
-    out.innerHTML = main('solve-main', '', 'PSC = ' + b.psc + ', ARR = ' + b.arr) +
+    out.innerHTML = main('solve-main', '', h.psc + ' = ' + reg(b) + ', ' + h.arr + ' = ' + b.arr) +
       '<div class="result-sub">' + T.solveSub(PWM.hzText(b.freq), pct(b.errorPct)) + '</div>' +
-      '<div class="table-scroll"><table><thead><tr><th>' + T.head.psc + '</th><th>' + T.head.arr + '</th><th>' + T.head.freq +
+      '<div class="table-scroll"><table><thead><tr><th>' + h.psc + '</th><th>' + h.arr + '</th><th>' + T.head.freq +
       '</th><th>' + T.head.error + '</th><th>' + T.head.steps + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
 
   ['fwd-clock', 'fwd-psc', 'fwd-arr', 'fwd-duty'].forEach(function (id) { $(id).addEventListener('input', renderForward); });
-  ['fwd-mode', 'fwd-bits'].forEach(function (id) { $(id).addEventListener('change', renderForward); });
+  ['fwd-mode', 'fwd-bits', 'fwd-div'].forEach(function (id) { $(id).addEventListener('change', renderForward); });
+  // An AVR prescaler is picked from a list instead of typed as a register value.
+  $('fwd-presc').addEventListener('change', function () {
+    var avr = $('fwd-presc').value === 'avr';
+    $('fwd-psc-field').hidden = avr;
+    $('fwd-div-field').hidden = !avr;
+    renderForward();
+  });
   ['solve-clock', 'solve-target'].forEach(function (id) { $(id).addEventListener('input', renderSolve); });
-  ['solve-mode', 'solve-bits'].forEach(function (id) { $(id).addEventListener('change', renderSolve); });
+  ['solve-mode', 'solve-bits', 'solve-presc'].forEach(function (id) { $(id).addEventListener('change', renderSolve); });
 
   // Start with a 72 MHz STM32 timer: ARR 16383 (about 4.4 kHz), and a 20 kHz target (above hearing, common for motors).
   $('fwd-clock').value = '72'; $('fwd-psc').value = '0'; $('fwd-arr').value = '16383'; $('fwd-duty').value = '50';

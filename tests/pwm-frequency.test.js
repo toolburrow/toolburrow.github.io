@@ -45,12 +45,12 @@ test('pwm: register limits and input errors', () => {
 });
 test('pwm: PSC and ARR for a frequency', () => {
   const r = PWM.solve('72', '20k', 'edge', '16');
-  eq(r.rows, [{ psc: 0, arr: 3599, freq: 20000, errorPct: 0, steps: 3600 }]);
-  eq(PWM.solve('72', '1k', 'edge', '16').rows[0], { psc: 1, arr: 35999, freq: 1000, errorPct: 0, steps: 36000 });
+  eq(r.rows, [{ psc: 0, div: 1, arr: 3599, freq: 20000, errorPct: 0, steps: 3600 }]);
+  eq(PWM.solve('72', '1k', 'edge', '16').rows[0], { psc: 1, div: 2, arr: 35999, freq: 1000, errorPct: 0, steps: 36000 });
   const s = PWM.solve('72', '50', 'edge', '16');
   eq([s.rows[0].psc, s.rows[0].arr], [21, 65454]);         // finest resolution first
   eq([s.rows[1].psc, s.rows[1].arr, s.rows[1].errorPct], [23, 59999, 0]); // then exact settings
-  eq(PWM.solve('72', '10k', 'center', '16').rows[0], { psc: 0, arr: 3600, freq: 10000, errorPct: 0, steps: 3600 });
+  eq(PWM.solve('72', '10k', 'center', '16').rows[0], { psc: 0, div: 1, arr: 3600, freq: 10000, errorPct: 0, steps: 3600 });
   eq(PWM.solve('72', '0.01', 'edge', '32').rows[0].arr, 3599999999);
   eq(PWM.solve('72', '36M', 'edge', '16').rows[0].arr, 1);
 });
@@ -76,4 +76,22 @@ test('pwm: out-of-range targets', () => {
   eq(PWM.solve('72', '', 'edge', '16').error, 'target-empty');
   eq(PWM.TEXT.en.errors['too-fast']({ max: 36e6 }), 'Too fast for this clock. The highest PWM frequency is 36 MHz.');
   eq(PWM.hzText(4394.26), '4.39426 kHz'); eq(PWM.hzText(976.5625), '976.563 Hz'); eq(PWM.hzText(20000), '20 kHz'); eq(PWM.hzText(1098.6328125), '1.09863 kHz');
+});
+test('pwm: AVR prescaler', () => {
+  const r = PWM.forward('16', '64', '255', 'edge', '50', '8', 'avr'); // Uno pins 5 and 6: Timer0, N = 64
+  eq([r.div, r.psc, r.freq, r.ccr], [64, 63, 976.5625, 128]);
+  near(PWM.forward('16', '64', '255', 'center', '', '8', 'avr').freq, 16e6 / (64 * 510)); // pins 9, 10, 3, 11: ≈ 490 Hz
+  eq(PWM.forward('16', '63', '255', 'edge', '', '8', 'avr').error, 'div-format');
+  eq(PWM.forward('16', '64', '256', 'edge', '', '8', 'avr'), { error: 'arr-range', max: 255 });
+  const s = PWM.solve('16', '50', 'edge', '16', 'avr'); // servo on Timer1: N = 8, TOP = 39999
+  eq([s.rows[0].div, s.rows[0].arr, s.rows[0].errorPct], [8, 39999, 0]);
+  for (const t of ['1', '100', '1k', '20k', '1M']) for (const mode of ['edge', 'center']) for (const bits of ['8', '16']) {
+    const x = PWM.solve('16', t, mode, bits, 'avr');
+    if (x.error) { eq(['too-slow', 'too-fast'].includes(x.error), true); continue; }
+    for (const row of x.rows) {
+      eq(PWM.AVR_DIV.includes(row.div) && row.arr <= PWM.ARR_MAX[bits], true);
+      near(row.freq, PWM.forward('16', String(row.div), String(row.arr), mode, '', bits, 'avr').freq);
+    }
+  }
+  eq(PWM.solve('16', '1', 'edge', '8', 'avr'), { error: 'too-slow', min: 16e6 / (1024 * 256) });
 });
