@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADC Calculator (Voltage to ADC Value and Back) - ToolLamp</title>
+<meta name="description" content="Free ADC calculator. Convert a voltage to an ADC reading and back for 8 to 24-bit ADCs, with the LSB size, hex value and sensor scaling from two points.">
+<link rel="canonical" href="https://toollamp.github.io/en/electronics/adc-calculator/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/adc-calculator/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/adc-calculator/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="ADC Calculator (Voltage to ADC Value and Back)">
+<meta property="og:description" content="Free ADC calculator. Convert a voltage to an ADC reading and back for 8 to 24-bit ADCs, with the LSB size, hex value and sensor scaling from two points.">
+<meta property="og:url" content="https://toollamp.github.io/en/electronics/adc-calculator/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script src="/assets/favorites.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ADC Calculator",
+  "url": "https://toollamp.github.io/en/electronics/adc-calculator/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Electronics</div>
+    <h1>ADC calculator</h1>
+    <p>Convert between a voltage and the value an ADC reports, for any resolution and reference voltage, and turn ADC values into sensor readings.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="adc-h">
+    <h2 id="adc-h">Voltage and ADC value</h2>
+    <div class="row">
+      <div class="field">
+        <label for="adc-bits">Resolution</label>
+        <select id="adc-bits">
+          <option value="8">8-bit</option>
+          <option value="10">10-bit</option>
+          <option value="12">12-bit</option>
+          <option value="14">14-bit</option>
+          <option value="16">16-bit</option>
+          <option value="18">18-bit</option>
+          <option value="20">20-bit</option>
+          <option value="24">24-bit</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="adc-vref">Reference voltage (Vref)</label>
+        <input id="adc-vref" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="e.g. 3.3, 5, 2.5">
+      </div>
+    </div>
+    <div class="choice">
+      <span id="scale-label">Divide by</span>
+      <div class="seg" id="scale-seg" role="group" aria-labelledby="scale-label">
+        <button type="button" data-scale="pow" id="scale-pow" aria-pressed="true">2^12 = 4096</button>
+        <button type="button" data-scale="max" id="scale-max" aria-pressed="false">2^12 − 1 = 4095</button>
+      </div>
+    </div>
+    <div class="choice">
+      <span id="dir-label">Convert</span>
+      <div class="seg" id="dir-seg" role="group" aria-labelledby="dir-label">
+        <button type="button" data-dir="v2c" aria-pressed="true">Voltage → value</button>
+        <button type="button" data-dir="c2v" aria-pressed="false">Value → voltage</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="adc-input" id="adc-input-label">Voltage</label>
+        <input id="adc-input" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="e.g. 1.2, 3V3, 500mV">
+      </div>
+    </div>
+    <div class="result" id="adc-result" aria-live="polite"></div>
+  </section>
+
+  <section class="tool" aria-labelledby="scale-h">
+    <h2 id="scale-h">ADC value to sensor reading</h2>
+    <p class="result-sub">Uses the resolution, reference and divisor above. Enter two points from the sensor’s datasheet, such as 0.5 V at 0 and 2.5 V at 100.</p>
+    <div class="row">
+      <div class="field">
+        <label for="scale-v1">Point 1 voltage</label>
+        <input id="scale-v1" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="e.g. 0.5">
+      </div>
+      <div class="field">
+        <label for="scale-y1">Point 1 reading</label>
+        <input id="scale-y1" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="e.g. 0">
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="scale-v2">Point 2 voltage</label>
+        <input id="scale-v2" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="e.g. 2.5">
+      </div>
+      <div class="field">
+        <label for="scale-y2">Point 2 reading</label>
+        <input id="scale-y2" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="e.g. 100">
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="scale-code">ADC value to convert</label>
+        <input id="scale-code" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 2048, 0x800">
+      </div>
+    </div>
+    <div class="result" id="scale-result" aria-live="polite"></div>
+  </section>
+
+  <p class="feedback">Wrong result or a typo? <a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fadc-calculator%2F" target="_blank" rel="noopener">Send feedback</a></p>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/adc-calculator" hidden></aside>
+
+  <article class="article">
+    <h2>How an ADC turns a voltage into a number</h2>
+    <p>An N-bit ADC splits the range from 0 V to the reference voltage Vref into 2<sup>N</sup> steps and reports which step the input falls in, as a whole number from 0 to 2<sup>N</sup> − 1:</p>
+    <p><strong>ADC value = V<sub>in</sub> / V<sub>ref</sub> × 2<sup>N</sup></strong><br>
+    <strong>V<sub>in</sub> = ADC value × V<sub>ref</sub> / 2<sup>N</sup></strong></p>
+    <p>A 12-bit ADC with a 3.3 V reference has 4096 steps of 3.3 / 4096 = 0.806 mV. An input of 1.2 V reads 1.2 / 3.3 × 4096 ≈ 1489.</p>
+
+    <h2>Divide by 4096 or 4095?</h2>
+    <p>Both are in use. The ideal transfer function in most ADC datasheets uses 2<sup>N</sup> (4096 for 12 bits): each value stands for one step of Vref / 4096, and the top value 4095 is reached one step below Vref. Many application notes and code examples divide by 2<sup>N</sup> − 1 (4095) instead, so that a reading of 4095 converts back to exactly Vref.</p>
+    <p>The difference is one part in 4096, about 0.02% for a 12-bit ADC, which is smaller than the offset and gain error of most built-in ADCs. Pick the one your code or datasheet uses, so that numbers match when you compare them.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Resolution</th><th>Values</th><th>Step at 3.3 V</th><th>Step at 5 V</th></tr></thead>
+        <tbody>
+          <tr><td>8-bit</td><td>0–255</td><td>12.89 mV</td><td>19.53 mV</td></tr>
+          <tr><td>10-bit</td><td>0–1023</td><td>3.223 mV</td><td>4.883 mV</td></tr>
+          <tr><td>12-bit</td><td>0–4095</td><td>805.7 µV</td><td>1.221 mV</td></tr>
+          <tr><td>14-bit</td><td>0–16383</td><td>201.4 µV</td><td>305.2 µV</td></tr>
+          <tr><td>16-bit</td><td>0–65535</td><td>50.35 µV</td><td>76.29 µV</td></tr>
+          <tr><td>24-bit</td><td>0–16777215</td><td>196.7 nV</td><td>298 nV</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Turning ADC values into sensor readings</h2>
+    <p>Most analog sensors give a voltage that changes in a straight line with what they measure. Two points from the datasheet are enough to convert: the second panel works out <strong>reading = slope × ADC value + offset</strong>, which you can put straight into firmware. It also works when the voltage falls as the reading rises, for example a current sensor that gives 2.5 V at 0 A and 0.5 V at 10 A; the slope is then negative.</p>
+
+    <h2>Frequently asked questions</h2>
+    <h3>What happens above Vref?</h3>
+    <p>The ADC reads its top value (4095 for 12 bits) for anything at or above full scale. Inputs above the supply voltage or below 0 V can damage the pin, so use a <a href="/en/electronics/voltage-divider/">voltage divider</a> to bring larger voltages into range.</p>
+    <h3>Why does my reading jump by a few counts?</h3>
+    <p>Noise on the input or the reference, and the ADC’s own error, typically move readings by a count or two. Averaging several samples, a small capacitor at the input and a stable reference all help.</p>
+    <h3>What is the LSB?</h3>
+    <p>The least significant bit, the voltage of one step: Vref / 2<sup>N</sup>. It is the smallest change the ADC can show.</p>
+    <h3>Arduino Uno: what is analogRead() in volts?</h3>
+    <p>The Uno has a 10-bit ADC with a 5 V reference by default, so V = value × 5 / 1024. A reading of 512 is 2.5 V. Choose 10-bit and enter 5 above.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/electronics/voltage-divider/"><span class="tool-name">Voltage divider calculator</span><span class="tool-desc">Vout, missing resistor, E24 values</span></a></li>
+      <li><a href="/en/electronics/uart-baud-rate/"><span class="tool-name">UART baud rate error calculator</span><span class="tool-desc">Divisor, real baud rate, error %</span></a></li>
+      <li><a href="/en/electronics/rc-time-constant/"><span class="tool-name">RC time constant calculator</span><span class="tool-desc">τ, cutoff frequency, charge time</span></a></li>
+      <li><a href="/en/electronics/ohms-law/"><span class="tool-name">Ohm’s law calculator</span><span class="tool-desc">Any two of V, I, R, P</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p>© 2026 ToolLamp</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a><a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fadc-calculator%2F" target="_blank" rel="noopener">Feedback</a></p>
+  </div>
+</footer>
+<script src="/assets/elec.js"></script>
+<script src="/assets/tools/adc-calculator.js"></script>
+</body>
+</html>

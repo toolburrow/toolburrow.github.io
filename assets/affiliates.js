@@ -22,6 +22,7 @@ var AFF = (function () {
     'zh-tw/capacitor-code': [],
     'zh-tw/smd-resistor-code': [],
     'zh-tw/parallel-resistor': [],
+    'zh-tw/adc-calculator': [],
     'en/roc-year-converter': [],
     'en/date-difference': [],
     'en/resistor-color-code': [],
@@ -39,7 +40,8 @@ var AFF = (function () {
     'en/dip-switch-calculator': [],
     'en/capacitor-code': [],
     'en/smd-resistor-code': [],
-    'en/parallel-resistor': []
+    'en/parallel-resistor': [],
+    'en/adc-calculator': []
   };
 
   var TEXT = {
