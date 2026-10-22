@@ -91,7 +91,11 @@ The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/
    Load `/assets/favorites.js` right after `affiliates.js` (the tests check this).
    Add the new tool to the related lists of the 2–3 tools it fits best, in both languages, replacing a weaker pick
    when a list already has 4.
-7. Every `.tool` panel must show a useful result on first load (pre-fill a sensible default), and update live as the
+7. Draw the tool's icon as a `<symbol id="<slug>">` in `/assets/icons.svg` (24×24, lines only, like the others) and put
+   `<span class="tile" aria-hidden="true"><svg class="ico" focusable="false"><use href="/assets/icons.svg#<slug>"/></svg></span>`
+   at the start of its `<h1>` and of its `<a>` in every list (home pages, related tools). Electronics tiles are green
+   (`tile`); everyday and finance tiles are gold (`tile warm`). The tests check every list item and title.
+8. Every `.tool` panel must show a useful result on first load (pre-fill a sensible default), and update live as the
    user types. A panel that starts empty looks broken.
 
 ## Languages

@@ -165,3 +165,17 @@ test('site: every footer links to the feedback form right after the contact link
     }
   }
 });
+test('site: every tool has an icon, in its lists and next to its title', () => {
+  const symbols = new Set([...fs.readFileSync(path.join(root, 'assets', 'icons.svg'), 'utf8').matchAll(/<symbol id="([a-z-]+)"/g)].map(m => m[1]));
+  const tile = (cat, slug) => '<span class="tile' + (cat === 'electronics' ? '' : ' warm') + '" aria-hidden="true"><svg class="ico" focusable="false"><use href="/assets/icons.svg#' + slug + '"/></svg></span>';
+  for (const rel of pages) {
+    const h = fs.readFileSync(path.join(root, rel), 'utf8');
+    // Every tool link in a list (home groups, related tools) starts with the tool's own icon.
+    for (const m of h.matchAll(/<li><a href="\/(?:zh-tw|en)\/(life|finance|electronics)\/([a-z-]+)\/">(.{0,200})/g)) {
+      eq([rel, m[2], symbols.has(m[2])], [rel, m[2], true]);
+      eq([rel, m[3].startsWith(tile(m[1], m[2]))], [rel, true]);
+    }
+    const parts = rel.split('/');
+    if (parts.length === 4) eq([rel, h.includes('<h1>' + tile(parts[1], parts[2]))], [rel, true]);
+  }
+});
