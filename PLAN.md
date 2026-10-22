@@ -203,7 +203,7 @@ Rup／Rdown 分壓已經有分壓電阻工具，不另外做。
 - [x] PWM 頻率計算加上「預除頻方式」：PSC 暫存器（STM32）或 AVR 預除頻 N（從 1、8、32、64、128、256、1024 選，32 和 128 只有 Timer2），兩個面板都有；計時器多一個 8 位元（AVR Timer0、Timer2）。Adrian 決定加。
       結果：測試和 Arduino Uno 比對（Timer0 N = 64 → 976.56 Hz；Timer1 50 Hz 伺服 → N = 8、TOP = 39999）。
 - [x] 首頁的電子工具分成三組（Adrian 決定分組）：零件標示（色碼、SMD、電容代碼）、電路計算（分壓、並聯、LED、歐姆、RC）、微控制器（ADC、PWM、UART、指撥開關）。原本提議兩組，但第二組會有 9 個，所以分三組。三個首頁都改了，工具頁的麵包屑還是「電子工具」。
-- [x] Adrian 回報：並聯電阻切到「串聯」時電路圖還是並聯。原因是 `<svg>` 沒有 `hidden` 屬性可以直接設（只有 HTML 元素有），改用 `setAttribute`／`removeAttribute`。用瀏覽器確認中英文兩個面板都會跟著切換；其他工具的 `.hidden` 都用在 HTML 元素上，沒有同樣的問題。
+- [x] Adrian 回報：並聯電阻切到「串聯」時電路圖還是並聯。原因是 `<svg>` 沒有 `hidden` 屬性可以直接設（只有 HTML 元素有），改用 `setAttribute`／`removeAttribute`。用瀏覽器確認中英文兩個面板都會跟著切換；其他工具的 `.hidden` 都用在 HTML 元素上，沒有同樣的問題。Adrian 重新整理後還是看到舊的圖：瀏覽器還在用快取裡的舊程式（GitHub Pages 讓檔案快取 10 分鐘），所以頁面改成載入 `parallel-resistor.js?v=2`，AGENTS.md 加上「改已上線的程式要加版本號」的規則。
 - [x] 堆疊的輸入列（`.row + .row`）和切換按鈕後面的輸入列（`.choice + .row`）加上間距，放在 `site.css`；原本沒有頁面這樣排，不影響舊頁面。
 
 ## 其他改進

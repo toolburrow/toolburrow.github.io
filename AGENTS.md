@@ -23,6 +23,9 @@ check tasks off as you finish them, and update PLAN.md before the session ends.
 - Commit and push straight to `main`. No feature branches or pull requests; the owner reviews on `main`.
 - `main` deploys to the live site immediately, so run `node tests/run.js` before every push.
   Never push if any test fails.
+- GitHub Pages lets browsers cache files for 10 minutes, and a normal reload often keeps using a cached script.
+  When you change a script or stylesheet that is already live, add or bump `?v=<n>` on its `<script src>` or
+  `<link href>` in every page that loads it, so readers get the new file with the new page.
 - One commit per tool or per logical change, with a clear English commit message.
 
 ## Structure
