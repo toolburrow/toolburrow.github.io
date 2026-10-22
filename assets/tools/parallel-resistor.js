@@ -230,7 +230,7 @@ if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded
     });
     // Each panel has a parallel and a series drawing; show the one in use.
     document.querySelectorAll('#' + panel + '-h ~ .with-schematic .schematic').forEach(function (svg) {
-      svg.hidden = svg.dataset.mode !== mode;
+      if (svg.dataset.mode === mode) svg.removeAttribute('hidden'); else svg.setAttribute('hidden', '');
     });
     renders[panel]();
   }
