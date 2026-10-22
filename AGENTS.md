@@ -47,6 +47,8 @@ google93ec6f7db77f90e7.html   Google Search Console verification. Never edit or 
 
 Current categories: `life` (生活工具 / Everyday), `finance` (理財工具 / Finance) and `electronics` (電子工具 / Electronics),
 in both languages.
+On the home pages, `electronics` tools are listed in three groups: 零件標示 / Part markings, 電路計算 / Circuit calculators
+and 微控制器 / Microcontrollers. Add a new electronics tool to the group it fits, on all three home pages.
 Slugs are lowercase English words joined with hyphens, describing what people search for.
 The category and slug are the same in both languages, so `/zh-tw/x/y/` and `/en/x/y/` are the two versions of one tool.
 
