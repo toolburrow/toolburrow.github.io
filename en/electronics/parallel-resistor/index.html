@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parallel Resistor Calculator (Series, E24 Pairs) - ToolLamp</title>
+<meta name="description" content="Free parallel and series resistor calculator. Add up any number of resistors, find the resistor to add for a target value, or the two E24 values that make it.">
+<link rel="canonical" href="https://toollamp.github.io/en/electronics/parallel-resistor/">
+<link rel="alternate" hreflang="zh-Hant" href="https://toollamp.github.io/zh-tw/electronics/parallel-resistor/">
+<link rel="alternate" hreflang="en" href="https://toollamp.github.io/en/electronics/parallel-resistor/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ToolLamp">
+<meta property="og:title" content="Parallel Resistor Calculator (Series, E24 Pairs)">
+<meta property="og:description" content="Free parallel and series resistor calculator. Add up any number of resistors, find the resistor to add for a target value, or the two E24 values that make it.">
+<meta property="og:url" content="https://toollamp.github.io/en/electronics/parallel-resistor/">
+<meta property="og:image" content="https://toollamp.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/site.js"></script>
+<script src="/assets/affiliates.js"></script>
+<script src="/assets/favorites.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Parallel Resistor Calculator",
+  "url": "https://toollamp.github.io/en/electronics/parallel-resistor/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 34C4 13 36 13 38 34Z" style="fill:var(--accent)"/><path d="M12 34C12 21 28 21 28 34Z" style="fill:var(--bg)"/><circle cx="20" cy="29" r="2.3" style="fill:var(--lamp)"/></svg>
+      ToolLamp
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/zh-tw/" data-set-lang="zh-tw" lang="zh-Hant-TW">中文工具</a>
+      <a href="/en/" data-set-lang="en" aria-current="page">English tools</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light or dark mode">☾</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="crumbs"><a href="/en/">English tools</a> / Electronics</div>
+    <h1>Parallel resistor calculator</h1>
+    <p>Total resistance of resistors in parallel or series, the resistor to add for a target value, and the two E24 resistors that come closest to any value.</p>
+  </div>
+
+  <section class="tool" aria-labelledby="total-h">
+    <h2 id="total-h">Total resistance</h2>
+    <div class="seg" id="total-seg" role="group" aria-label="How the resistors are connected">
+      <button type="button" data-mode="parallel" aria-pressed="true">Parallel</button>
+      <button type="button" data-mode="series" aria-pressed="false">Series</button>
+    </div>
+    <div class="with-schematic">
+      <svg class="schematic" data-mode="parallel" viewBox="0 0 140 200" role="img" aria-label="Three resistors R1, R2 and R3 connected side by side between the same two points">
+        <circle cx="70" cy="12" r="5" class="part"/>
+        <path d="M70 17V40M30 40H110M30 40V60M70 40V60M110 40V60M30 120V140M70 120V140M110 120V140M30 140H110M70 140V183" class="wire"/>
+        <rect x="22" y="60" width="16" height="60" class="part"/>
+        <rect x="62" y="60" width="16" height="60" class="part"/>
+        <rect x="102" y="60" width="16" height="60" class="part"/>
+        <text x="40" y="96">R1</text>
+        <text x="80" y="96">R2</text>
+        <text x="120" y="96">R3</text>
+        <circle cx="70" cy="188" r="5" class="part"/>
+      </svg>
+      <svg class="schematic" data-mode="series" viewBox="0 0 120 250" role="img" aria-label="Three resistors R1, R2 and R3 connected one after another" hidden>
+        <circle cx="40" cy="12" r="5" class="part"/>
+        <path d="M40 17V30M40 80V100M40 150V170M40 220V233" class="wire"/>
+        <rect x="28" y="30" width="24" height="50" class="part"/>
+        <rect x="28" y="100" width="24" height="50" class="part"/>
+        <rect x="28" y="170" width="24" height="50" class="part"/>
+        <text x="60" y="60">R1</text>
+        <text x="60" y="130">R2</text>
+        <text x="60" y="200">R3</text>
+        <circle cx="40" cy="238" r="5" class="part"/>
+      </svg>
+      <div class="row">
+        <div class="field">
+          <label for="total-list">Resistors, separated by commas</label>
+          <input id="total-list" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 10k, 4.7k, 2.2k">
+        </div>
+      </div>
+    </div>
+    <div class="result" id="total-result" aria-live="polite"></div>
+  </section>
+
+  <section class="tool" aria-labelledby="missing-h">
+    <h2 id="missing-h">Find the resistor to add</h2>
+    <div class="seg" id="missing-seg" role="group" aria-label="How the second resistor is added">
+      <button type="button" data-mode="parallel" aria-pressed="true">Parallel</button>
+      <button type="button" data-mode="series" aria-pressed="false">Series</button>
+    </div>
+    <div class="with-schematic">
+      <svg class="schematic" data-mode="parallel" viewBox="0 0 140 200" role="img" aria-label="R1 and the unknown R2 side by side between the same two points">
+        <circle cx="70" cy="12" r="5" class="part"/>
+        <path d="M70 17V40M40 40H100M40 40V60M100 40V60M40 120V140M100 120V140M40 140H100M70 140V183" class="wire"/>
+        <rect x="32" y="60" width="16" height="60" class="part"/>
+        <rect x="92" y="60" width="16" height="60" class="part"/>
+        <text x="50" y="96">R1</text>
+        <text x="110" y="96" class="unknown">R2 ?</text>
+        <circle cx="70" cy="188" r="5" class="part"/>
+      </svg>
+      <svg class="schematic" data-mode="series" viewBox="0 0 120 200" role="img" aria-label="R1 followed by the unknown R2" hidden>
+        <circle cx="40" cy="12" r="5" class="part"/>
+        <path d="M40 17V30M40 90V110M40 170V183" class="wire"/>
+        <rect x="28" y="30" width="24" height="60" class="part"/>
+        <rect x="28" y="110" width="24" height="60" class="part"/>
+        <text x="60" y="65">R1</text>
+        <text x="60" y="145" class="unknown">R2 ?</text>
+        <circle cx="40" cy="188" r="5" class="part"/>
+      </svg>
+      <div class="row">
+        <div class="field">
+          <label for="missing-known">R1 (the resistor you have)</label>
+          <input id="missing-known" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 10k">
+        </div>
+        <div class="field">
+          <label for="missing-target">Total you want</label>
+          <input id="missing-target" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 3.3k">
+        </div>
+      </div>
+    </div>
+    <div class="result" id="missing-result" aria-live="polite"></div>
+  </section>
+
+  <section class="tool" aria-labelledby="pairs-h">
+    <h2 id="pairs-h">Make a value from two E24 resistors</h2>
+    <div class="seg" id="pairs-seg" role="group" aria-label="How the two resistors are connected">
+      <button type="button" data-mode="parallel" aria-pressed="true">Parallel</button>
+      <button type="button" data-mode="series" aria-pressed="false">Series</button>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="pairs-target">Value you need</label>
+        <input id="pairs-target" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. 8k, 6.04k, 250">
+      </div>
+    </div>
+    <div class="result" id="pairs-result" aria-live="polite"></div>
+  </section>
+
+  <p class="feedback">Wrong result or a typo? <a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fparallel-resistor%2F" target="_blank" rel="noopener">Send feedback</a></p>
+
+  <!-- Affiliate slot: filled from /assets/affiliates.js, stays hidden while the slot is empty. -->
+  <aside class="affiliate" data-slot="en/parallel-resistor" hidden></aside>
+
+  <article class="article">
+    <h2>Resistors in parallel</h2>
+    <p>Resistors in parallel share the same two connection points, so the current has more than one path. Each extra path lowers the total resistance:</p>
+    <p><strong>1 / R = 1 / R1 + 1 / R2 + 1 / R3 + …</strong></p>
+    <p>For just two resistors this simplifies to <strong>R = R1 × R2 / (R1 + R2)</strong>, “product over sum”. With 10 kΩ and 4.7 kΩ: 47,000,000 / 14,700 = 3.197 kΩ. Two equal resistors give half the value, and n equal resistors give R / n.</p>
+    <p>The total is always smaller than the smallest resistor. The smallest resistor carries the most current: each one gets a share of R<sub>total</sub> / R<sub>n</sub>, shown in the results table.</p>
+
+    <h2>Resistors in series</h2>
+    <p>Resistors in series are connected end to end, so the same current flows through all of them and the values simply add: <strong>R = R1 + R2 + R3 + …</strong>. The voltage splits in proportion to each value, which is how a <a href="/en/electronics/voltage-divider/">voltage divider</a> works.</p>
+
+    <h2>Making a value you don’t have</h2>
+    <p>Standard resistors come in series like E24 (24 values per decade, ±5%). When you need a value in between, two resistors can get you there. The third panel tries every pair of E24 values and lists the five closest.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>You need</th><th>Parallel</th><th>Series</th></tr></thead>
+        <tbody>
+          <tr><td>5 kΩ</td><td>10 kΩ ∥ 10 kΩ</td><td>2 kΩ + 3 kΩ</td></tr>
+          <tr><td>8 kΩ</td><td>16 kΩ ∥ 16 kΩ</td><td>3.3 kΩ + 4.7 kΩ</td></tr>
+          <tr><td>25 Ω</td><td>30 Ω ∥ 150 Ω</td><td>12 Ω + 13 Ω</td></tr>
+          <tr><td>50 Ω</td><td>100 Ω ∥ 100 Ω</td><td>20 Ω + 30 Ω</td></tr>
+          <tr><td>6 kΩ</td><td>12 kΩ ∥ 12 kΩ</td><td>3 kΩ + 3 kΩ</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <h3>Why is the parallel total smaller than each resistor?</h3>
+    <p>Every resistor you add in parallel is another path for the current. More paths let more current flow at the same voltage, and more current at the same voltage means less resistance.</p>
+    <h3>What power rating do the combined resistors have?</h3>
+    <p>Equal resistors in parallel or in series share the power equally, so two 1/4 W resistors together handle 1/2 W. With unequal values, the one that takes the larger share heats up first: in parallel that is the smaller resistor, in series the larger one. Check each resistor’s own power with the <a href="/en/electronics/ohms-law/">Ohm’s law calculator</a>.</p>
+    <h3>Does combining resistors change the tolerance?</h3>
+    <p>The tolerance of the combination is no worse than that of the parts. Two ±5% resistors give a total that is still within ±5%, and often closer, because their errors tend to partly cancel.</p>
+    <h3>How do I enter the values?</h3>
+    <p>Separate them with commas, for example <code>10k, 4k7, 2.2M</code>. You can write 4.7k or 4k7, R47 for 0.47 Ω, and M for megohms. Up to 20 resistors at a time.</p>
+  </article>
+
+  <nav class="tool-group" aria-labelledby="related-h">
+    <h2 id="related-h">Related tools</h2>
+    <ul class="tool-list">
+      <li><a href="/en/electronics/voltage-divider/"><span class="tool-name">Voltage divider calculator</span><span class="tool-desc">Vout, missing resistor, E24 values</span></a></li>
+      <li><a href="/en/electronics/ohms-law/"><span class="tool-name">Ohm’s law calculator</span><span class="tool-desc">Any two of V, I, R, P</span></a></li>
+      <li><a href="/en/electronics/resistor-color-code/"><span class="tool-name">Resistor color code calculator</span><span class="tool-desc">4 and 5 band, both directions</span></a></li>
+      <li><a href="/en/electronics/smd-resistor-code/"><span class="tool-name">SMD resistor code calculator</span><span class="tool-desc">3-digit, 4-digit and EIA-96 codes</span></a></li>
+    </ul>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>ToolLamp: small, useful tools. Everything runs in your browser and nothing is uploaded.</p>
+    <p>© 2026 ToolLamp</p>
+    <p class="footer-links"><a href="/en/about/">About</a><a href="/en/privacy/">Privacy</a><a href="/en/contact/">Contact</a><a href="https://docs.google.com/forms/d/e/1FAIpQLScLt-GhP0PLlylqvuapzdhkgqdP_ZWWgiKO7V0qs4SpOuw6zg/viewform?usp=pp_url&amp;entry.243321783=%2Fen%2Felectronics%2Fparallel-resistor%2F" target="_blank" rel="noopener">Feedback</a></p>
+  </div>
+</footer>
+<script src="/assets/elec.js"></script>
+<script src="/assets/tools/parallel-resistor.js"></script>
+</body>
+</html>
