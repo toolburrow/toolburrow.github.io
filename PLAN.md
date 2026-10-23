@@ -238,6 +238,8 @@ Adrian 2026-10-22 提議做 BIN／DEC／HEX／ASCII 轉換工具。
 - [x] 結果列表（`.result-list`）的值太長時自動換行，不會超出工具框（例如指撥開關 12 個開關的二進位）。改在 `site.css`，所有工具共用；用瀏覽器在 360px 寬度檢查過 30 個工具頁，都沒有超出。
 - [x] 指撥開關的二進位每 4 位加一個空格（例如 `1111 1111 1111`），從最低位開始分組，每組剛好對應一位十六進位：最低位模式從左邊分，最高位模式從右邊分。只改顯示，`bits()` 不變。
 
+- [x] 首頁標題改成品牌在前（Adrian 同意）：2026-10-23 搜「toollamp」已經找得到中文首頁，但 Google 把標題「中文工具 - ToolLamp」縮成「中文工具」，網站名稱仍顯示 GitHub。中文首頁改成「ToolLamp｜免費線上工具：生活、理財、電子計算」，英文首頁改成「ToolLamp: Free Online Calculators for Electronics and Everyday Use」，og:title 一起改。要等 Google 重新抓首頁才會更新。
+
 ## 之後的工具點子
 
 依搜尋需求排序，Adrian 可以調整。做完一個就從這裡移到對應階段。
